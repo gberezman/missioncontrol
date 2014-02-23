@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+mkdir -p work
+cd work
+
+PYSERIAL_VERSION=2.7
+
+wget https://pypi.python.org/packages/source/p/pyserial/pyserial-$PYSERIAL_VERSION.tar.gz -O pyserial.tar.gz
+tar -zxf pyserial.tar.gz
+cd pyserial-$PYSERIAL_VERSION
+sudo python setup.py install
+sudo apt-get install tightvncserver
+
+echo "Now run tight VNC to initialize: tightvncserver :1"
+echo "Kill it: tightvncserver -kill :1"
+echo "Set it up to autostart: echo \"Starting VNC on port 5901\" && sudo -u pi tightvncserver :1"
