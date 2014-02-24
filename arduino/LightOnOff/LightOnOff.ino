@@ -1,9 +1,16 @@
 const int LED_EXTERNAL = 22;
 const int SWITCH = 52;
 
+boolean wasSwitchOpen;
+
+int switchState;
+
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_EXTERNAL, OUTPUT);
+  
+  switchState = digitalRead(SWITCH);
+  
   Serial.begin(115200);
 }
 
@@ -35,9 +42,12 @@ void ledOff(int pin) {
 }
 
 void processSwitch(void) {
-  boolean isSwitchOpen = digitalRead(SWITCH) == LOW;
-  if( isSwitchOpen )
-    Serial.write('o');
-  else
-   Serial.write('x');
+  int newState = digitalRead(SWITCH);
+  if( switchState != newState ) {
+    switchState = newState;
+    if( newState == LOW )
+      Serial.write('o');
+    else
+      Serial.write('x');
+  }
 }

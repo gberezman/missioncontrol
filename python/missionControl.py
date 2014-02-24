@@ -14,44 +14,43 @@ arduinoSerial.flush()
 current_milli_time = lambda: int(time() * 1000)
 
 boardLed = b'+'
-extLed = b'x'
 
-lastBoardFlip = current_milli_time()
+lastBoardLedFlip = current_milli_time()
+flipBoardLed = False
 
 def state():
+	global flipBoardLed
 	while True:
-		arduinoSerial.write( boardLed )
-		arduinoSerial.write( extLed )
-		sleep(.1)
+		bytes = arduinoSerial.read()
+                if( len(bytes) > 0 ):
+                        print "external led: " + bytes[0]
+			arduinoSerial.write( bytes[0] )
+		if( flipBoardLed ):
+			arduinoSerial.write( boardLed )
+			flipBoardLed = False
 
 def mainLoop():
-	global extLed
 	global boardLed
-	global lastBoardFlip
+	global lastBoardLedFlip
+	global flipBoardLed
 
 	while True:
 		try: 
-			# bytes = arduinoSerial.read()
-			# if( len(bytes) > 0 ):
-				# extLed = bytes[0]
-
-			if( current_milli_time() - lastBoardFlip > 500 ):
-				lastBoardFlip = current_milli_time()
+			if( current_milli_time() - lastBoardLedFlip > 500 ):
+				lastBoardLedFlip = current_milli_time()
 				if( boardLed == b'+' ):
-					print "flipping to off"
+					print "board LED: off"
 					boardLed = b'-'
-					extLed = b'x'
 				else:
-					print "flipping to on"
+					print "board LED: on"
 					boardLed = b'+'
-					extLed = b'o'
-			sleep(.1)
+				flipBoardLed = True
 
 		except KeyboardInterrupt:
 			exit()
 
 mainThread = threading.Thread( target = mainLoop )
-stateThread = threading.Thread( target = state )
+sendStateThread = threading.Thread( target = state )
 
 mainThread.start()
-stateThread.start()
+sendStateThread.start()
