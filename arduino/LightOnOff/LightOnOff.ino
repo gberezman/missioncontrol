@@ -1,4 +1,5 @@
 const int LED_EXTERNAL = 22;
+const int SWITCH = 52;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -8,6 +9,7 @@ void setup() {
 
 void loop() {
   processSerial();
+  processSwitch();
 }
 
 void processSerial(void) {
@@ -32,3 +34,10 @@ void ledOff(int pin) {
   digitalWrite(pin, LOW);
 }
 
+void processSwitch(void) {
+  boolean isSwitchOpen = digitalRead(SWITCH) == LOW;
+  if( isSwitchOpen )
+    Serial.write('o');
+  else
+   Serial.write('x');
+}
