@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from time import sleep
 import pygame.mixer
 
 pygame.mixer.quit()
@@ -10,4 +11,5 @@ quindar.set_volume(0.5)
 quindarChannel = pygame.mixer.Channel(1)
 
 quindarChannel.play(quindar)
-print "playing"
+print( "playing" )
+sleep(1)
