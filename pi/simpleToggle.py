@@ -17,13 +17,13 @@ arduinoSerial.flush()
 sleep_seconds = .05
 
 def mainLoop():
-	while True:
-		print "off"
-		arduinoSerial.write( b'-' )
-		sleep(sleep_seconds)
-		print "on"
-		arduinoSerial.write( b'+' )
-		sleep(sleep_seconds)
+    while True:
+        print "off"
+        arduinoSerial.write( b'-' )
+        sleep(sleep_seconds)
+        print "on"
+        arduinoSerial.write( b'+' )
+        sleep(sleep_seconds)
 
 mainThread = threading.Thread( target = mainLoop )
 mainThread.start()
