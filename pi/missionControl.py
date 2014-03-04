@@ -54,7 +54,7 @@ class Board:
         self.switches = { 
             'Arm Abort'         : [0, 0],
             'Abort'             : [0, 1], 
-            'Push to Talk'      : [0, 2], 
+            'Push To Talk'      : [0, 2], 
             'SPS'               : [0, 3],
             'TEI'               : [0, 4],
             'TLI'               : [0, 5], 
