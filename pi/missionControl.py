@@ -5,7 +5,7 @@ def isBitSet(bitNum, value):
     mask = 1 << offset
     return ( value & mask ) != 0
 
-class Readings:
+class Board:
 
     def isSwitchOn(self, switch, switchSettings):
         try:
@@ -25,6 +25,18 @@ class Readings:
             return None
         except IndexError:
             return None
+
+    def getLedArray(self, indicators):
+        result = bytearray([0, 0, 0, 0, 0, 0, 0, 0])
+        for indicator in indicators:
+            try:
+                coord = self.ledIndicators[indicator]
+                offset = coord[1] & 31
+                bit = 1 << offset
+                result[coord[0]] |= bit
+            except KeyError: 
+                pass
+        return result
 
     def __init__(self):
         self.switches = { 
@@ -85,4 +97,87 @@ class Readings:
             'Beam'       : 8,
             'Ant Pitch'  : 9,
             'Ant Yaw'    : 10
+        }
+
+        self.ledIndicators = {
+            'Abort Indicator'             : [0, 0],
+            'Push To Talk Indicator'      : [0, 1],
+            'Drogue Chute Indicator'      : [0, 2],
+            'Ulage Indicator'             : [0, 3],
+            'Thrust Indicator'            : [0, 4],
+            'Main Chute Indicator'        : [0, 5],
+            'Hatch Indicator'             : [0, 6],
+            'Docking Target Indicator'    : [0, 7],
+            'SPS Pressure Indicator'      : [1, 0],
+            'AC Bus I Indicator'          : [1, 1],
+            'AC Bus 2 Indicator'          : [1, 2],
+            'SPS Rough Eco Indicator'     : [1, 3],
+            'AC Bus 1 Overload Indicator' : [1, 4],
+            'AC Bus 2 Overload Indicator' : [1, 5],
+            'SPS Flng Temp HI Indicator'  : [1, 6],
+            'Crew Alert Indicator'        : [1, 7],
+            'C/W Indicator'               : [2, 0],
+            'FC Bus Disconnect Indicator' : [2, 1],
+            'Suit Comp Indicator'         : [2, 2],
+            'BMAG 1 Temp'                 : [2, 3],
+            'BMAG 2 Temp'                 : [2, 4],
+            'CO2PPHI'                     : [2, 5],
+            'Pitch Gimbal 1'              : [2, 6],
+            'Pitch Gimbal 2'              : [2, 7],
+            'Yaw Gimbal 1'                : [3, 0],
+            'Yaw Gimbal 2'                : [3, 1],
+            'HG Antenna Scan Limit'       : [3, 2],
+            'Cryo Pressure'               : [3, 3],
+            'Glycol Temperature Low'      : [3, 4],
+            'CM RCS 1'                    : [3, 5],
+            'CM RSC 2'                    : [3, 6],
+            'SM RCS A'                    : [3, 7],
+            'SM RCS B'                    : [4, 0],
+            'SM RCS C'                    : [4, 1],
+            'SM RCS D'                    : [4, 2],
+            'Uplink Activity'             : [4, 3],
+            'Gimbal Lock'                 : [4, 4],
+            'SPS Indicator'               : [4, 5],
+            'TEI Indicator'               : [4, 6],
+            'TLI Indicator'               : [4, 7],
+            'S-IC Indicator'              : [5, 0],
+            'SEI Indicator'               : [5, 1],
+            'S-IVB Indicator'             : [5, 2],
+            'M-I Indicator'               : [5, 3],
+            'M-II Indicator'              : [5, 4],
+            'M-III Indicator'             : [5, 5],
+            'Docking Probe Indicator'     : [5, 6],
+            'Glycol Pump Indicator'       : [5, 7],
+            'SCE Power Indicator'         : [6, 0],
+            'Wast Dump Indicator'         : [6, 1],
+            'Cabin Fan Indicator'         : [6, 2],
+            'H2O Flow Indicator'          : [6, 3],
+            'Int Light Indicator'         : [6, 4],
+            'Suit Comp Indicator'         : [6, 5],
+            'Master Alarm Indicator'      : [6, 6],
+            'Lamp Indicator'              : [6, 7],
+            'Ack Indicator'               : [7, 0]
+        }
+
+        self.scaledIndicators = {
+            'Mission Clock Indicator' : 0, 
+            'Pitch Indicator'         : 1, 
+            'Yaw Indicator'           : 2, 
+            'Roll Indicator'          : 3, 
+            'IHR Indicator'           : 4, 
+            'AHR Indicator'           : 5, 
+            'ABR Indicator'           : 6,
+            'Voltage Indicator'       : 7,
+            'Resistance Indicator'    : 8,
+            'Current Indicator'       : 9,
+            'O2 Flow Indicator'       : 10,
+            'O2 Pressure Indicator'   : 11,
+            'H2 Pressure Indicator'   : 12,
+            'O2 Quantity Indicator'   : 13,
+            'H2 Quantity Indicator'   : 14,
+            'Voltage Indicator'       : 15,
+            'Resistance Indicator'    : 16,
+            'Current Indicator'       : 17,
+            'O2 Flow Indicator'       : 18,
+            'Signal Indicator'        : 19
         }
