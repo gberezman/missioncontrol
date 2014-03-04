@@ -38,6 +38,18 @@ class Board:
                 pass
         return result
 
+    def getScaledIndicatorArray(self, indicators):
+        result = bytearray(len(self.scaledIndicators))
+        for index in range(len(result)):
+            result[index] = 0
+        for indicator in indicators:
+            try:
+                index = self.scaledIndicators[indicator]
+                result[index] = indicators[indicator]
+            except KeyError:
+                pass
+        return result
+
     def __init__(self):
         self.switches = { 
             'Arm Abort'         : [0, 0],
