@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
-def isBitSet(bitNum, value):
+def bitNumToMask(bitNum):
     offset = bitNum & 31
-    mask = 1 << offset
+    return 1 << offset
+
+def isBitSet(bitNum, value):
+    mask = bitNumToMask(bitNum)
     return ( value & mask ) != 0
 
 class Board:
@@ -12,7 +15,7 @@ class Board:
             coord = self.switches[switch]
             bitNum = coord[1]
             segment = switchSettings[coord[0]]
-            return isBitSet(coord[1], segment)
+            return isBitSet(bitNum, segment)
         except KeyError:
             return None
         except IndexError:
@@ -31,8 +34,7 @@ class Board:
         for indicator in indicators:
             try:
                 coord = self.ledIndicators[indicator]
-                offset = coord[1] & 31
-                bit = 1 << offset
+                bit = bitNumToMask(coord[1])
                 result[coord[0]] |= bit
             except KeyError: 
                 pass
