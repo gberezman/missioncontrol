@@ -8,7 +8,7 @@ def isBitSet(bitNum, value):
     mask = bitNumToMask(bitNum)
     return ( value & mask ) != 0
 
-class Board:
+class BoardSignalTransformer:
 
     def isSwitchOn(self, switch, switchSettings):
         try:
