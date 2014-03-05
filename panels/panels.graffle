@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2014-03-02 16:39:20 +0000</string>
+	<string>2014-03-03 03:24:55 +0000</string>
 	<key>Modifier</key>
 	<string>Gregory Berezowsky</string>
 	<key>NotesVisible</key>
@@ -8049,7 +8049,7 @@ DEPLOY}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{362.45984678970876, 484.32197087221022}, {130.24485778808594, 28.346456527709961}}</string>
+					<string>{{389.08227568375173, 484.32197087221022}, {77, 28.346456527709961}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -8146,7 +8146,7 @@ DEPLOY}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{350.91654615323, 374.52650626467266}, {130.24485778808594, 28.346456527709961}}</string>
+					<string>{{377.53897504727297, 374.52650626467266}, {77, 28.346456527709961}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -8245,7 +8245,7 @@ DEPLOY}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{350.91654615323012, 264.73103831829792}, {130.24485778808594, 28.346456527709961}}</string>
+					<string>{{377.53897504727308, 264.73103831829792}, {77, 28.346456527709961}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -8342,7 +8342,7 @@ DEPLOY}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{356.68819600733445, 139.0763536701393}, {130.24485778808594, 28.346456527709961}}</string>
+					<string>{{383.31062535378737, 139.0763536701393}, {77, 28.346456527709961}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -16309,7 +16309,7 @@ GMBL 1}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>14</integer>
+		<integer>0</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>FitInWindow</key>
