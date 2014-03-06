@@ -96,6 +96,13 @@ class MissionControlTests(unittest.TestCase):
         transformer = BoardSignalTransformer()
         indicatorArray = transformer.getScaledIndicatorArray( indicators )
         self.assertEquals( bytearray(len(transformer.scaledIndicators)), indicatorArray)
+
+    def test_SPSSwitchOn(self):
+        transformer = BoardSignalTransformer()
+        switches = transformer.getClearedSwitches()
+        transformer.switchOn('SPS', switches)
+        spsSwitch = transformer.isSwitchOn('SPS', switches)
+        self.assertTrue(spsSwitch)
         
 if __name__ == '__main__':
     unittest.main()

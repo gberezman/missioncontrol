@@ -10,6 +10,15 @@ def isBitSet(bitNum, value):
 
 class BoardSignalTransformer:
 
+    def getClearedSwitches(self):
+        return bytearray(len(self.switches))
+
+    def switchOn(self, switch, switches):
+        coord = self.switches[switch]
+        bitNum = coord[1]
+        segment = switches[coord[0]]
+        switches[coord[0]] = segment | bitNumToMask(bitNum)
+
     def isSwitchOn(self, switch, switchSettings):
         try:
             coord = self.switches[switch]
