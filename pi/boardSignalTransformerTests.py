@@ -104,5 +104,12 @@ class MissionControlTests(unittest.TestCase):
         spsSwitch = transformer.isSwitchOn('SPS', switches)
         self.assertTrue(spsSwitch)
         
+    def test_ES1SwitchOn(self):
+        transformer = BoardSignalTransformer()
+        switches = transformer.getClearedSwitches()
+        transformer.switchOn('ES1', switches)
+        spsSwitch = transformer.isSwitchOn('ES1', switches)
+        self.assertTrue(spsSwitch)
+        
 if __name__ == '__main__':
     unittest.main()
