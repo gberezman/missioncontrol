@@ -78,6 +78,13 @@ class BoardSerializerTests(unittest.TestCase):
         self.assertTrue( self.board.isSwitchEnabled( 'Switch 1' ) )
         self.assertTrue( self.board.isSwitchEnabled( 'Switch 2' ) )
         self.assertTrue( self.board.isSwitchEnabled( 'Switch 3' ) )
+   
+    def test_deserializeOffSwitch_setsToOff(self):
+        self.board.enableSwitch( 'Switch 1' )
+        switches = bytearray([0, 0])
+        self.serializer.deserializeSwitches(self.board, switches)
+        self.assertFalse( self.board.isSwitchEnabled( 'Switch 1' ) )
+        
 
     def test_deserializePot(self):
         pots = bytearray([10, 0])

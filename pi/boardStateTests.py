@@ -11,6 +11,11 @@ class BoardStateTests(unittest.TestCase):
         self.board.enableSwitch( 'Arm Abort' )
         self.assertTrue( self.board.isSwitchEnabled( 'Arm Abort' ) )
 
+    def test_switchOffArmAbort(self):
+        self.board.enableSwitch( 'Arm Abort' )
+        self.board.disableSwitch( 'Arm Abort' )
+        self.assertFalse( self.board.isSwitchEnabled( 'Arm Abort' ) )
+
     def test_ifArmAbortSwitchIsNotEnabled_switchIsOff(self):
         self.assertFalse( self.board.isSwitchEnabled( 'Arm Abort' ) )
 
@@ -27,6 +32,11 @@ class BoardStateTests(unittest.TestCase):
     def test_enableAbortLed(self):
         self.board.enableLed( 'Abort' )
         self.assertTrue( self.board.isLedEnabled( 'Abort' ) )
+
+    def test_disableAbortLed(self):
+        self.board.enableLed( 'Abort' )
+        self.board.disableLed( 'Abort' )
+        self.assertFalse( self.board.isLedEnabled( 'Abort' ) )
 
     def test_unsetPitch_isZero(self):
         self.assertEquals(0, self.board.getScaledIndicator( 'Pitch' ) )

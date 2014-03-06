@@ -33,6 +33,8 @@ class BoardSerializer:
             (segment, bitNum) = board.config.switches[switch]
             if( isBitSet( bitNum, switches[segment] ) ):
                 board.enableSwitch( switch )
+            else:
+                board.disableSwitch( switch )
 
     def deserializePots(self, board, pots):
         for pot in board.config.potentiometers:

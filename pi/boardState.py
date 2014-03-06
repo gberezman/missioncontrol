@@ -25,6 +25,9 @@ class BoardState:
     def enableSwitch(self, switch):
         self.switchState[switch] = True
 
+    def disableSwitch(self, switch):
+        self.switchState[switch] = False
+
     def isSwitchEnabled(self, switch):
         return self.switchState[switch]
 
@@ -42,6 +45,9 @@ class BoardState:
 
     def enableLed(self, led):
         self.ledStates[led] = True
+
+    def disableLed(self, led):
+        self.ledStates[led] = False
 
     def getScaledIndicator(self, indicator):
         return self.scaledIndicatorStates[indicator]
