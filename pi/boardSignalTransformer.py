@@ -49,6 +49,12 @@ class BoardSignalTransformer:
                 pass
         return result
 
+    def isLedOn(self, led, ledArray):
+        coord = self.ledIndicators[led]
+        bitNum = coord[1]
+        segment = ledArray[coord[0]]
+        return isBitSet(bitNum, segment)
+
     def getScaledIndicatorArray(self, indicators):
         result = bytearray(len(self.scaledIndicators))
         for index in range(len(result)):

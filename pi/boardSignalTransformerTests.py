@@ -104,12 +104,17 @@ class MissionControlTests(unittest.TestCase):
         spsSwitch = transformer.isSwitchOn('SPS', switches)
         self.assertTrue(spsSwitch)
         
-    def test_ES1SwitchOn(self):
+    def test_SwitchOn_ES1(self):
         transformer = BoardSignalTransformer()
         switches = transformer.getClearedSwitches()
         transformer.switchOn('ES1', switches)
         spsSwitch = transformer.isSwitchOn('ES1', switches)
         self.assertTrue(spsSwitch)
+
+    def test_isLedOn_PTT(self):
+        transformer = BoardSignalTransformer()
+        ledArray = transformer.getLedArray( ['Push To Talk Indicator'] )
+        self.assertTrue( transformer.isLedOn('Push To Talk Indicator', ledArray ) )
         
 if __name__ == '__main__':
     unittest.main()
