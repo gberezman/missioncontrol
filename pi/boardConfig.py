@@ -1,71 +1,6 @@
 #!/usr/bin/env python
 
-def bitNumToMask(bitNum):
-    offset = bitNum & 31
-    return 1 << offset
-
-def isBitSet(bitNum, value):
-    mask = bitNumToMask(bitNum)
-    return ( value & mask ) != 0
-
-class BoardSignalTransformer:
-
-    def getClearedSwitches(self):
-        return bytearray(len(self.switches))
-
-    def switchOn(self, switch, switches):
-        coord = self.switches[switch]
-        bitNum = coord[1]
-        segment = switches[coord[0]]
-        switches[coord[0]] = segment | bitNumToMask(bitNum)
-
-    def isSwitchOn(self, switch, switchSettings):
-        try:
-            coord = self.switches[switch]
-            bitNum = coord[1]
-            segment = switchSettings[coord[0]]
-            return isBitSet(bitNum, segment)
-        except KeyError:
-            return None
-        except IndexError:
-            return None
-
-    def getPotentiometerReading(self, meter, potentiometerSettings):
-        try:
-            return potentiometerSettings[self.potentiometers[meter]]
-        except KeyError:
-            return None
-        except IndexError:
-            return None
-
-    def getLedArray(self, indicators):
-        result = bytearray([0, 0, 0, 0, 0, 0, 0, 0])
-        for indicator in indicators:
-            try:
-                coord = self.ledIndicators[indicator]
-                bit = bitNumToMask(coord[1])
-                result[coord[0]] |= bit
-            except KeyError: 
-                pass
-        return result
-
-    def isLedOn(self, led, ledArray):
-        coord = self.ledIndicators[led]
-        bitNum = coord[1]
-        segment = ledArray[coord[0]]
-        return isBitSet(bitNum, segment)
-
-    def getScaledIndicatorArray(self, indicators):
-        result = bytearray(len(self.scaledIndicators))
-        for index in range(len(result)):
-            result[index] = 0
-        for indicator in indicators:
-            try:
-                index = self.scaledIndicators[indicator]
-                result[index] = indicators[indicator]
-            except KeyError:
-                pass
-        return result
+class BoardConfig:
 
     def __init__(self):
         self.switches = { 
@@ -166,26 +101,17 @@ class BoardSignalTransformer:
             'SM RCS D'                    : [4, 2],
             'Uplink Activity'             : [4, 3],
             'Gimbal Lock'                 : [4, 4],
-            'SPS Indicator'               : [4, 5],
-            'TEI Indicator'               : [4, 6],
-            'TLI Indicator'               : [4, 7],
-            'S-IC Indicator'              : [5, 0],
-            'SEI Indicator'               : [5, 1],
-            'S-IVB Indicator'             : [5, 2],
-            'M-I Indicator'               : [5, 3],
-            'M-II Indicator'              : [5, 4],
-            'M-III Indicator'             : [5, 5],
-            'Docking Probe Indicator'     : [5, 6],
-            'Glycol Pump Indicator'       : [5, 7],
-            'SCE Power Indicator'         : [6, 0],
-            'Wast Dump Indicator'         : [6, 1],
-            'Cabin Fan Indicator'         : [6, 2],
-            'H2O Flow Indicator'          : [6, 3],
-            'Int Light Indicator'         : [6, 4],
-            'Suit Comp Indicator'         : [6, 5],
-            'Master Alarm Indicator'      : [6, 6],
-            'Lamp Indicator'              : [6, 7],
-            'Ack Indicator'               : [7, 0]
+            'Docking Probe Indicator'     : [4, 5],
+            'Glycol Pump Indicator'       : [4, 6],
+            'SCE Power Indicator'         : [4, 7],
+            'Wast Dump Indicator'         : [5, 0],
+            'Cabin Fan Indicator'         : [5, 1],
+            'H2O Flow Indicator'          : [5, 2],
+            'Int Light Indicator'         : [5, 3],
+            'Suit Comp Indicator'         : [5, 4],
+            'Master Alarm Indicator'      : [5, 5],
+            'Lamp Indicator'              : [5, 6],
+            'Ack Indicator'               : [5, 7]
         }
 
         self.scaledIndicators = {
