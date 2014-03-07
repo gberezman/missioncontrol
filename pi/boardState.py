@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 class BoardState:
 
     def __init__(self, config):

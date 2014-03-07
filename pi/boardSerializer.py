@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 def bitNumToMask(bitNum):
     offset = bitNum & 31
     return 1 << offset

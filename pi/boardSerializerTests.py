@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import unittest
 from boardSerializer import BoardSerializer
 from boardState import BoardState
