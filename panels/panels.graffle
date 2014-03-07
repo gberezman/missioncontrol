@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2014-03-06 15:57:02 +0000</string>
+	<string>2014-03-07 19:59:55 +0000</string>
 	<key>Modifier</key>
 	<string>Gregory Berezowsky</string>
 	<key>NotesVisible</key>
@@ -8476,7 +8476,7 @@ FIRE}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{425.99643516147927, 355.65436374946881}, {88, 46}}</string>
+					<string>{{414.56099746948632, 348.82576095277375}, {78, 69}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -8527,8 +8527,9 @@ FIRE}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\fs36 \cf0 DROGUE\
-DEPLOY}</string>
+\f0\fs36 \cf0 APEX\
+COVER\
+JETTSN}</string>
 						<key>VerticalPad</key>
 						<integer>0</integer>
 					</dict>
@@ -8580,7 +8581,7 @@ DEPLOY}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{425.99642848380495, 250.69056704397568}, {88, 46}}</string>
+					<string>{{426.99642848380495, 250.69056704397568}, {86, 46}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -8631,7 +8632,7 @@ DEPLOY}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\fs36 \cf0 DROGUE\
+\f0\fs36 \cf0 CANARD\
 DEPLOY}</string>
 						<key>VerticalPad</key>
 						<integer>0</integer>
@@ -16437,13 +16438,13 @@ GMBL 1}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>7</integer>
+		<integer>15</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>FitInWindow</key>
 		<true/>
 		<key>Frame</key>
-		<string>{{-0, 4}, {1920, 1054}}</string>
+		<string>{{0, 4}, {1280, 774}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -16457,9 +16458,9 @@ GMBL 1}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{-426, 0}, {1429.950783343862, 732.99998137794603}}</string>
+		<string>{{0, 0}, {1321.7086874705435, 733.00001444872942}}</string>
 		<key>Zoom</key>
-		<real>1.2482947111129761</real>
+		<real>0.86630284786224365</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
