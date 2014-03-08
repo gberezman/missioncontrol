@@ -1,3 +1,4 @@
+from time import sleep
 import serial
 
 class Port:
@@ -8,8 +9,8 @@ class Port:
         sleep(2)
         self.port.flush()
 
-    def nonBlockingRead():
+    def nonBlockingRead(self):
         return self.port.read()
 
-    def write(message):
+    def write(self, message):
         self.port.write(message)
