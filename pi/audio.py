@@ -10,5 +10,6 @@ class Audio:
         self.ch0 = pygame.mixer.Channel(0)
         self.ch1 = pygame.mixer.Channel(1)
 
-        quindar  : pygame.mixer.Sound( 'audio/quindar-tone.wav' )
-        thruster : pygame.mixer.Sound( 'audio/rocket.wav' )
+        self.quindar  = pygame.mixer.Sound( 'audio/quindar-tone.wav' )
+        self.thruster = pygame.mixer.Sound( 'audio/rocket.wav' )
+        self.thruster.set_volume(2)

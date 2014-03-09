@@ -12,20 +12,23 @@
 
 // Input #0 is on pin 21 so connect a button or switch from there to ground
 
-Adafruit_MCP23017 mcp;
+Adafruit_MCP23017 mcp0;
+// Adafruit_MCP23017 mcp1;
   
 void setup() {  
-  mcp.begin();      // use default address 0
+  mcp0.begin(0);
+  // mcp1.begin(1);
 
-  mcp.pinMode(0, INPUT);
-  mcp.pullUp(0, HIGH);  // turn on a 100K pullup internally
+  mcp0.pinMode(0, INPUT);
+  mcp0.pullUp(0, HIGH);  // turn on a 100K pullup internally
 
+  // mcp1.pinMode(0, INPUT);
+  // mcp1.pullUp(0, HIGH);  // turn on a 100K pullup internally
+  
   pinMode(13, OUTPUT);  // use the p13 LED as debugging
 }
 
-
-
 void loop() {
   // The LED will 'echo' the button
-  digitalWrite(13, mcp.digitalRead(0));
+  digitalWrite(13, mcp0.digitalRead(0));
 }
