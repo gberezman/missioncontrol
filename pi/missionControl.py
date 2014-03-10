@@ -1,10 +1,9 @@
 from port import Port
-from audio import Audio
 from time import sleep
+from rules import Rules
 import threading
 
 port = Port()
-audio = Audio()
 
 def isSwitched(reading):
     return reading < 128
@@ -80,8 +79,8 @@ def eventLoop():
 
     print "Starting event loop"
 
-    SPSDown = False
- 
+    rules = MCRules()
+
     while True:
         try:
             sleep( .01 )
@@ -95,13 +94,7 @@ def eventLoop():
 
             print "switch {} is {}".format(switch, isSwitchOn)
 
-            if switch == 'SPS':
-                if isSwitchOn:
-                    print "start thruster"
-                    audio.thruster.play(loops = -1)
-                else:
-                    print "stop thruster"
-                    audio.thruster.stop()
+            rules.apply(switch, isSwitchOn)
 
         except KeyboardInterrupt:
             exit()
