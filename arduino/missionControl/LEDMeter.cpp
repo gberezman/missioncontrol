@@ -1,10 +1,11 @@
 #include <Wire.h>
 #include "LEDMeter.h"
 
-LEDMeter::LEDMeter(Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t _baseAnode) {
+LEDMeter::LEDMeter(Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t _baseAnode, uint16_t* _colors) {
     baseCathode = _baseCathode;
     baseAnode   = _baseAnode;
     matrix      = _matrix;
+    colors      = _colors;
 }
 
 void LEDMeter::clear(void) {
@@ -18,40 +19,54 @@ void LEDMeter::setBars(uint8_t bars) {
   // for( int cathode = baseCathode; cathode < baseCathode + 3; cathode++ )
     // matrix->displaybuffer[cathode] = 0;
     
-  uint16_t color = B11110000;
-  if( bars < 3 )
-    color = B00001111;
-  else if ( bars < 5 )
-    color = B11111111;
+  uint16_t color = 0;
+  if( bars >= 1 )
+    color = colors[bars - 1];
   
   switch( bars ) {
+    case 0:
+      matrix->displaybuffer[baseCathode] = 0;
+      matrix->displaybuffer[baseCathode + 1] = 0;
+      matrix->displaybuffer[baseCathode + 2] = 0;
     case 1:
       matrix->displaybuffer[baseCathode] = B00010001 & color;
+      matrix->displaybuffer[baseCathode + 1] = 0;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;      
     case 2:
       matrix->displaybuffer[baseCathode] = B00110011 & color;
+      matrix->displaybuffer[baseCathode + 1] = 0;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;
     case 3:
       matrix->displaybuffer[baseCathode] = B01110111 & color;
+      matrix->displaybuffer[baseCathode + 1] = 0;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;
     case 4:
       matrix->displaybuffer[baseCathode] = B11111111 & color;
+      matrix->displaybuffer[baseCathode + 1] = 0;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;
     case 5:
       matrix->displaybuffer[baseCathode] = B11111111 & color;
       matrix->displaybuffer[baseCathode + 1] = B00010001 & color;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;
     case 6:
       matrix->displaybuffer[baseCathode] = B11111111 & color;
       matrix->displaybuffer[baseCathode + 1] = B00110011 & color;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;
     case 7:
       matrix->displaybuffer[baseCathode] = B11111111 & color;
       matrix->displaybuffer[baseCathode + 1] = B01110111 & color;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;
     case 8:
       matrix->displaybuffer[baseCathode] = B11111111 & color;
       matrix->displaybuffer[baseCathode + 1] = B11111111 & color;
+      matrix->displaybuffer[baseCathode + 2] = 0;
       break;
     case 9:
       matrix->displaybuffer[baseCathode] = B11111111 & color;

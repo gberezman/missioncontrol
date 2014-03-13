@@ -20,8 +20,23 @@ Adafruit_LEDBackpack matrixA = Adafruit_LEDBackpack();
 #define NUM_SWITCHES ( NUM_EXPANDER_PINS ) * ( NUM_EXPANDERS )
 
 uint8_t switchStates[NUM_SWITCHES];
+uint8_t potStates[1];
   
-LEDMeter o2meter = LEDMeter(&matrixA, 0, 0);
+uint16_t colors1[] = { 
+  B00001111,
+  B00001111,
+  B11111111,
+  B11111111,
+  B11110000,
+  B11110000,
+  B11110000,
+  B11110000,
+  B11110000,
+  B11110000,
+  B11111111,
+  B00001111
+};
+LEDMeter o2meter = LEDMeter(&matrixA, 0, 0, colors1);
 
 void setup() {
   Serial.begin(115200);
@@ -44,6 +59,9 @@ void setup() {
 
 void loop() {
   scanSwitches();
+  
+  potStates[0] = map( analogRead(7), 0, 1023, 0, 12 );  
+  
   updateMeters();
 }
 
@@ -97,11 +115,6 @@ void sendAndUpdateSwitchStateChanges(uint8_t current[]) {
 }
 
 void updateMeters() {
-  o2meter.clear();
-  delay(500);
-  for( int i = 1; i < 13; i++ ) {
-    o2meter.setBars(i);
-    delay(500);
-  }
+  o2meter.setBars(potStates[0]);
 }
 

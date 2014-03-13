@@ -7,14 +7,15 @@
 
 class LEDMeter {
   public:
-    LEDMeter(Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode);
+    LEDMeter(Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode, uint16_t* _colors);
     void clear(void);
     void setBars(uint8_t bars);
 
   private:
     Adafruit_LEDBackpack* matrix;
-    uint8_t baseCathode;
-    uint8_t baseAnode;
+    uint8_t  baseCathode;
+    uint8_t  baseAnode;
+    uint16_t* colors;
 };
 
 #endif
