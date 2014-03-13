@@ -18,30 +18,32 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#include <Wire.h>
-#include "./Adafruit_LEDBackpack.h"
-#include "./Adafruit_GFX.h"
+#ifdef __AVR_ATtiny85__
+ #include <TinyWireM.h>
+ #define Wire TinyWireM
+#else
+ #include <Wire.h>
+#endif
+#include "Adafruit_LEDBackpack.h"
+#include "Adafruit_GFX.h"
 
 static const uint8_t numbertable[] = { 
-	0x3F /* 0 */, 
-	0x06 /* 1 */,
-	0x5B /* 2 */,
-	0x4F /* 3 */,
-	0x66 /* 4 */,
-	0x6D /* 5 */,
-	0x7D, /* 6 */
-	0x07, /* 7 */
-	0x7F, /* 8 */
-	0x6F, /* 9 */
-};
-
-const uint8_t alphatable[] = {
-	0x77, /* a */
-	0x7C, /* b */
-	0x39, /* C */
-	0x5E, /* d */
-	0x79, /* E */
-	0x71, /* F */
+    0x3F, /* 0 */
+    0x06, /* 1 */
+    0x5B, /* 2 */
+    0x4F, /* 3 */
+    0x66, /* 4 */
+    0x6D, /* 5 */
+    0x7D, /* 6 */
+    0x07, /* 7 */
+    0x7F, /* 8 */
+    0x6F, /* 9 */
+    0x77, /* a */
+    0x7C, /* b */
+    0x39, /* C */
+    0x5E, /* d */
+    0x79, /* E */
+    0x71, /* F */
 };
 
 void Adafruit_LEDBackpack::setBrightness(uint8_t b) {
@@ -92,17 +94,66 @@ void Adafruit_LEDBackpack::clear(void) {
   }
 }
 
-Adafruit_8x8matrix::Adafruit_8x8matrix(void) {
-  constructor(8, 8);
+/******************************* 24 BARGRAPH OBJECT */
+
+Adafruit_24bargraph::Adafruit_24bargraph(void) {
+
+}
+
+void Adafruit_24bargraph::setBar(uint8_t bar, uint8_t color) {
+  uint16_t a, c;
+ 
+  if (bar < 12)
+    c = bar / 4;
+  else 
+    c = (bar - 12) / 4;
+
+  a = bar % 4;
+  if (bar >= 12)
+    a += 4;
+    
+  //Serial.print("Ano = "); Serial.print(a); Serial.print(" Cath = "); Serial.println(c);
+  if (color == LED_RED) {
+    displaybuffer[c] |= _BV(a) ;
+  } else if (color == LED_YELLOW) {
+    displaybuffer[c] |= _BV(a) | _BV(a+8);
+  } else if (color == LED_OFF) {
+    displaybuffer[c] &= ~_BV(a) & ~_BV(a+8);
+  } else if (color == LED_GREEN) {
+    displaybuffer[c] |= _BV(a+8) ;
+  } 
+}
+
+
+/******************************* 8x8 MATRIX OBJECT */
+
+Adafruit_8x8matrix::Adafruit_8x8matrix(void) : Adafruit_GFX(8, 8) {
 }
 
 void Adafruit_8x8matrix::drawPixel(int16_t x, int16_t y, uint16_t color) {
   if ((y < 0) || (y >= 8)) return;
-  if ((x < 0) || (x >= 16)) return;
+  if ((x < 0) || (x >= 8)) return;
+
+ // check rotation, move pixel around if necessary
+  switch (getRotation()) {
+  case 1:
+    swap(x, y);
+    x = 8 - x - 1;
+    break;
+  case 2:
+    x = 8 - x - 1;
+    y = 8 - y - 1;
+    break;
+  case 3:
+    swap(x, y);
+    y = 8 - y - 1;
+    break;
+  }
 
   // wrap around the x
   x += 7;
   x %= 8;
+
 
   if (color) {
     displaybuffer[y] |= 1 << x;
@@ -111,14 +162,29 @@ void Adafruit_8x8matrix::drawPixel(int16_t x, int16_t y, uint16_t color) {
   }
 }
 
+/******************************* 8x8 BICOLOR MATRIX OBJECT */
 
-Adafruit_BicolorMatrix::Adafruit_BicolorMatrix(void) {
-  constructor(8, 8);
+Adafruit_BicolorMatrix::Adafruit_BicolorMatrix(void) : Adafruit_GFX(8, 8) {
 }
 
 void Adafruit_BicolorMatrix::drawPixel(int16_t x, int16_t y, uint16_t color) {
   if ((y < 0) || (y >= 8)) return;
   if ((x < 0) || (x >= 8)) return;
+
+  switch (getRotation()) {
+  case 1:
+    swap(x, y);
+    x = 8 - x - 1;
+    break;
+  case 2:
+    x = 8 - x - 1;
+    y = 8 - y - 1;
+    break;
+  case 3:
+    swap(x, y);
+    y = 8 - y - 1;
+    break;
+  }
 
   if (color == LED_GREEN) {
     displaybuffer[y] |= 1 << x;
@@ -130,6 +196,8 @@ void Adafruit_BicolorMatrix::drawPixel(int16_t x, int16_t y, uint16_t color) {
     displaybuffer[y] &= ~(1 << x) & ~(1 << (x+8));
   }
 }
+
+/******************************* 7 SEGMENT OBJECT */
 
 Adafruit_7segment::Adafruit_7segment(void) {
   position = 0;
@@ -215,14 +283,20 @@ void  Adafruit_7segment::print(double n, int digits)
 
 size_t Adafruit_7segment::write(uint8_t c) {
 
+  uint8_t r = 0;
+
   if (c == '\n') position = 0;
   if (c == '\r') position = 0;
 
-  if ((c >= '0') && (c <= '9'))
+  if ((c >= '0') && (c <= '9')) {
     writeDigitNum(position, c-'0');
+    r = 1;
+  }
 
   position++;
   if (position == 2) position++;
+
+  return r;
 }
 
 void Adafruit_7segment::writeDigitRaw(uint8_t d, uint8_t bitmask) {
@@ -243,108 +317,80 @@ void Adafruit_7segment::writeDigitNum(uint8_t d, uint8_t num, boolean dot) {
   writeDigitRaw(d, numbertable[num] | (dot << 7));
 }
 
-void Adafruit_7segment::writeDigitAlpha(uint8_t d, uint8_t alph, boolean dot) {
-  if (d > 4) return;
-
-  writeDigitRaw(d, alphatable[alph] | (dot << 7));
-}
-
 void Adafruit_7segment::print(long n, int base)
 {
-  if (base == 0) {
-    write(n);
-  } else if (base == 10) {
-    if (n < 0) {
-      print('-');
-      n = -n;
-    }
-    printNumber(n, 10);
-  } else {
-    printNumber(n, base);
-  }
+  printNumber(n, base);
 }
 
-
-void Adafruit_7segment::printNumber(unsigned long n, uint8_t base)
+void Adafruit_7segment::printNumber(long n, uint8_t base)
 {
-  position = 0;
-
-  unsigned char buf[8 * sizeof(long)]; // Assumes 8-bit chars. 
-  unsigned long i = 0;
-
-  if (n == 0) {
-    writeDigitRaw(0, 0x0);
-    writeDigitRaw(1, 0x0);
-    writeDigitRaw(2, 0x0);
-    writeDigitRaw(3, 0x0);
-    writeDigitNum(4, 0);
-    return;
-  } 
-
-  while (n > 0) {
-    buf[i++] = n % base;
-    n /= base;
-  }
-
-  // we have i digits
-
-  if (i > 4) { // too big!
-    Serial.println("too long");
-    writeDigitRaw(0, 0x40);
-    writeDigitRaw(1, 0x40);
-    writeDigitRaw(2, 0x00);
-    writeDigitRaw(3, 0x40);
-    writeDigitRaw(4, 0x40);
-    return;
-  }
-  //Serial.println(i);
-
-  clear();
-
-  position = 4;
-  for (uint8_t n=0; n<i; n++) {
-    if (buf[n] < 10)
-      writeDigitNum(position, buf[n]);
-    else 
-      writeDigitAlpha(position,  buf[n] - 10);
-
-    position--;
-    if (position == 2) position--;
-  }
-  position = 0;
+    printFloat(n, 0, base);
 }
 
-void Adafruit_7segment::printFloat(double number, uint8_t digits) 
+void Adafruit_7segment::printFloat(double n, uint8_t fracDigits, uint8_t base) 
 { 
-  // Handle negative numbers
-  if (number < 0.0)
-  {
-     print('-');
-     number = -number;
-  }
-
-  // Round correctly so that print(1.999, 2) prints as "2.00"
-  double rounding = 0.5;
-  for (uint8_t i=0; i<digits; ++i)
-    rounding /= 10.0;
+  uint8_t numericDigits = 4;   // available digits on display
+  boolean isNegative = false;  // true if the number is negative
   
-  number += rounding;
-
-  // Extract the integer part of the number and print it
-  unsigned long int_part = (unsigned long)number;
-  double remainder = number - (double)int_part;
-  print(int_part);
-
-  // Print the decimal point, but only if there are digits beyond
-  if (digits > 0)
-    print('.'); 
-
-  // Extract digits from the remainder one at a time
-  while (digits-- > 0)
-  {
-    remainder *= 10.0;
-    int toPrint = int(remainder);
-    print(toPrint);
-    remainder -= toPrint; 
-  } 
+  // is the number negative?
+  if(n < 0) {
+    isNegative = true;  // need to draw sign later
+    --numericDigits;    // the sign will take up one digit
+    n *= -1;            // pretend the number is positive
+  }
+  
+  // calculate the factor required to shift all fractional digits
+  // into the integer part of the number
+  double toIntFactor = 1.0;
+  for(int i = 0; i < fracDigits; ++i) toIntFactor *= base;
+  
+  // create integer containing digits to display by applying
+  // shifting factor and rounding adjustment
+  uint32_t displayNumber = n * toIntFactor + 0.5;
+  
+  // calculate upper bound on displayNumber given
+  // available digits on display
+  uint32_t tooBig = 1;
+  for(int i = 0; i < numericDigits; ++i) tooBig *= base;
+  
+  // if displayNumber is too large, try fewer fractional digits
+  while(displayNumber >= tooBig) {
+    --fracDigits;
+    toIntFactor /= base;
+    displayNumber = n * toIntFactor + 0.5;
+  }
+  
+  // did toIntFactor shift the decimal off the display?
+  if (toIntFactor < 1) {
+    printError();
+  } else {
+    // otherwise, display the number
+    int8_t displayPos = 4;
+    
+    if (displayNumber)  //if displayNumber is not 0
+    {
+      for(uint8_t i = 0; displayNumber; ++i) {
+        boolean displayDecimal = (fracDigits != 0 && i == fracDigits);
+        writeDigitNum(displayPos--, displayNumber % base, displayDecimal);
+        if(displayPos == 2) writeDigitRaw(displayPos--, 0x00);
+        displayNumber /= base;
+      }
+    }
+    else {
+      writeDigitNum(displayPos--, 0, false);
+    }
+  
+    // display negative sign if negative
+    if(isNegative) writeDigitRaw(displayPos--, 0x40);
+  
+    // clear remaining display positions
+    while(displayPos >= 0) writeDigitRaw(displayPos--, 0x00);
+  }
 }
+
+void Adafruit_7segment::printError(void) {
+  for(uint8_t i = 0; i < SEVENSEG_DIGITS; ++i) {
+    writeDigitRaw(i, (i == 2 ? 0x00 : 0x40));
+  }
+}
+

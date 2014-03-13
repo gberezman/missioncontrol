@@ -17,6 +17,8 @@
   Written by Limor Fried/Ladyada for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ****************************************************/
+#ifndef _ADAFRUIT_LEDBACKPACK_H
+#define _ADAFRUIT_LEDBACKPACK_H
 
 #if (ARDUINO >= 100)
  #include "Arduino.h"
@@ -24,8 +26,12 @@
  #include "WProgram.h"
 #endif
 
-#include "Wire.h"
-#include "./Adafruit_GFX.h"
+#ifdef __AVR_ATtiny85__
+ #include <TinyWireM.h>
+#else
+ #include <Wire.h>
+#endif
+#include "Adafruit_GFX.h"
 
 #define LED_ON 1
 #define LED_OFF 0
@@ -45,6 +51,9 @@
 
 #define HT16K33_CMD_BRIGHTNESS 0x0E
 
+#define SEVENSEG_DIGITS 5
+
+
 // this is the raw HT16K33 controller
 class Adafruit_LEDBackpack {
  public:
@@ -61,6 +70,16 @@ class Adafruit_LEDBackpack {
  private:
   uint8_t i2c_addr;
 };
+
+class Adafruit_24bargraph : public Adafruit_LEDBackpack {
+ public:
+  Adafruit_24bargraph(void);
+
+  void setBar(uint8_t bar, uint8_t color);
+
+ private:
+};
+
 
 class Adafruit_8x8matrix : public Adafruit_LEDBackpack, public Adafruit_GFX {
  public:
@@ -110,11 +129,14 @@ class Adafruit_7segment : public Adafruit_LEDBackpack {
   
   void writeDigitRaw(uint8_t x, uint8_t bitmask);
   void writeDigitNum(uint8_t x, uint8_t num, boolean dot = false);
-  void writeDigitAlpha(uint8_t x, uint8_t num, boolean dot = false);
   void drawColon(boolean state);
-  void printNumber(unsigned long n, uint8_t base);
-  void printFloat(double number, uint8_t digits);
+  void printNumber(long, uint8_t = 2);
+  void printFloat(double, uint8_t = 2, uint8_t = DEC);
+  void printError(void);
 
  private:
   uint8_t position;
 };
+
+#endif
+

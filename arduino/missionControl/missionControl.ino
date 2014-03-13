@@ -1,37 +1,45 @@
 #include <Wire.h>
-#include "./Adafruit_MCP23017.h"
-#include "./Adafruit_LEDBackpack.h"
+#include "Adafruit_MCP23017.h"
+#include "Adafruit_LEDBackpack.h"
+#include "LEDMeter.h"
 
 Adafruit_MCP23017 mcp0;
-Adafruit_MCP23017 mcp1;
-Adafruit_MCP23017 mcp2;
-Adafruit_MCP23017 mcp3;
+// Adafruit_MCP23017 mcp1;
+// Adafruit_MCP23017 mcp2;
+// Adafruit_MCP23017 mcp3;
 Adafruit_MCP23017 mcps[] = { mcp0 };
 
-Adafruit_LEDBackpack matrixA;
-Adafruit_LEDBackpack matrixB;
-Adafruit_LEDBackpack matrixC;
-Adafruit_LEDBackpack matrixD;
-Adafruit_LEDBackpack matrixE;
-Adafruit_LEDBackpack matrices[] = { matrixA };
+Adafruit_LEDBackpack matrixA = Adafruit_LEDBackpack();
+// Adafruit_LEDBackpack matrixB;
+// Adafruit_LEDBackpack matrixC;
+// Adafruit_LEDBackpack matrixD;
+// Adafruit_LEDBackpack matrixE;
 
 #define NUM_EXPANDER_PINS 16
 #define NUM_EXPANDERS sizeof(mcps)/sizeof(Adafruit_MCP23017)
 #define NUM_SWITCHES ( NUM_EXPANDER_PINS ) * ( NUM_EXPANDERS )
-#define NUM_MATRICES sizeof(matrices)/sizeof(Adafruit_LEDBackpack)
 
 uint8_t switchStates[NUM_SWITCHES];
   
+LEDMeter o2meter = LEDMeter(&matrixA, 0, 0);
+
 void setup() {
   Serial.begin(115200);
+  
+  Wire.begin();
 
-  initializeBuffers();
+  initializeSwitchBuffers();
 
-  for( int mcp = 0; mcp < NUM_EXPANDERS; mcp++ )
-    initializeExpander(mcps[mcp], mcp);
+  initializeExpander( mcp0, 0 );
+  // initializeExpander( mcp1, 1 );
+  // initializeExpander( mcp2, 2 );
+  // initializeExpander( mcp3, 3 );
 
-  for( int matrix = 0; matrix < NUM_MATRICES; matrix++ )
-    initializeMatrix(matrices[matrix], matrixAddresses[matrix]);
+  initializeLEDMatrix( matrixA, 0x70 );
+  // initializeLEDMatrix( matrixB, 0x71 );
+  // initializeLEDMatrix( matrixC, 0x72 );
+  // initializeLEDMatrix( matrixD, 0x73 );
+  // initializeLEDMatrix( matrixE, 0x74 );
 }
 
 void loop() {
@@ -39,23 +47,24 @@ void loop() {
   updateMeters();
 }
 
-void initializeBuffers() {
+void initializeSwitchBuffers() {
   for( int i = 0; i < NUM_SWITCHES; i++ ) 
     switchStates[i] = 0;
 }
 
 void initializeExpander(Adafruit_MCP23017 mcp, int address) {
   mcp.begin(address);
-
+  
   for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) { 
-    mcp.pinMode(pin, INPUT);
-    mcp.pullUp(pin, HIGH);  // 100K pullup 
+      mcp.pinMode(pin, INPUT);
+      mcp.pullUp(pin, HIGH);  // 100K pullup 
   }
 }
 
-void intializeMatrix(Adafruit_LEDBackpack matrix, int address) {
-  matrix.begin(address + 0x70);
-  matrix.setBrightness(10);
+void initializeLEDMatrix(Adafruit_LEDBackpack matrix, uint8_t address) {
+  matrixA.begin( address );
+  matrix.clear();  
+  matrix.writeDisplay();
 }
 
 void scanSwitches() {
@@ -87,75 +96,12 @@ void sendAndUpdateSwitchStateChanges(uint8_t current[]) {
   }
 }
 
-// O2 press, H2 press, O2 Qty, H2 Qty, Voltage, current, O2flow, Resistance
-uint8_t meterBars[] = { 0 } // bars: 1-12
-// { matrix index, cathod offset, anode offset }
-uint8_t meterGeometry[][3] = { 
-    { 0, 0, 0 }
-    { 0, 0, 8 }
-    { 0, 3, 0 }
-    { 0, 3, 8 }
-    { 1, 0, 0 }
-    { 1, 0, 8 }
-    { 1, 3, 0 }
-    { 1, 3, 8 }
-}
-
-#define NUM_METERS sizeof(meterBars)/sizeof(uint8_t)
-#define LED_GREEN  B11110000
-#define LED_RED    B00001111
-#define LED_YELLOW B11111111
-
 void updateMeters() {
-  for( int meter = 0; meter < NUM_METERS; meter++ )
-    setMeterLED(meterBars[meter], meterGeometry[meter]);
-}
-
-uint8_t numbers[][] = {
-    { B00000000, B00000000, B00010001 },
-    { B00000000, B00000000, B00110011 },
-    { B00000000, B00000000, B01110111 },
-    { B00000000, B00000000, B11111111 },
-    { B00000000, B00010001, B11111111 },
-    { B00000000, B00110011, B11111111 },
-    { B00000000, B01110111, B11111111 },
-    { B00000000, B11111111, B11111111 },
-    { B00000000, B11111111, B11111111 },
-    { B00010001, B11111111, B11111111 },
-    { B00110011, B11111111, B11111111 },
-    { B01110111, B11111111, B11111111 },
-    { B11111111, B11111111, B11111111 },
-}
-
-void setMeterLED(uint8_t bars, uint8_t geometry[]) {
-  Adafruit_LEDBackpack matrix = matrices[geometry[0]];
-  uint8_t cathodOffset = geometry[1];
-  uint8_t anodeOffset  = geometry[2];
-
-  uint8_t colorMask = getColorMask( bars );
-
-  for( int cathode = cathodeOffset; cathode < 3 + cathodeOffset; cathode++ ) {
-    uint16_t buffer = matrix.displaybuffer[cathode];
-
-    buffer = disableByteAtOffset( buffer, anodeOffset );
-    buffer |= (colorMask & numbers[bars - 1, cathode]) << anodeOffset // enable number
-
-    matrix.displaybuffer[cathode] = buffer;
+  o2meter.clear();
+  delay(500);
+  for( int i = 1; i < 13; i++ ) {
+    o2meter.setBars(i);
+    delay(500);
   }
-
-  matrix.writeDisplay();
 }
 
-void disableByteAtOffset( uint16_t value, uint8_t offset ) {
-  uint16_t anodesMask = ~ ( B11111111 << anodeOffset );
-  return value & anodesMask;
-}
-
-uint8_t getColorMask( uint8_t bars ) {
-  if( bars < 2 )
-    return RED;
-  elsif( bars < 4 )
-    return YELLOW;
-  else
-    return GREEN;
-}

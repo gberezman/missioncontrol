@@ -228,3 +228,4 @@ uint8_t Adafruit_MCP23017::digitalRead(uint8_t p) {
   Wire.requestFrom(MCP23017_ADDRESS | i2caddr, 1);
   return (wirerecv() >> p) & 0x1;
 }
+
