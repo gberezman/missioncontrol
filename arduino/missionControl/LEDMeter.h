@@ -9,6 +9,36 @@
 #define BAR_LED_RED    B00001111
 #define BAR_LED_YELLOW B11111111
 
+static uint16_t TWELVE_BAR_DIAL_COLORS[] = {
+  BAR_LED_RED,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_RED
+};
+
+static uint16_t TWELVE_BAR_METER_COLORS[] = {
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN
+};
+
 class LEDMeter {
   public:
     LEDMeter(Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode, uint16_t* _colors);
