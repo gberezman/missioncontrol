@@ -60,7 +60,8 @@ class Rules:
             'ES 7'              : self.noAction,
             'ES 8'              : self.noAction,
             'ES 9'              : self.noAction,
-            'ES 10'             : self.noAction
+            'ES 10'             : self.noAction,
+            'undefined'         : self.noAction
         }
 
         self.offRule = {
@@ -108,7 +109,8 @@ class Rules:
             'ES 7'              : self.noAction,
             'ES 8'              : self.noAction,
             'ES 9'              : self.noAction,
-            'ES 10'             : self.noAction
+            'ES 10'             : self.noAction,
+            'undefined'         : self.noAction
         }
 
 if __name__ == '__main__':
