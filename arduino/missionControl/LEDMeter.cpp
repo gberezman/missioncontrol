@@ -22,11 +22,12 @@ LEDMeter::LEDMeter(Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t 
     baseAnode   = _baseAnode;
     matrix      = _matrix;
     colors      = _colors;
+    anodeMask   = ~ ( B11111111 << baseAnode );
 }
 
 void LEDMeter::clear(void) {
   for( int cathode = baseCathode; cathode < baseCathode + 3; cathode++ ) 
-    matrix->displaybuffer[cathode] = 0;
+    matrix->displaybuffer[cathode] &= anodeMask;
     
   matrix->writeDisplay();
 }
@@ -43,8 +44,7 @@ void LEDMeter::setDisplayBuffer( uint8_t pin, uint8_t value, uint8_t color ) {
 }
 
 uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
-  uint16_t mask = ~ ( B11111111 << baseAnode );
-  return ( current & mask ) | ( value << baseAnode );  
+  return ( current & anodeMask ) | ( value << baseAnode );  
 }
 
 uint8_t LEDMeter::getColor( uint8_t bars ) {
