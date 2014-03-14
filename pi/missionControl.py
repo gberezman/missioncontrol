@@ -79,7 +79,7 @@ def eventLoop():
 
     print "Starting event loop"
 
-    rules = MCRules()
+    rules = Rules()
 
     while True:
         try:
