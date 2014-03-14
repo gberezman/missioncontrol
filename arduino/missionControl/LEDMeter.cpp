@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include "LEDMeter.h"
 
-const static uint8_t numbers[][3] = {
+const static uint8_t anodeSegmentForBars[][3] = {
     { B00000000, B00000000, B00000000 },
     { B00010001, B00000000, B00000000 },
     { B00110011, B00000000, B00000000 },
@@ -33,8 +33,10 @@ void LEDMeter::clear(void) {
 }
 
 void LEDMeter::setBars(uint8_t bars) {  
-  for( int pin = baseCathode; pin < baseCathode + 3; pin++ ) 
-    setDisplayBuffer( pin, numbers[bars][pin - baseCathode], getColor( bars ) );    
+  for( int cathodeOffset = 0; cathodeOffset < 3; cathodeOffset++ ) {
+    uint8_t anodeSegment = anodeSegmentForBars[bars][cathodeOffset];
+    setDisplayBuffer( cathodeOffset + baseCathode, anodeSegment, getColor( bars ) );
+  }
   
   matrix->writeDisplay();
 }
@@ -48,66 +50,6 @@ uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
 }
 
 uint8_t LEDMeter::getColor( uint8_t bars ) {
-  if( bars >= 1 )
-    return colors[bars - 1];
-  else 
-    return 0;
+  return bars >= 1 ? colors[bars - 1 ] : 0;
 }
 
-/*
-// O2 press, H2 press, O2 Qty, H2 Qty, Voltage, current, O2flow, Resistance
-uint8_t meterBars[] = { 0 }; // bars: 1-12
-// { matrix index, cathod offset, anode offset }
-uint8_t meterGeometry[][3] = { 
-    { 0, 0, 0 },
-    { 0, 0, 8 },
-    { 0, 3, 0 },
-    { 0, 3, 8 },
-    { 1, 0, 0 },
-    { 1, 0, 8 },
-    { 1, 3, 0 },
-    { 1, 3, 8 }
-};
-
-#define NUM_METERS sizeof(meterBars)/sizeof(uint8_t)
-
-*/
-
-/*
-void setMeterValueOrig() { 
-
-  uint8_t geometry[] = meterGeometry[graphIdx];
-  Adafruit_LEDBackpack matrix = matrices[geometry[0]];
-  uint8_t cathodeOffset = geometry[1];
-  uint8_t anodeOffset  = geometry[2];
-
-  uint8_t colorMask = getColorMask( bars );
-
-  for( int cathode = cathodeOffset; cathode < 3 + cathodeOffset; cathode++ ) {
-    uint16_t buffer = matrix.displaybuffer[cathode];
-
-    buffer = disableByteAtOffset( buffer, anodeOffset );
-    buffer |= (colorMask & numbers[bars - 1][3 - cathode]) << anodeOffset; // enable number
-
-    matrix.displaybuffer[cathode] = buffer;
-
-    matrix.writeDisplay();
-  }
-
-}
-
-uint16_t disableByteAtOffset( uint16_t value, uint8_t offset ) {
-  uint16_t anodesMask = B11111111 << offset;
-  return value & ( ~anodesMask );
-}
-
-uint8_t getColorMask( uint8_t bars ) {
-  if( bars < 2 )
-    return LED_RED;
-  else if( bars < 4 )
-    return LED_YELLOW;
-  else
-    return LED_GREEN;
-}
-
-*/

@@ -19,6 +19,25 @@ Adafruit_LEDBackpack matrixA = Adafruit_LEDBackpack();
 #define NUM_EXPANDERS sizeof(mcps)/sizeof(Adafruit_MCP23017)
 #define NUM_SWITCHES ( NUM_EXPANDER_PINS ) * ( NUM_EXPANDERS )
 
+/*
+// O2 press, H2 press, O2 Qty, H2 Qty, Voltage, current, O2flow, Resistance
+uint8_t meterBars[] = { 0 }; // bars: 1-12
+// { matrix index, cathod offset, anode offset }
+uint8_t meterGeometry[][3] = { 
+    { 0, 0, 0 },
+    { 0, 0, 8 },
+    { 0, 3, 0 },
+    { 0, 3, 8 },
+    { 1, 0, 0 },
+    { 1, 0, 8 },
+    { 1, 3, 0 },
+    { 1, 3, 8 }
+};
+
+#define NUM_METERS sizeof(meterBars)/sizeof(uint8_t)
+
+*/
+
 uint8_t switchStates[NUM_SWITCHES];
 uint8_t potStates[1];
   

@@ -23,6 +23,7 @@ class LEDMeter {
     uint8_t  baseCathode;
     uint8_t  baseAnode;
     uint16_t* colors;
+    uint16_t anodeMask;
 };
 
 #endif
