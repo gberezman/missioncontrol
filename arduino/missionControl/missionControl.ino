@@ -44,7 +44,7 @@ void initializeLEDMatrix(Adafruit_LEDBackpack matrix, uint8_t address) {
 void loop() {
   scanSwitches();
   
-  potStates[0] = map( analogRead(7), 0, 1023, 0, 12 );  
+  scanPots();
   
   updateMeters();
 }
@@ -61,6 +61,10 @@ void sendSwitchStates(SwitchExpander exp) {
     else if ( exp.isPinTurnedOff( pin ) )
       Serial.write( exp.getPinId(pin) );
   }
+}
+
+void scanPots() {
+  potStates[0] = map( analogRead(7), 1, 1022, 0, 12 );  
 }
 
 void updateMeters() {
