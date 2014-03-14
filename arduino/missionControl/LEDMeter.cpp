@@ -25,28 +25,34 @@ LEDMeter::LEDMeter(Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t 
 }
 
 void LEDMeter::clear(void) {
-  for( int cathode = baseCathode; cathode < baseCathode + 3; cathode++ ) {
+  for( int cathode = baseCathode; cathode < baseCathode + 3; cathode++ ) 
     matrix->displaybuffer[cathode] = 0;
-  }
+    
   matrix->writeDisplay();
 }
 
-void LEDMeter::setBars(uint8_t bars) {
-  uint16_t color = 0;
-  if( bars >= 1 )
-    color = colors[bars - 1];
-
-  uint8_t cathode0 = numbers[bars][0];
-  uint8_t cathode1 = numbers[bars][1];
-  uint8_t cathode2 = numbers[bars][2];
-
-  matrix->displaybuffer[baseCathode] = cathode0 & color;
-  matrix->displaybuffer[baseCathode + 1] = cathode1 & color;
-  matrix->displaybuffer[baseCathode + 2] = cathode2 & color;
+void LEDMeter::setBars(uint8_t bars) {  
+  for( int pin = baseCathode; pin < baseCathode + 3; pin++ ) 
+    setDisplayBuffer( pin, numbers[bars][pin - baseCathode], getColor( bars ) );    
   
   matrix->writeDisplay();
 }
 
+void LEDMeter::setDisplayBuffer( uint8_t pin, uint8_t value, uint8_t color ) {
+  matrix->displaybuffer[pin] = applyNewAnodes(matrix->displaybuffer[pin], value & color);
+}
+
+uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
+  uint16_t mask = ~ ( B11111111 << baseAnode );
+  return ( current & mask ) | ( value << baseAnode );  
+}
+
+uint8_t LEDMeter::getColor( uint8_t bars ) {
+  if( bars >= 1 )
+    return colors[bars - 1];
+  else 
+    return 0;
+}
 
 /*
 // O2 press, H2 press, O2 Qty, H2 Qty, Voltage, current, O2flow, Resistance
@@ -64,9 +70,6 @@ uint8_t meterGeometry[][3] = {
 };
 
 #define NUM_METERS sizeof(meterBars)/sizeof(uint8_t)
-#define LED_GREEN  B11110000
-#define LED_RED    B00001111
-#define LED_YELLOW B11111111
 
 */
 

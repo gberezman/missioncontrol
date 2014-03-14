@@ -22,21 +22,37 @@ Adafruit_LEDBackpack matrixA = Adafruit_LEDBackpack();
 uint8_t switchStates[NUM_SWITCHES];
 uint8_t potStates[1];
   
-uint16_t colors1[] = { 
-  B00001111,
-  B00001111,
-  B11111111,
-  B11111111,
-  B11110000,
-  B11110000,
-  B11110000,
-  B11110000,
-  B11110000,
-  B11110000,
-  B11111111,
-  B00001111
+uint16_t dialColors[] = { 
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_YELLOW,
+  BAR_LED_RED
 };
-LEDMeter o2meter = LEDMeter(&matrixA, 0, 0, colors1);
+
+uint16_t meterColors[] = { 
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN
+};
+
+LEDMeter o2meter = LEDMeter(&matrixA, 0, 0, dialColors);
 
 void setup() {
   Serial.begin(115200);
