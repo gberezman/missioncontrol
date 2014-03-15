@@ -14,7 +14,8 @@ Adafruit_LEDBackpack matrixA = Adafruit_LEDBackpack();
 // Adafruit_LEDBackpack matrixD;
 // Adafruit_LEDBackpack matrixE;
 
-uint8_t potStates[1];
+uint8_t prevPotStates[1];
+uint8_t currPotStates[1];
   
 LEDMeter o2meter = LEDMeter(&matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS);
 
@@ -23,7 +24,7 @@ void setup() {
   
   Wire.begin();
 
-  exp0.initialize(0);
+  exp0.initialize(0, B1);
   // exp1.initialize(1);
   // exp2.initialize(2);
   // exp3.initialize(3);
@@ -46,6 +47,8 @@ void loop() {
   
   scanPots();
   
+  scanSerial();
+  
   updateMeters();
 }
 
@@ -64,11 +67,34 @@ void sendSwitchStates(SwitchExpander exp) {
 }
 
 void scanPots() {
-  potStates[0] = map( analogRead(7), 1, 1022, 0, 12 );  
+  for( int pot = 0; pot < sizeof(currPotStates)/sizeof(uint8_t); pot++ )
+    prevPotStates[pot] = currPotStates[pot];
+    
+  currPotStates[0] = map( analogRead(7), 1, 1022, 0, 12 );
+  
+  sendPotStates();
+}
+
+void sendPotStates() {
+  for( int pot = 0; pot < sizeof(currPotStates)/sizeof(uint8_t); pot++ ) {
+    if( currPotStates[pot] != prevPotStates[pot] ) {
+      Serial.write( pot | B01000000 );
+      Serial.write( currPotStates[pot] | B11000000 );
+    }
+  }
+}
+
+void scanSerial() {
+  if( Serial.available() ) {
+    while( Serial.available() ) {
+      uint8_t value = Serial.read();
+      o2meter.setBars(value);
+    }
+  }
 }
 
 void updateMeters() {
-  o2meter.setBars(potStates[0]);
+  // o2meter.setBars(meterStates[0]);
 }
 
 /*

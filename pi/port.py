@@ -13,4 +13,4 @@ class Port:
         return self.port.read()
 
     def write(self, message):
-        self.port.write(message)
+        self.port.write( message )

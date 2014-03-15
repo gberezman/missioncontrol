@@ -6,8 +6,9 @@
 #include "SwitchExpander.h"
 #include "Arduino.h"
 
-void SwitchExpander::initialize(uint8_t _address) {
+void SwitchExpander::initialize(uint8_t _address, uint16_t _activePins) {
   address = _address;
+  activePins = _activePins;
   
   mcp.begin(address);
   
@@ -22,7 +23,8 @@ void SwitchExpander::scanSwitches() {
 
   uint16_t gpioState = mcp.readGPIOAB();
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ )
-    currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
+    if( bitRead( activePins, pin ) )
+      currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
 }
 
 bool SwitchExpander::isPinTurnedOn( uint8_t pin ) {

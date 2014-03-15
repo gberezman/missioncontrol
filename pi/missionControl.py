@@ -5,8 +5,19 @@ import threading
 
 port = Port()
 
-def isSwitched(reading):
-    return reading < 128
+pots = {
+    0  : 'O2 Flow',
+    1  : 'Speaker',
+    2  : 'Headset',
+    3  : 'Voltage',
+    4  : 'Resistance',
+    5  : 'Current',
+    6  : 'Abort Mode',
+    7  : 'Ant Pitch',
+    8  : 'Ant Yaw',
+    9  : 'Tune',
+    10 : 'Beam'
+}
 
 switches = {
     0  : 'SPS',
@@ -75,6 +86,15 @@ switches = {
     63 : 'undefined'
 }
 
+def readingIsPot(reading):
+    return ( reading & 0b01000000 ) != 0
+
+def readingIsPotValue(reading):
+    return ( reading & 0b11000000 ) != 0
+
+def isSwitched(switchReading):
+    return ( switchReading & 0b10000000 ) != 0
+
 def eventLoop():
 
     print "Starting event loop"
@@ -84,17 +104,34 @@ def eventLoop():
     while True:
         try:
             sleep( .01 )
-            reading = port.nonBlockingRead()
-            if len(reading) == 0:
+            input = port.nonBlockingRead()
+            if len(input) == 0:
                 continue
 
-            switchReading = ord(reading)
-            isSwitchOn = isSwitched( switchReading )
-            switch = switches[ switchReading & 127 ]
+            reading = ord( input )
 
-            print "switch {} is {}".format(switch, isSwitchOn)
+            if readingIsPot( reading ):
+                pot = pots[reading & 0b00111111]
+                input = port.nonBlockingRead()
+                if len(input) != 0:
+                    reading = ord( input )
+                    if readingIsPotValue( reading ):
+                        potValue = reading & 0b00111111
+    
+                        print "pot {} = {}".format(pot, potValue)
+    
+                        rules.applyPotRule(port, pot, potValue)
 
-            rules.apply(switch, isSwitchOn)
+            else:
+                isSwitchOn = isSwitched( reading )
+                switch = switches[ reading & 127 ]
+    
+                print "switch {} is {}".format(switch, isSwitchOn)
+    
+                if( isSwitchOn ):
+                    rules.switchOn( switch )
+                else:
+                    rules.switchOff( switch )
 
         except KeyboardInterrupt:
             exit()
