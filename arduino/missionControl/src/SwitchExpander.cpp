@@ -6,25 +6,31 @@
 #include "SwitchExpander.h"
 #include "Arduino.h"
 
-void SwitchExpander::initialize(uint8_t _address, uint16_t _activePins) {
+SwitchExpander::SwitchExpander(uint8_t _address) {
   address = _address;
-  activePins = _activePins;
+}
+
+void SwitchExpander::ensureInitialized() {
+  if( ! initialized ) {
+    mcp.begin(address);
   
-  mcp.begin(address);
-  
-  for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) { 
-      mcp.pinMode(pin, INPUT);
-      mcp.pullUp(pin, HIGH);  // 100K pullup 
+    for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) { 
+        mcp.pinMode(pin, INPUT);
+        mcp.pullUp(pin, HIGH);  // 100K pullup 
+    }
+
+    initialized = true;
   }
 }
 
 void SwitchExpander::scanSwitches() {
+  ensureInitialized();
+
   storePreviousSwitchStates();
 
   uint16_t gpioState = mcp.readGPIOAB();
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ )
-    if( bitRead( activePins, pin ) )
-      currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
+    currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
 }
 
 bool SwitchExpander::isPinTurnedOn( uint8_t pin ) {
@@ -40,6 +46,8 @@ uint8_t SwitchExpander::getPinId( uint8_t pin ) {
 }
 
 void SwitchExpander::storePreviousSwitchStates(void) {
+  ensureInitialized();
+
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) 
     prevSwitchStates[pin] = currSwitchStates[pin];
 }
