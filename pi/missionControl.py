@@ -103,9 +103,9 @@ def eventLoop():
 
     while True:
         try:
-            sleep( .01 )
             input = port.nonBlockingRead()
             if len(input) == 0:
+                sleep( .01 )
                 continue
 
             reading = ord( input )
