@@ -70,7 +70,7 @@ void scanPots() {
   for( int pot = 0; pot < sizeof(currPotStates)/sizeof(uint8_t); pot++ )
     prevPotStates[pot] = currPotStates[pot];
     
-  currPotStates[0] = map( analogRead(7), 1, 1022, 0, 12 );
+  currPotStates[0] = map( analogRead(7), 0, 1010, 0, 12 );
   
   sendPotStates();
 }
