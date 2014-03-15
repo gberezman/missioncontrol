@@ -21,3 +21,8 @@ echo "Set it up to autostart by adding to /etc/rc.local: echo \"Starting VNC on 
 # pygame
 
 # Not quite sure how I got it working, but removing pygame, stripping it completely from the FS, and reinstalling worked
+
+sudo apt-get install picocom
+
+# then grab inotool:
+sudo easy_install ino
