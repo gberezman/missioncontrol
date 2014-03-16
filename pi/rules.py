@@ -4,25 +4,16 @@ from time import sleep
 class Rules:
 
     def noAction(self, *args):
-        pass
+        print "no action"
 
     def switchOn(self, switch):
-        try:
-            self.onRule[switch]()
-        except KeyError:
-            print "invalid switch: {}".format(switch)
+        self.onRule.get(switch, self.noAction)()
 
     def switchOff(self, switch):
-        try:
-            self.offRule[switch]()
-        except KeyError:
-            print "invalid switch: {}".format(switch)
+        self.offRule.get(switch, self.noAction)()
 
-    def applyPotRule(self, port, pot, potValue):
-        try:
-            self.potRule[pot](port, potValue)
-        except:
-            print "invalid pot: {}".format(pot)
+    def setPot(self, port, pot, potValue):
+        self.potRule.get(pot, self.noAction)(port, potValue)
 
     def sendMeterSetting(self, port, potId, potValue):
         print "sending pot value {}".format( potValue )
@@ -196,4 +187,4 @@ if __name__ == '__main__':
     rules.switchOff('undefined')
 
     print "undefined pot" 
-    rules.applyPotRule( None, 'undefined', None )
+    rules.setPot( None, 'undefined', None )

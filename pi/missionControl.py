@@ -127,7 +127,7 @@ def eventLoop():
     
                         print "pot {} = {}".format(pot, potValue)
     
-                        rules.applyPotRule(port, pot, potValue)
+                        rules.setPot(port, pot, potValue)
 
             else:
                 isSwitchOn = isSwitched( reading )
