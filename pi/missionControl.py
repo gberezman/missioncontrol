@@ -116,26 +116,26 @@ def eventLoop():
 
     while True:
         try:
-            port.readline()
-            if port.isEmpty():
+            command = port.readline()
+            if command is None:
                 sleep( .01 )
                 continue
 
-            if port.token() == "P":
-                if port.next():
-                    pot = safe_list_get(pots, port.tokenAsInt(), None)
-                    if pot != None and port.next():
+            if command.token() == "P":
+                if command.next():
+                    pot = safe_list_get(pots, command.tokenAsInt(), None)
+                    if pot != None and command.next():
                         try:
-                            value = port.tokenAsInt()
+                            value = command.tokenAsInt()
                             print "pot {} = {}".format(pot, value)
                             rules.setPot(port, pot, value)
                         except ValueError:
-                            print "Invalid numeric pot value {}".format(port.token())
+                            print "Invalid numeric pot value {}".format(command.token())
 
-            elif port.next():
-                switch = safe_list_get(switches, port.tokenAsInt(), None)
-                if switch != None and port.next():
-                    isSwitchOn = port.tokenAsBoolean()
+            elif command.next():
+                switch = safe_list_get(switches, command.tokenAsInt(), None)
+                if switch != None and command.next():
+                    isSwitchOn = command.tokenAsBoolean()
                     print "switch {} is {}".format(switch, isSwitchOn)
     
                     if( isSwitchOn ):

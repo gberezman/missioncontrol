@@ -1,6 +1,42 @@
 from time import sleep
 import serial
 
+class Command:
+
+    def __init__(self, text):
+        self.index = 0
+        if text == None or len( text ) == 0:
+            self.tokens = None
+        else:
+            self.tokens = text.split()
+
+    def token(self):
+        if self.tokens is None:
+            return None
+        return self.tokens[self.index]
+
+    def next(self):
+        if self.tokens is None or self.index >= len( self.tokens ):
+            return None
+        self.index += 1
+        return self.token()
+
+    def token(self):
+        return self.tokens[self.index]
+
+    def tokenAsInt(self):
+        try:
+            return int( self.token() )
+        except ValueError:
+            return None
+
+    def tokenAsBoolean(self):
+        if self.token().lower() in ( "yes", "true", "1", "t" ):
+            return True
+
+        return False
+
+
 class Port:
 
     def __init__(self, port = "/dev/serial/by-id/usb-Arduino__www.arduino.cc__0042_741333534373512161B1-if00", baudrate = 115200, timeout=0):
@@ -8,41 +44,12 @@ class Port:
         self.port.setDTR(level=False)
         sleep(2)
         self.port.flush()
-    
-        self.command = None
-        self.idx = 0
-
-    def nonBlockingRead(self):
-        result = self.port.read()
 
     def readline(self):
-        self.command = None
-        self.idx = 0
         result = self.port.readline()
-        if len(result) > 0:
-            self.command = result.split()
+        if result == None or len(result) == 0:
+            return None
+        return Command( result )
 
     def write(self, message):
         self.port.write( message )
-
-    def isEmpty(self):
-        return self.command == None
-
-    def token(self):
-        return self.command[self.idx]
-
-    def next(self):
-        self.idx += 1
-        return self.idx < len( self.command )
-
-    def tokenAsInt(self):
-        try:
-            return int( self.command[self.idx] )
-        except ValueError:
-            return None
-
-    def tokenAsBoolean(self):
-        if( self.command[self.idx] == 'True' ):
-            return True
-
-        return False
