@@ -128,7 +128,7 @@ def eventLoop():
                         try:
                             value = command.tokenAsInt()
                             print "pot {} = {}".format(pot, value)
-                            rules.setPot(port, pot, value)
+                            rules.potEvent(port, pot, value)
                         except ValueError:
                             print "Invalid numeric pot value {}".format(command.token())
 
