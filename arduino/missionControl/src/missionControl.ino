@@ -2,13 +2,16 @@
 #include "Adafruit_LEDBackpack.h"
 #include "LEDMeter.h"
 #include "SwitchExpander.h"
+#include "SerialCommand.h"
+
+SerialCommand serialCommand;
 
 SwitchExpander exp0(0);
 // SwitchExpander exp1(1);
 // SwitchExpander exp2(2);
 // SwitchExpander exp3(3);
 
-Adafruit_LEDBackpack matrixA = Adafruit_LEDBackpack();
+Adafruit_LEDBackpack matrixA;
 // Adafruit_LEDBackpack matrixB;
 // Adafruit_LEDBackpack matrixC;
 // Adafruit_LEDBackpack matrixD;
@@ -16,7 +19,6 @@ Adafruit_LEDBackpack matrixA = Adafruit_LEDBackpack();
 
 uint8_t prevPotStates[1];
 uint8_t currPotStates[1];
-uint8_t meterStates[1];
   
 LEDMeter o2meter = LEDMeter(&matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS);
 
@@ -30,6 +32,20 @@ void setup() {
   // initializeLEDMatrix( matrixC, 0x72 );
   // initializeLEDMatrix( matrixD, 0x73 );
   // initializeLEDMatrix( matrixE, 0x74 );
+
+  serialCommand.addCommand("Meter", setMeter);
+}
+
+void setMeter() {
+  char* meter = serialCommand.next();
+  if( meter != NULL ) {
+    char* value = serialCommand.next();
+    if( value != NULL ) {
+      int graphSetting = atoi( value );
+      if( strcmp( meter, "O2" ) == 0 )
+        o2meter.setBars(graphSetting);
+    }
+  }
 }
 
 void initializeLEDMatrix(Adafruit_LEDBackpack matrix, uint8_t address) {
@@ -47,9 +63,7 @@ void loop() {
   
   sendPotStates();
 
-  scanSerial();
-
-  updateLEDs();
+  serialCommand.readSerial();
 }
 
 void scanSwitches() {
@@ -67,7 +81,7 @@ void sendSwitchStates() {
 }
 
 void sendSwitchStatesToSerial(SwitchExpander exp) {
-  for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) {
+  for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) {
     if( exp.isPinTurnedOn( pin ) )
       Serial.write( exp.getPinId(pin) + 128 );
     else if ( exp.isPinTurnedOff( pin ) )
@@ -91,15 +105,3 @@ void sendPotStates() {
   }
 }
 
-void scanSerial() {
-  if( Serial.available() ) {
-    while( Serial.available() ) {
-      uint8_t value = Serial.read();
-      meterStates[0] = value;
-    }
-  }
-}
-
-void updateLEDs() {
-  o2meter.setBars(meterStates[0]);
-}
