@@ -3,7 +3,7 @@ from time import sleep
 from rules import Rules
 import threading
 
-port = Port()
+port = Port(timeout = .5)
 
 pots = [
     'O2 Flow',
@@ -102,6 +102,12 @@ def readingIsPotValue(reading):
 def isSwitched(switchReading):
     return ( switchReading & 0b10000000 ) != 0
 
+def safe_list_get (aList, idx, default):
+  try:
+    return aList[idx]
+  except IndexError:
+    return default
+
 def eventLoop():
 
     print "Starting event loop"
@@ -110,35 +116,32 @@ def eventLoop():
 
     while True:
         try:
-            input = port.nonBlockingRead()
-            if len(input) == 0:
+            port.readline()
+            if port.isEmpty():
                 sleep( .01 )
                 continue
 
-            reading = ord( input )
+            if port.token() == "P":
+                if port.next():
+                    pot = safe_list_get(pots, port.tokenAsInt(), None)
+                    if pot != None and port.next():
+                        try:
+                            value = port.tokenAsInt()
+                            print "pot {} = {}".format(pot, value)
+                            rules.setPot(port, pot, value)
+                        except ValueError:
+                            print "Invalid numeric pot value {}".format(port.token())
 
-            if readingIsPot( reading ):
-                pot = pots[reading & 0b00111111]
-                input = port.nonBlockingRead()
-                if len(input) != 0:
-                    reading = ord( input )
-                    if readingIsPotValue( reading ):
-                        potValue = reading & 0b00111111
+            elif port.next():
+                switch = safe_list_get(switches, port.tokenAsInt(), None)
+                if switch != None and port.next():
+                    isSwitchOn = port.tokenAsBoolean()
+                    print "switch {} is {}".format(switch, isSwitchOn)
     
-                        print "pot {} = {}".format(pot, potValue)
-    
-                        rules.setPot(port, pot, potValue)
-
-            else:
-                isSwitchOn = isSwitched( reading )
-                switch = switches[ reading & 127 ]
-    
-                print "switch {} is {}".format(switch, isSwitchOn)
-    
-                if( isSwitchOn ):
-                    rules.switchOn( switch )
-                else:
-                    rules.switchOff( switch )
+                    if( isSwitchOn ):
+                        rules.switchOn( switch )
+                    else:
+                        rules.switchOff( switch )
 
         except KeyboardInterrupt:
             exit()

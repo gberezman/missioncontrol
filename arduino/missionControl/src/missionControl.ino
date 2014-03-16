@@ -82,10 +82,22 @@ void sendSwitchStates() {
 
 void sendSwitchStatesToSerial(SwitchExpander exp) {
   for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) {
-    if( exp.isPinTurnedOn( pin ) )
-      Serial.write( exp.getPinId(pin) + 128 );
-    else if ( exp.isPinTurnedOff( pin ) )
-      Serial.write( exp.getPinId(pin) );
+    if( exp.wasPinTurnedOn( pin ) ) {
+      Serial.print( "S" );
+      Serial.print( " " );
+      Serial.print( exp.getPinId(pin) );
+      Serial.print( " " );
+      Serial.print( "True" );
+      Serial.print( "\n" );
+    }
+    else if ( exp.wasPinTurnedOff( pin ) ) {
+      Serial.print( "S" );
+      Serial.print( " " );
+      Serial.print( exp.getPinId(pin) );
+      Serial.print( " " );
+      Serial.print( "False" );
+      Serial.print( "\n" );
+    }
   }
 }
 
@@ -99,8 +111,12 @@ void scanPots() {
 void sendPotStates() {
   for( int pot = 0; pot < sizeof(currPotStates)/sizeof(uint8_t); pot++ ) {
     if( currPotStates[pot] != prevPotStates[pot] ) {
-      Serial.write( pot | B01000000 );
-      Serial.write( currPotStates[pot] | B11000000 );
+      Serial.print( "P" );
+      Serial.print( " " );
+      Serial.print( pot );
+      Serial.print( " " );
+      Serial.print( currPotStates[pot] );
+      Serial.print( "\n" );
     }
   }
 }

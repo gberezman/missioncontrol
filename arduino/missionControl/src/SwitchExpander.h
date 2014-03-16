@@ -10,8 +10,8 @@ class SwitchExpander {
   public:
     SwitchExpander(uint8_t _address);
     void scanSwitches(void);
-    bool isPinTurnedOn( uint8_t _pin );
-    bool isPinTurnedOff( uint8_t _pin );
+    bool wasPinTurnedOn( uint8_t _pin );
+    bool wasPinTurnedOff( uint8_t _pin );
     uint8_t getPinId( uint8_t _pin );
 
   private:
