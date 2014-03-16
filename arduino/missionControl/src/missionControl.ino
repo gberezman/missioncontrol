@@ -36,18 +36,6 @@ void setup() {
   serialCommand.addCommand("Meter", setMeter);
 }
 
-void setMeter() {
-  char* meter = serialCommand.next();
-  if( meter != NULL ) {
-    char* value = serialCommand.next();
-    if( value != NULL ) {
-      int graphSetting = atoi( value );
-      if( strcmp( meter, "O2" ) == 0 )
-        o2meter.setBars(graphSetting);
-    }
-  }
-}
-
 void initializeLEDMatrix(Adafruit_LEDBackpack matrix, uint8_t address) {
   matrixA.begin( address );
   matrix.clear();  
@@ -83,20 +71,14 @@ void sendSwitchStates() {
 void sendSwitchStatesToSerial(SwitchExpander exp) {
   for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) {
     if( exp.wasPinTurnedOn( pin ) ) {
-      Serial.print( "S" );
-      Serial.print( " " );
+      Serial.print( "S " );
       Serial.print( exp.getPinId(pin) );
-      Serial.print( " " );
-      Serial.print( "True" );
-      Serial.print( "\n" );
+      Serial.print( " True\n" );
     }
     else if ( exp.wasPinTurnedOff( pin ) ) {
-      Serial.print( "S" );
-      Serial.print( " " );
+      Serial.print( "S " );
       Serial.print( exp.getPinId(pin) );
-      Serial.print( " " );
-      Serial.print( "False" );
-      Serial.print( "\n" );
+      Serial.print( " False\n" );
     }
   }
 }
@@ -111,8 +93,7 @@ void scanPots() {
 void sendPotStates() {
   for( int pot = 0; pot < sizeof(currPotStates)/sizeof(uint8_t); pot++ ) {
     if( currPotStates[pot] != prevPotStates[pot] ) {
-      Serial.print( "P" );
-      Serial.print( " " );
+      Serial.print( "P " );
       Serial.print( pot );
       Serial.print( " " );
       Serial.print( currPotStates[pot] );
@@ -121,3 +102,22 @@ void sendPotStates() {
   }
 }
 
+void setMeter() {
+  char* meterLabel = serialCommand.next();
+  if( meterLabel != NULL )
+    sm( meterLabel );
+}
+
+void sm(char* meterLabel) {
+  char* value = serialCommand.next();
+  if( value != NULL ) {
+    int graphSetting = atoi( value );
+    LEDMeter* meter = getMeter( meterLabel );
+    meter->setBars( graphSetting );
+  }
+}
+
+LEDMeter* getMeter( char* meterLabel ) {
+  if( strcmp( meterLabel, "O2" ) == 0 )
+    return &o2meter;
+}

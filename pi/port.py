@@ -49,6 +49,7 @@ class Port:
         result = self.port.readline()
         if result == None or len(result) == 0:
             return None
+        print "received command {}".format( result )
         return Command( result )
 
     def write(self, message):
