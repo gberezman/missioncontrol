@@ -7,23 +7,32 @@ class Rules:
         pass
 
     def switchOn(self, switch):
-        self.onRule[switch]()
+        try:
+            self.onRule[switch]()
+        except KeyError:
+            print "invalid switch: {}".format(switch)
 
     def switchOff(self, switch):
-        self.offRule[switch]()
+        try:
+            self.offRule[switch]()
+        except KeyError:
+            print "invalid switch: {}".format(switch)
 
     def applyPotRule(self, port, pot, potValue):
-        self.potRule[pot](port, pot, potValue)
+        try:
+            self.potRule[pot](port, potValue)
+        except:
+            print "invalid pot: {}".format(pot)
 
-    def sendMeterSetting(self, port, pot, potValue):
+    def sendMeterSetting(self, port, potId, potValue):
         print "sending pot value {}".format( potValue )
-        port.write( "Meter " + pot + " " + str(potValue) + "\n" )
+        port.write( "Meter " + potId + " " + str(potValue) + "\n" )
 
     def __init__(self):
         self.audio = Audio()
 
         self.potRule = {
-            'O2 Flow'    : lambda port, pot, potValue: self.sendMeterSetting(port, "O2", potValue),
+            'O2 Flow'    : lambda port, potValue: self.sendMeterSetting(port, "O2", potValue),
             'Speaker'    : self.noAction,
             'Headset'    : self.noAction,
             'Voltage'    : self.noAction,
@@ -82,7 +91,6 @@ class Rules:
             'ES 8'              : self.noAction,
             'ES 9'              : self.noAction,
             'ES 10'             : self.noAction,
-            'undefined'         : self.noAction
         }
 
         self.offRule = {
@@ -131,49 +139,61 @@ class Rules:
             'ES 8'              : self.noAction,
             'ES 9'              : self.noAction,
             'ES 10'             : self.noAction,
-            'undefined'         : self.noAction
         }
 
 if __name__ == '__main__':
 
     rules = Rules()
     print "SPS on"
-    rules.applySwitchRule('SPS', True)
+    rules.switchOn('SPS')
     sleep(1)
 
     print "SPS off"
-    rules.applySwitchRule('SPS', False)
+    rules.switchOff('SPS')
     sleep(.25)
 
     print "Fan on"
-    rules.applySwitchRule('Cabin Fan', True)
+    rules.switchOn('Cabin Fan')
     sleep(1)
 
     print "Fan off"
-    rules.applySwitchRule('Cabin Fan', False)
+    rules.switchOff('Cabin Fan')
     sleep(.25)
 
     print "O2 Fan on"
-    rules.applySwitchRule('O2 Fan', True)
+    rules.switchOn('O2 Fan')
     sleep(1)
 
     print "O2 Fan off"
-    rules.applySwitchRule('O2 Fan', False)
+    rules.switchOff('O2 Fan')
     sleep(.25)
 
     print "H2 Fan on"
-    rules.applySwitchRule('H2 Fan', True)
+    rules.switchOn('H2 Fan')
     sleep(1)
 
     print "H2 Fan off"
-    rules.applySwitchRule('H2 Fan', False)
+    rules.switchOff('H2 Fan')
 
     sleep(.5)
 
     print "PTT In"
-    rules.applySwitchRule('PTT', True)
+    rules.switchOn('PTT')
     sleep(.5)
 
     print "PTT Out"
-    rules.applySwitchRule('PTT', False)
+    rules.switchOff('PTT')
     sleep(.5)
+
+    print "PTT Out"
+    rules.switchOff('PTT')
+    sleep(.5)
+
+    print "undefined switch on"
+    rules.switchOn('undefined')
+
+    print "undefined switch off"
+    rules.switchOff('undefined')
+
+    print "undefined pot" 
+    rules.applyPotRule( None, 'undefined', None )
