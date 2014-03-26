@@ -93,15 +93,6 @@ switches = [
     'undefined'
 ]
 
-def readingIsPot(reading):
-    return ( reading & 0b01000000 ) != 0
-
-def readingIsPotValue(reading):
-    return ( reading & 0b11000000 ) != 0
-
-def isSwitched(switchReading):
-    return ( switchReading & 0b10000000 ) != 0
-
 def safe_list_get (aList, idx, default):
   try:
     return aList[idx]
@@ -118,7 +109,7 @@ def eventLoop():
         try:
             command = port.readline()
             if command is None:
-                sleep( .01 )
+                sleep( .1 )
                 continue
 
             if command.token() == "P":

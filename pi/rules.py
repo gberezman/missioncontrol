@@ -19,19 +19,14 @@ class Rules:
         print "sending pot value {}".format( potValue )
         port.write( "Meter " + potId + " " + str(potValue) + "\n" )
 
-    def sendMeterAndSetAudio(self, port, potId, potValue):
-        self.sendMeterSetting(port, potId, potValue)
-        self.audio.spsThruster.set_volume( potValue / 12.0 )
-
     def __init__(self):
         self.audio = Audio()
 
         self.potRule = {
-            # 'O2 Flow'    : lambda port, potValue: self.sendMeterSetting(port, "O2", 12 - potValue),
-            'O2 Flow'    : lambda port, potValue: self.sendMeterAndSetAudio(port, "O2", 12 - potValue),
+            'O2 Flow'    : lambda port, potValue: self.sendMeterSetting(port, "O2", 12 - potValue),
             'Speaker'    : self.noAction,
             'Headset'    : self.noAction,
-            'Voltage'    : self.noAction,
+            'Voltage'    : lambda port, potValue: self.sendMeterSetting(port, "H2", 12 - potValue),
             'Resistance' : self.noAction,
             'Current'    : self.noAction,
             'Abort Mode' : self.noAction,
