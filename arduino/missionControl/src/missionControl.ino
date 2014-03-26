@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include "Adafruit_LEDBackpack.h"
 #include "LEDMeter.h"
+#include "Potentiometer.h"
 #include "SwitchExpander.h"
 #include "SerialCommand.h"
 
@@ -12,34 +13,41 @@ SwitchExpander exp0(0);
 // SwitchExpander exp3(3);
 
 Adafruit_LEDBackpack matrixA;
-// Adafruit_LEDBackpack matrixB;
-// Adafruit_LEDBackpack matrixC;
-// Adafruit_LEDBackpack matrixD;
-// Adafruit_LEDBackpack matrixE;
+Adafruit_LEDBackpack matrixB;
+Adafruit_LEDBackpack matrixC;
+Adafruit_LEDBackpack matrixD;
+Adafruit_LEDBackpack matrixE;
 
-uint8_t prevPotStates[1];
-uint8_t currPotStates[1];
-  
-LEDMeter o2meter = LEDMeter(&matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS);
+uint8_t o2MeterBaseCathodePin = 0;
+uint8_t o2MeterBaseAnodePin = 0;
+LEDMeter o2meter = LEDMeter( &matrixA, o2MeterBaseCathodePin, o2MeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
+
+uint8_t h2MeterBaseCathodePin = 0;
+uint8_t h2MeterBaseAnodePin = 0;
+LEDMeter h2meter = LEDMeter( &matrixB, h2MeterBaseAnodePin, h2MeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
+
+int voltagePotPin = 0;
+int voltagePotId = 3;
+Potentiometer voltagePot = Potentiometer( voltagePotId, voltagePotPin );
 
 void setup() {
   Serial.begin(115200);
   
   Wire.begin();
 
-  initializeLEDMatrix( matrixA, 0x70 );
-  // initializeLEDMatrix( matrixB, 0x71 );
-  // initializeLEDMatrix( matrixC, 0x72 );
-  // initializeLEDMatrix( matrixD, 0x73 );
-  // initializeLEDMatrix( matrixE, 0x74 );
+  initializeLEDMatrix( &matrixA, 0x70 );
+  initializeLEDMatrix( &matrixB, 0x71 );
+  // initializeLEDMatrix( &matrixC, 0x72 );
+  // initializeLEDMatrix( &matrixD, 0x73 );
+  // initializeLEDMatrix( &matrixE, 0x74 );
 
   serialCommand.addCommand("Meter", setMeter);
 }
 
-void initializeLEDMatrix(Adafruit_LEDBackpack matrix, uint8_t address) {
-  matrixA.begin( address );
-  matrix.clear();  
-  matrix.writeDisplay();
+void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
+  matrix->begin( address );
+  matrix->clear();  
+  matrix->writeDisplay();
 }
 
 void loop() {
@@ -84,21 +92,20 @@ void sendSwitchStatesToSerial(SwitchExpander exp) {
 }
 
 void scanPots() {
-  for( int pot = 0; pot < sizeof(currPotStates)/sizeof(uint8_t); pot++ )
-    prevPotStates[pot] = currPotStates[pot];
-    
-  currPotStates[0] = map( analogRead(7), 3, 1020, 0, 12 );
+  voltagePot.scan();
 }
 
 void sendPotStates() {
-  for( int pot = 0; pot < sizeof(currPotStates)/sizeof(uint8_t); pot++ ) {
-    if( currPotStates[pot] != prevPotStates[pot] ) {
-      Serial.print( "P " );
-      Serial.print( pot );
-      Serial.print( " " );
-      Serial.print( currPotStates[pot] );
-      Serial.print( "\n" );
-    }
+  sendPotStateIfChanged( &voltagePot );
+}
+
+void sendPotStateIfChanged( Potentiometer* pot ) {
+  if( pot->hasChanged() ) {
+    Serial.print( "P " );
+    Serial.print( pot->id() );
+    Serial.print( " " );
+    Serial.print( pot->reading() );
+    Serial.print( "\n" );
   }
 }
 
@@ -113,11 +120,16 @@ void sm(char* meterLabel) {
   if( value != NULL ) {
     int graphSetting = atoi( value );
     LEDMeter* meter = getMeter( meterLabel );
-    meter->setBars( graphSetting );
+    if( meter != NULL )
+      meter->setBars( graphSetting );
   }
 }
 
 LEDMeter* getMeter( char* meterLabel ) {
   if( strcmp( meterLabel, "O2" ) == 0 )
     return &o2meter;
+  if( strcmp( meterLabel, "H2" ) == 0 )
+    return &h2meter;
+
+  return NULL;
 }
