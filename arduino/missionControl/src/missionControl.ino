@@ -22,13 +22,12 @@ uint8_t o2MeterBaseCathodePin = 0;
 uint8_t o2MeterBaseAnodePin = 0;
 LEDMeter o2meter = LEDMeter( &matrixA, o2MeterBaseCathodePin, o2MeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
 
-uint8_t h2MeterBaseCathodePin = 0;
-uint8_t h2MeterBaseAnodePin = 0;
-LEDMeter h2meter = LEDMeter( &matrixB, h2MeterBaseAnodePin, h2MeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
+uint8_t voltageMeterBaseCathodePin = 0;
+uint8_t voltageMeterBaseAnodePin = 0;
+LEDMeter voltageMeter = LEDMeter( &matrixB, voltageMeterBaseAnodePin, voltageMeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
 
 int voltagePotPin = 0;
-int voltagePotId = 3;
-Potentiometer voltagePot = Potentiometer( voltagePotId, voltagePotPin );
+Potentiometer voltagePot = Potentiometer( "Voltage", voltagePotPin );
 
 void setup() {
   Serial.begin(115200);
@@ -128,8 +127,8 @@ void sm(char* meterLabel) {
 LEDMeter* getMeter( char* meterLabel ) {
   if( strcmp( meterLabel, "O2" ) == 0 )
     return &o2meter;
-  if( strcmp( meterLabel, "H2" ) == 0 )
-    return &h2meter;
+  if( strcmp( meterLabel, "V" ) == 0 )
+    return &voltageMeter;
 
   return NULL;
 }

@@ -3,15 +3,15 @@
 
 class Potentiometer {
   public:
-    Potentiometer( uint8_t _potId, uint8_t _analogPin );
+    Potentiometer( char* _potId, uint8_t _analogPin );
     void scan( void );
-    uint8_t id( void );
+    char* id( void );
     uint8_t reading( void );
     bool hasChanged( void );
 
   private:
     uint8_t pin;
-    uint8_t potId;
+    char* potId;
     uint8_t currentState = 0;
     uint8_t previousState = 0;
 };

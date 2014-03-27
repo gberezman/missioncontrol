@@ -11,12 +11,12 @@ class Command:
             self.tokens = text.split()
 
     def token(self):
-        if self.tokens is None:
+        if self.tokens is None or self.index >= len( self.tokens ):
             return None
         return self.tokens[self.index]
 
     def next(self):
-        if self.tokens is None or self.index >= len( self.tokens ):
+        if self.token() is None:
             return None
         self.index += 1
         return self.token()
@@ -35,7 +35,6 @@ class Command:
             return True
 
         return False
-
 
 class Port:
 
