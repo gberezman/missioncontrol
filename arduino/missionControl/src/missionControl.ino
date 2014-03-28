@@ -42,6 +42,16 @@ void setup() {
 
   serialCommand.addCommand("Meter", setMeter);
 
+  forceInitialSwitchStateTransmission();
+}
+
+void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
+  matrix->begin( address );
+  matrix->clear();  
+  matrix->writeDisplay();
+}
+
+void forceInitialSwitchStateTransmission() {
   scanSwitches();
   invertSwitchStates();
 }
@@ -51,12 +61,6 @@ void invertSwitchStates() {
   // exp1.invert();
   // exp2.invert();
   // exp3.invert();
-}
-
-void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
-  matrix->begin( address );
-  matrix->clear();  
-  matrix->writeDisplay();
 }
 
 void loop() {
