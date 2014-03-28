@@ -4,7 +4,7 @@ from time import sleep
 class Rules:
 
     def sendMeterSetting(self, port, potId, potValue):
-        print "sending pot value {}".format( potValue )
+        print "sending pot {} = {}".format( potId, potValue )
         port.write( "Meter " + potId + " " + str(potValue) + "\n" )
         return True
 

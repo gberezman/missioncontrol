@@ -26,6 +26,8 @@ uint8_t voltageMeterBaseCathodePin = 0;
 uint8_t voltageMeterBaseAnodePin = 0;
 LEDMeter voltageMeter = LEDMeter( &matrixB, "Voltage", voltageMeterBaseAnodePin, voltageMeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
 
+LEDMeter* meters[] = { &o2meter, &voltageMeter };
+
 int voltagePotPin = 0;
 Potentiometer voltagePot = Potentiometer( "Voltage", voltagePotPin );
 
@@ -137,8 +139,10 @@ void setMeter() {
 }
 
 void setMeter( char* meterLabel, int graphSetting ) {
-  if( strcmp( meterLabel, o2meter.getLabel() ) == 0 )
-    o2meter.setBars( graphSetting );
-  if( strcmp( meterLabel, voltageMeter.getLabel() ) == 0 )
-    voltageMeter.setBars( graphSetting );
+  for( int i = 0; i < sizeof( meters ) / sizeof( LEDMeter* ); i++ ) {
+    if( strcmp( meterLabel, meters[i]->getLabel() ) == 0 ) {
+      meters[i]->setBars( graphSetting );
+      break;
+    }
+  } 
 }
