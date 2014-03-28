@@ -1,10 +1,11 @@
 from port import Port
 from time import sleep
 from rules import Rules
+from command import CommandFactory
 import threading
 
-port = Port(timeout = .5)
-rules = Rules(port)
+port = Port(CommandFactory(), timeout = .5)
+rules = Rules()
 
 def eventLoop():
 
@@ -12,34 +13,12 @@ def eventLoop():
 
     while True:
         try:
-            command = port.readline()
+            command = port.readCommand()
             if not command:
                 sleep( .1 )
                 continue
 
-            if command.token() == "P":
-                pot = command.next()
-                if pot:
-                    command.next()
-                    value = command.tokenAsInt()
-                    if value:
-                        print "pot {} = {}".format(pot, value)
-                        rules.potEvent(pot, value)
-
-            elif command.token() == "S":
-                switch = command.next()
-                if switch:
-                    command.next()
-                    isSwitchOn = command.tokenAsBoolean()
-                    if isSwitchOn:
-                        print "switch {} is {}".format(switch, isSwitchOn)
-     
-                        if isSwitchOn:
-                            rules.switchOn( switch )
-                        else:
-                            rules.switchOff( switch )
-            else:
-                pass
+            command.fire(port, rules)
 
         except KeyboardInterrupt:
             exit()

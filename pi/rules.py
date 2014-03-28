@@ -3,190 +3,122 @@ from time import sleep
 
 class Rules:
 
-    def noAction(self, *args):
-        print "no action"
-
-    def switchOn(self, switch):
-        self.onRule.get(switch, self.noAction)()
-
-    def switchOff(self, switch):
-        self.offRule.get(switch, self.noAction)()
-
-    def potEvent(self, pot, potValue):
-        self.potRule.get(pot, self.noAction)(potValue)
-
-    def sendMeterSetting(self, potId, potValue):
+    def sendMeterSetting(self, port, potId, potValue):
         print "sending pot value {}".format( potValue )
-        self.port.write( "Meter " + potId + " " + str(potValue) + "\n" )
+        port.write( "Meter " + potId + " " + str(potValue) + "\n" )
         return True
 
-    def __init__(self, port):
-        self.port = port
+    def __init__(self):
         self.audio = Audio()
 
         self.potRule = {
-            'O2Flow'     : lambda potValue: self.sendMeterSetting("O2", 12 - potValue),
-            'Speaker'    : self.noAction,
-            'Headset'    : self.noAction,
-            'Voltage'    : lambda potValue: self.sendMeterSetting("V", 12 - potValue) and self.sendMeterSetting("O2", 12 - potValue),
-            'Resistance' : self.noAction,
-            'Current'    : self.noAction,
-            'AbortMode'  : self.noAction,
-            'AntPitch'   : self.noAction,
-            'AntYaw'     : self.noAction,
-            'Tune'       : self.noAction,
-            'Beam'       : self.noAction
+            'O2Flow'     : lambda port, potValue: self.sendMeterSetting(port, "O2", 12 - potValue),
+            # 'Speaker'  : ?
+            # 'Headset'  : ?
+            'Voltage'    : lambda port, potValue: self.sendMeterSetting(port, "V", 12 - potValue)
+            # 'Resistance' : ?
+            # 'Current'    : ?
+            # 'AbortMode'  : ?
+            # 'AntPitch'   : ?
+            # 'AntYaw'     : ?
+            # 'Tune'       : ?
+            # 'Beam'       : ?
         }
 
         self.onRule = {
+            '0'               : lambda : self.audio.spsThruster.play(loops = -1),
             'SPS'               : lambda : self.audio.spsThruster.play(loops = -1),
-            'TEI'               : self.noAction,
-            'TLI'               : self.noAction,
-            'S-IC'              : self.noAction,
-            'S-II'              : self.noAction,
-            'S-iVB'             : self.noAction,
-            'M-I'               : self.noAction,
-            'M-II'              : self.noAction,
-            'M-III'             : self.noAction,
-            'Power'             : self.noAction,
-            'Mode'              : self.noAction,
-            'Lamp'              : self.noAction,
-            'Ack'               : self.noAction,
-            'DockingProbe'      : self.noAction,
-            'GlycolPump'        : self.noAction,
-            'SCEPower'          : self.noAction,
-            'WasteDump'         : self.noAction,
+            # 'TEI'               : ?
+            # 'TLI'               : ?
+            # 'S-IC'              : ?
+            # 'S-II'              : ?
+            # 'S-iVB'             : ?
+            # 'M-I'               : ?
+            # 'M-II'              : ?
+            # 'M-III'             : ?
+            # 'Power'             : ?
+            # 'Mode'              : ?
+            # 'Lamp'              : ?
+            # 'Ack'               : ?
+            # 'DockingProbe'      : ?
+            # 'GlycolPump'        : ?
+            # 'SCEPower'          : ?
+            # 'WasteDump'         : ?
             'CabinFan'          : lambda : self.audio.fan.play(loops = -1),
-            'H2OFlow'           : self.noAction,
-            'IntLights'         : self.noAction,
-            'SuitComp'          : self.noAction,
+            # 'H2OFlow'           : ?
+            # 'IntLights'         : ?
+            # 'SuitComp'          : ?
             'PTT'               : lambda : self.audio.quindarin.play(),
-            'ArmAbort'          : self.noAction,
-            'Abort'             : self.noAction,
+            # 'ArmAbort'          : ?
+            # 'Abort'             : ?
             'O2Fan'             : lambda : self.audio.o2fan.play(loops = -1),
             'H2Fan'             : lambda : self.audio.h2fan.play(loops = -1),
-            'Pumps'             : self.noAction,
-            'Heat'              : self.noAction,
-            'MainDeploy'        : self.noAction,
+            # 'Pumps'             : ?
+            # 'Heat'              : ?
+            # 'MainDeploy'        : ?
             'CSM/LVDeploy'      : lambda : self.audio.csmDeploy.play(),
-            'SM/CMDeploy'       : self.noAction,
-            'DrogueDeploy'      : self.noAction,
-            'CanardDeploy'      : self.noAction,
-            'ApexCoverJettsn'   : self.noAction,
-            'LesMotorFire'      : self.noAction,
-            'ES1'               : self.noAction,
-            'ES2'               : self.noAction,
-            'ES3'               : self.noAction,
-            'ES4'               : self.noAction,
-            'ES5'               : self.noAction,
-            'ES6'               : self.noAction,
-            'ES7'               : self.noAction,
-            'ES8'               : self.noAction,
-            'ES9'               : self.noAction,
-            'ES10'              : self.noAction,
+            # 'SM/CMDeploy'       : ?
+            # 'DrogueDeploy'      : ?
+            #'CanardDeploy'      : ?
+            #'ApexCoverJettsn'   : ?
+            #'LesMotorFire'      : ?
+            #'ES1'               : ?
+            #'ES2'               : ?
+            #'ES3'               : ?
+            #'ES4'               : ?
+            #'ES5'               : ?
+            #'ES6'               : ?
+            #'ES7'               : ?
+            #'ES8'               : ?
+            #'ES9'               : ?
+            #'ES10'              : ?
         }
 
         self.offRule = {
+            '0'               : lambda : self.audio.spsThruster.stop(),
             'SPS'               : lambda : self.audio.spsThruster.stop(),
-            'TEI'               : self.noAction,
-            'TLI'               : self.noAction,
-            'S-IC'              : self.noAction,
-            'S-II'              : self.noAction,
-            'S-iVB'             : self.noAction,
-            'M-I'               : self.noAction,
-            'M-II'              : self.noAction,
-            'M-III'             : self.noAction,
-            'Power'             : self.noAction,
-            'Mode'              : self.noAction,
-            'Lamp'              : self.noAction,
-            'Ack'               : self.noAction,
-            'Docking Probe'     : self.noAction,
-            'Glycol Pump'       : self.noAction,
-            'SCE Power'         : self.noAction,
-            'Waste Dump'        : self.noAction,
-            'Cabin Fan'         : lambda : self.audio.fan.stop(),
-            'H2O Flow'          : self.noAction,
-            'Int Lights'        : self.noAction,
-            'Suit Comp'         : self.noAction,
+            # 'TEI'               : ?
+            # 'TLI'               : ?
+            # 'S-IC'              : ?
+            # 'S-II'              : ?
+            # 'S-iVB'             : ?
+            # 'M-I'               : ?
+            # 'M-II'              : ?
+            # 'M-III'             : ?
+            # 'Power'             : ?
+            # 'Mode'              : ?
+            # 'Lamp'              : ?
+            # 'Ack'               : ?
+            # 'DockingProbe'     : ?
+            # 'GlycolPump'       : ?
+            # 'SCEPower'         : ?
+            # 'WasteDump'        : ?
+            'CabinFan'         : lambda : self.audio.fan.stop(),
+            # 'H2OFlow'          : ?
+            # 'IntLights'        : ?
+            # 'SuitComp'         : ?
             'PTT'               : lambda : self.audio.quindarout.play(),
-            'Arm Abort'         : self.noAction,
-            'Abort'             : self.noAction,
+            # 'ArmAbort'         : ?
+            # 'Abort'             : ?
             'O2 Fan'            : lambda : self.audio.o2fan.stop(),
-            'H2 Fan'            : lambda : self.audio.h2fan.stop(),
-            'Pumps'             : self.noAction,
-            'Heat'              : self.noAction,
-            'Main Deploy'       : self.noAction,
-            'CSM/LV Deploy'     : self.noAction,
-            'SM/CM Deploy'      : self.noAction,
-            'Drogue Deploy'     : self.noAction,
-            'Canard Deploy'     : self.noAction,
-            'Apex Cover Jettsn' : self.noAction,
-            'Les Motor Fire'    : self.noAction,
-            'ES 1'              : self.noAction,
-            'ES 2'              : self.noAction,
-            'ES 3'              : self.noAction,
-            'ES 4'              : self.noAction,
-            'ES 5'              : self.noAction,
-            'ES 6'              : self.noAction,
-            'ES 7'              : self.noAction,
-            'ES 8'              : self.noAction,
-            'ES 9'              : self.noAction,
-            'ES 10'             : self.noAction,
+            'H2 Fan'            : lambda : self.audio.h2fan.stop()
+            # 'Pumps'             : ?
+            # 'Heat'              : ?
+            # 'MainDeploy'       : ?
+            # 'CSM/LVDeploy'     : ?
+            # 'SM/CMDeploy'      : ?
+            # 'DrogueDeploy'     : ?
+            # 'CanardDeploy'     : ?
+            # 'ApexCoverJettsn' : ?
+            # 'LesMotorFire'    : ?
+            # 'ES1'              : ?
+            # 'ES2'              : ?
+            # 'ES3'              : ?
+            # 'ES4'              : ?
+            # 'ES5'              : ?
+            # 'ES6'              : ?
+            # 'ES7'              : ?
+            # 'ES8'              : ?
+            # 'ES9'              : ?
+            # 'ES10'             : ?
         }
-
-if __name__ == '__main__':
-
-    rules = Rules()
-    print "SPS on"
-    rules.switchOn('SPS')
-    sleep(1)
-
-    print "SPS off"
-    rules.switchOff('SPS')
-    sleep(.25)
-
-    print "Fan on"
-    rules.switchOn('Cabin Fan')
-    sleep(1)
-
-    print "Fan off"
-    rules.switchOff('Cabin Fan')
-    sleep(.25)
-
-    print "O2 Fan on"
-    rules.switchOn('O2 Fan')
-    sleep(1)
-
-    print "O2 Fan off"
-    rules.switchOff('O2 Fan')
-    sleep(.25)
-
-    print "H2 Fan on"
-    rules.switchOn('H2 Fan')
-    sleep(1)
-
-    print "H2 Fan off"
-    rules.switchOff('H2 Fan')
-
-    sleep(.5)
-
-    print "PTT In"
-    rules.switchOn('PTT')
-    sleep(.5)
-
-    print "PTT Out"
-    rules.switchOff('PTT')
-    sleep(.5)
-
-    print "PTT Out"
-    rules.switchOff('PTT')
-    sleep(.5)
-
-    print "undefined switch on"
-    rules.switchOn('undefined')
-
-    print "undefined switch off"
-    rules.switchOff('undefined')
-
-    print "undefined pot" 
-    rules.setPot( None, 'undefined', None )
