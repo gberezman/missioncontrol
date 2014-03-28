@@ -20,11 +20,11 @@ Adafruit_LEDBackpack matrixE;
 
 uint8_t o2MeterBaseCathodePin = 0;
 uint8_t o2MeterBaseAnodePin = 0;
-LEDMeter o2meter = LEDMeter( &matrixA, o2MeterBaseCathodePin, o2MeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
+LEDMeter o2meter = LEDMeter( &matrixA, "O2", o2MeterBaseCathodePin, o2MeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
 
 uint8_t voltageMeterBaseCathodePin = 0;
 uint8_t voltageMeterBaseAnodePin = 0;
-LEDMeter voltageMeter = LEDMeter( &matrixB, voltageMeterBaseAnodePin, voltageMeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
+LEDMeter voltageMeter = LEDMeter( &matrixB, "Voltage", voltageMeterBaseAnodePin, voltageMeterBaseAnodePin, TWELVE_BAR_DIAL_COLORS );
 
 int voltagePotPin = 0;
 Potentiometer voltagePot = Potentiometer( "Voltage", voltagePotPin );
@@ -137,8 +137,8 @@ void setMeter() {
 }
 
 void setMeter( char* meterLabel, int graphSetting ) {
-  if( strcmp( meterLabel, "O2" ) == 0 )
+  if( strcmp( meterLabel, o2meter.getLabel() ) == 0 )
     o2meter.setBars( graphSetting );
-  if( strcmp( meterLabel, "V" ) == 0 )
-    voltageMeter.setBars( graphSetting );;
+  if( strcmp( meterLabel, voltageMeter.getLabel() ) == 0 )
+    voltageMeter.setBars( graphSetting );
 }

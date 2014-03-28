@@ -15,7 +15,7 @@ class Rules:
             'O2Flow'     : lambda port, potValue: self.sendMeterSetting(port, "O2", 12 - potValue),
             # 'Speaker'  : ?
             # 'Headset'  : ?
-            'Voltage'    : lambda port, potValue: self.sendMeterSetting(port, "V", 12 - potValue)
+            'Voltage'    : lambda port, potValue: self.sendMeterSetting(port, "Voltage", 12 - potValue)
             # 'Resistance' : ?
             # 'Current'    : ?
             # 'AbortMode'  : ?
