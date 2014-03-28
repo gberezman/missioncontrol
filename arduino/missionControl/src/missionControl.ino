@@ -87,17 +87,23 @@ void sendSwitchStates() {
 
 void sendSwitchStatesToSerial(SwitchExpander exp) {
   for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) {
-    if( exp.wasPinTurnedOn( pin ) ) {
-      Serial.print( "S " );
-      Serial.print( exp.getPinId(pin) );
-      Serial.print( " True\n" );
-    }
-    else if ( exp.wasPinTurnedOff( pin ) ) {
-      Serial.print( "S " );
-      Serial.print( exp.getPinId(pin) );
-      Serial.print( " False\n" );
-    }
+    if( exp.wasPinTurnedOn( pin ) )
+      sendSwitchOn( exp, pin );
+    else if ( exp.wasPinTurnedOff( pin ) ) 
+      sendSwitchOff( exp, pin );
   }
+}
+
+void sendSwitchOn( SwitchExpander exp, int pin ) {
+  Serial.print( "S " );
+  Serial.print( exp.getPinId(pin) );
+  Serial.print( " True\n" );
+}
+
+void sendSwitchOff( SwitchExpander exp, int pin ) {
+  Serial.print( "S " );
+  Serial.print( exp.getPinId(pin) );
+  Serial.print( " False\n" );
 }
 
 void scanPots() {
@@ -120,25 +126,15 @@ void sendPotStateIfChanged( Potentiometer* pot ) {
 
 void setMeter() {
   char* meterLabel = serialCommand.next();
-  if( meterLabel != NULL )
-    sm( meterLabel );
-}
-
-void sm(char* meterLabel) {
   char* value = serialCommand.next();
-  if( value != NULL ) {
-    int graphSetting = atoi( value );
-    LEDMeter* meter = getMeter( meterLabel );
-    if( meter != NULL )
-      meter->setBars( graphSetting );
-  }
+
+  if( meterLabel != NULL && value != NULL )
+    setMeter( meterLabel, atoi( value ) );
 }
 
-LEDMeter* getMeter( char* meterLabel ) {
+void setMeter( char* meterLabel, int graphSetting ) {
   if( strcmp( meterLabel, "O2" ) == 0 )
-    return &o2meter;
+    o2meter.setBars( graphSetting );
   if( strcmp( meterLabel, "V" ) == 0 )
-    return &voltageMeter;
-
-  return NULL;
+    voltageMeter.setBars( graphSetting );;
 }
