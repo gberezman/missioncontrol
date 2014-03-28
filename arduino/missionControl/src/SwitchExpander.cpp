@@ -33,6 +33,12 @@ void SwitchExpander::scanSwitches() {
     currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
 }
 
+void SwitchExpander::invert() {
+  storePreviousSwitchStates();
+  for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ )
+    currSwitchStates[pin] = ! currSwitchStates[pin];
+}
+
 bool SwitchExpander::wasPinTurnedOn( uint8_t pin ) {
   return ( prevSwitchStates[pin] == 0 ) && ( currSwitchStates[pin] == 1 );
 }

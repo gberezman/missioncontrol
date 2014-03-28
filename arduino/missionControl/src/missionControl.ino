@@ -41,6 +41,16 @@ void setup() {
   // initializeLEDMatrix( &matrixE, 0x74 );
 
   serialCommand.addCommand("Meter", setMeter);
+
+  scanSwitches();
+  invertSwitchStates();
+}
+
+void invertSwitchStates() {
+  exp0.invert();
+  // exp1.invert();
+  // exp2.invert();
+  // exp3.invert();
 }
 
 void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {

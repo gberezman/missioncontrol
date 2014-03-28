@@ -13,6 +13,7 @@ class SwitchExpander {
     bool wasPinTurnedOn( uint8_t _pin );
     bool wasPinTurnedOff( uint8_t _pin );
     uint8_t getPinId( uint8_t _pin );
+    void invert( void );
 
   private:
     void ensureInitialized();
