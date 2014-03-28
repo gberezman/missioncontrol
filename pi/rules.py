@@ -12,22 +12,23 @@ class Rules:
     def switchOff(self, switch):
         self.offRule.get(switch, self.noAction)()
 
-    def potEvent(self, port, pot, potValue):
-        self.potRule.get(pot, self.noAction)(port, potValue)
+    def potEvent(self, pot, potValue):
+        self.potRule.get(pot, self.noAction)(potValue)
 
-    def sendMeterSetting(self, port, potId, potValue):
+    def sendMeterSetting(self, potId, potValue):
         print "sending pot value {}".format( potValue )
-        port.write( "Meter " + potId + " " + str(potValue) + "\n" )
+        self.port.write( "Meter " + potId + " " + str(potValue) + "\n" )
         return True
 
-    def __init__(self):
+    def __init__(self, port):
+        self.port = port
         self.audio = Audio()
 
         self.potRule = {
-            'O2Flow'     : lambda port, potValue: self.sendMeterSetting(port, "O2", 12 - potValue),
+            'O2Flow'     : lambda potValue: self.sendMeterSetting("O2", 12 - potValue),
             'Speaker'    : self.noAction,
             'Headset'    : self.noAction,
-            'Voltage'    : lambda port, potValue: self.sendMeterSetting(port, "V", 12 - potValue) and self.sendMeterSetting(port, "O2", 12 - potValue),
+            'Voltage'    : lambda potValue: self.sendMeterSetting("V", 12 - potValue) and self.sendMeterSetting("O2", 12 - potValue),
             'Resistance' : self.noAction,
             'Current'    : self.noAction,
             'AbortMode'  : self.noAction,

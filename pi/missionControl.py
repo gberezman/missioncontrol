@@ -4,7 +4,7 @@ from rules import Rules
 import threading
 
 port = Port(timeout = .5)
-rules = Rules()
+rules = Rules(port)
 
 def eventLoop():
 
