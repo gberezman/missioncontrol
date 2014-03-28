@@ -24,7 +24,7 @@ def eventLoop():
                     value = command.tokenAsInt()
                     if value:
                         print "pot {} = {}".format(pot, value)
-                        rules.potEvent(port, pot, value)
+                        rules.potEvent(pot, value)
 
             elif command.token() == "S":
                 switch = command.next()
