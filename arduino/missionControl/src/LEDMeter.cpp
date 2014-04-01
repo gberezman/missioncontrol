@@ -17,7 +17,7 @@ const static uint8_t anodeSegmentForBars[][3] = {
   { B11111111, B11111111, B11111111 }
 };
 
-LEDMeter::LEDMeter(Adafruit_LEDBackpack* _matrix, char* _label, uint8_t _baseCathode, uint8_t _baseAnode, uint16_t* _colors) {
+LEDMeter::LEDMeter(char* _label, Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t _baseAnode, uint16_t* _colors) {
     baseCathode = _baseCathode;
     baseAnode   = _baseAnode;
     matrix      = _matrix;
