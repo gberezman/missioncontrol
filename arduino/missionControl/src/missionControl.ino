@@ -262,6 +262,7 @@ void setup() {
 
   serialCommand.addCommand("Meter", setMeter);
   serialCommand.addCommand("LED", setLED);
+  serialCommand.addCommand("Digit", setDigit);
 
   forceInitialSwitchStateTransmission();
 }
@@ -368,13 +369,13 @@ void setMeter( char* meterLabel, int graphSetting ) {
 }
 
 void setLED() {
-    char* ledLabel = serialCommand.next();
-    char* value = serialCommand.next();
+  char* ledLabel = serialCommand.next();
+  char* value = serialCommand.next();
 
-    if( ledLabel != NULL && value != NULL ) {
-        bool isOn = strcmp( value, "on" ) == 0;
-        setLED( ledLabel, isOn );
-    }
+  if( ledLabel != NULL && value != NULL ) {
+      bool isOn = strcmp( value, "on" ) == 0;
+      setLED( ledLabel, isOn );
+  }
 }
 
 void setLED( char* ledLabel, bool isOn ) {
@@ -384,6 +385,23 @@ void setLED( char* ledLabel, bool isOn ) {
         leds[i].on();
       else
         leds[i].off();
+      break;
+    }
+  } 
+}
+
+void setDigit() {
+  char* digitLabel = serialCommand.next();
+  char* value = serialCommand.next();
+
+  if( digitLabel != NULL && value != NULL )
+      setDigit( digitLabel, atoi( value ) );
+}
+
+void setDigit( char* digitLabel, int digit ) {
+  for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ ) {
+    if( strcmp( digitLabel, digits[i].getLabel() ) == 0 ) {
+      digits[i].setDigit( digit );
       break;
     }
   } 
