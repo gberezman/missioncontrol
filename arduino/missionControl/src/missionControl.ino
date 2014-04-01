@@ -5,6 +5,7 @@
 #include "SwitchExpander.h"
 #include "SerialCommand.h"
 #include "LED.h"
+#include "LEDDigit.h"
 
 SerialCommand serialCommand;
 
