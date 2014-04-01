@@ -264,6 +264,8 @@ void setup() {
   serialCommand.addCommand("LED", setLED);
   serialCommand.addCommand("Digit", setDigit);
 
+  clearDigits();
+  clearLEDs();
   forceInitialSwitchStateTransmission();
 }
 
@@ -276,6 +278,16 @@ void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
 void forceInitialSwitchStateTransmission() {
   scanSwitches();
   invertSwitchStates();
+}
+
+void clearDigits() {
+  for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ ) 
+    digits[i].clear();
+}
+
+void clearLEDs() {
+  for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ ) 
+    leds[i].off();
 }
 
 void invertSwitchStates() {
