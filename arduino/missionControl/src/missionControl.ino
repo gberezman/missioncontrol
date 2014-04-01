@@ -4,6 +4,7 @@
 #include "Potentiometer.h"
 #include "SwitchExpander.h"
 #include "SerialCommand.h"
+#include "LED.h"
 
 SerialCommand serialCommand;
 
@@ -145,57 +146,56 @@ Potentiometer potentiometers[] = {
   Potentiometer( "AntYaw",     7 )
 };
 
-// Numeric LED's:
+// NumericLED numerics[] = {
+  // ATTITUDE
+  // NumericLED
+  // Pitch (3)
+  // Yaw (3)
+  // Roll (3)
 
-    // ATTITUDE
-    // Pitch (3)
-    // Yaw (3)
-    // Roll (3)
+  // SURGEON
+  // IHR (3)
+  // AHR (3)
+  // ABR (3)
+// };
 
-    // SURGEON
-    // IHR (3)
-    // AHR (3)
-    // ABR (3)
+// MissionClock (?)
 
-    // MissionClock (?)
-
-// LED's:
-
-// ABORT
-// LED abortSwitch = 
-
-// AbortSwitch
+LED leds[] = {
+  // ABORT
+  LED( "abortSwitch",  &matrixA, 0, 0 ),
     
-    // CONTROL
-    // CabinFan
-    // H2OFlow
-    // Lights
-    // SuitComp
-    // DockingProbe
-    // GlycolPump
-    // SCEPower
-    // WasteDump
+  // CONTROL
+  LED( "CabinFan",     &matrixA, 0, 0),
+  LED( "H2OFlow",      &matrixA, 0, 0),
+  LED( "Lights",       &matrixA, 0, 0),
+  LED( "SuitComp",     &matrixA, 0, 0),
+  LED( "DockingProbe", &matrixA, 0, 0),
+  LED( "GlycolPump",   &matrixA, 0, 0),
+  LED( "SCEPower",     &matrixA, 0, 0),
+  LED( "WasteDump",    &matrixA, 0, 0),
 
-    // C&WS
-    // MasterAlarm
+  // C&WS
+  LED( "MasterAlarm",  &matrixA, 0, 0),
 
-    // EVENT SEQUENCE
-    // ES 1
-    // ES 2
-    // ES 3
-    // ES 4
-    // ES 5
-    // ES 6
-    // ES 7
-    // ES 8
-    // ES 9
-    // ES 10
+  // EVENT SEQUENCE
+  LED( "ES1",          &matrixA, 0, 0),
+  LED( "ES2",          &matrixA, 0, 0),
+  LED( "ES3",          &matrixA, 0, 0),
+  LED( "ES4",          &matrixA, 0, 0),
+  LED( "ES5",          &matrixA, 0, 0),
+  LED( "ES6",          &matrixA, 0, 0),
+  LED( "ES7",          &matrixA, 0, 0),
+  LED( "ES8",          &matrixA, 0, 0),
+  LED( "ES9",          &matrixA, 0, 0),
+  LED( "ES10",         &matrixA, 0, 0),
 
-    // CRYOGENICS
-    // O2Fan
-    // H2Fan
-    // Pumps
-    // Heat
+  // CRYOGENICS
+  LED( "O2Fan",        &matrixA, 0, 0),
+  LED( "H2Fan",        &matrixA, 0, 0),
+  LED( "Pumps",        &matrixA, 0, 0),
+  LED( "Heat",         &matrixA, 0, 0)
+};
 
 void setup() {
   Serial.begin(115200);
