@@ -106,30 +106,6 @@ SwitchExpander exp1(1, exp1Switches);
 SwitchExpander exp2(2, exp2Switches);
 SwitchExpander exp3(3, exp3Switches);
 
-Adafruit_LEDBackpack matrixA;
-Adafruit_LEDBackpack matrixB;
-Adafruit_LEDBackpack matrixC;
-Adafruit_LEDBackpack matrixD;
-Adafruit_LEDBackpack matrixE;
-
-LEDMeter meters[] = { 
-  // EECOM
-  LEDMeter( "Current", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "O2", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Voltage", &matrixB, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Resistance", &matrixB, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-
-  // CRYOGENICS
-  LEDMeter( "O2Pressure", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "H2Pressure", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "O2Qty", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "H2Qty", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-
-  // INCO
-  LEDMeter( "Signal1", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Signal2", &matrixA, 0, 0, TWELVE_BAR_DIAL_COLORS )
-};
-
 Potentiometer potentiometers[] = { 
   // CAPCOM
   Potentiometer( "Speaker",    0 ),
@@ -146,55 +122,119 @@ Potentiometer potentiometers[] = {
   Potentiometer( "AntYaw",     7 )
 };
 
+Adafruit_LEDBackpack matrixA;
+Adafruit_LEDBackpack matrixB;
+Adafruit_LEDBackpack matrixC;
+Adafruit_LEDBackpack matrixD;
+Adafruit_LEDBackpack matrixE;
+
+LEDMeter meters[] = { 
+  // CRYOGENICS
+  LEDMeter( "O2Pressure", &matrixC, 0, 0, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "H2Pressure", &matrixC, 0, 8, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "O2Qty",      &matrixC, 3, 0, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "H2Qty",      &matrixC, 3, 8, TWELVE_BAR_DIAL_COLORS ),
+
+  // INCO
+  LEDMeter( "Signal1",    &matrixD, 0, 0, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "Signal2",    &matrixD, 0, 8, TWELVE_BAR_DIAL_COLORS ),
+
+  // EECOM
+  LEDMeter( "Current",    &matrixE, 0, 0, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "O2",         &matrixE, 0, 8, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "Voltage",    &matrixE, 3, 0, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "Resistance", &matrixE, 3, 8, TWELVE_BAR_DIAL_COLORS ),
+};
+
 // NumericLED numerics[] = {
   // ATTITUDE
   // NumericLED
-  // Pitch (3)
-  // Yaw (3)
-  // Roll (3)
+  // Pitch (3), A, 0-3, 0-7
+  // Yaw (3),   A, 0-3, 8-15
+  // Roll (3),  A, 4-5, 0-7
 
   // SURGEON
-  // IHR (3)
-  // AHR (3)
-  // ABR (3)
+  // IHR (3),  D, 1-4, 0-7
+  // AHR (3),  D, 1-4, 8-15
+  // ABR (3),  D, 5-7, 0-7
 // };
 
 // MissionClock (?)
 
 LED leds[] = {
-  // ABORT
-  LED( "abortSwitch",  &matrixA, 0, 0 ),
-    
-  // CONTROL
-  LED( "CabinFan",     &matrixA, 0, 0),
-  LED( "H2OFlow",      &matrixA, 0, 0),
-  LED( "Lights",       &matrixA, 0, 0),
-  LED( "SuitComp",     &matrixA, 0, 0),
-  LED( "DockingProbe", &matrixA, 0, 0),
-  LED( "GlycolPump",   &matrixA, 0, 0),
-  LED( "SCEPower",     &matrixA, 0, 0),
-  LED( "WasteDump",    &matrixA, 0, 0),
+  // PANEL1
+  LED( "1",            &matrixB, 0, 0 ),
+  LED( "2",            &matrixB, 0, 1 ),
+  LED( "3",            &matrixB, 0, 2 ),
+  LED( "4",            &matrixB, 0, 3 ),
+  LED( "5",            &matrixB, 0, 4 ),
+  LED( "6",            &matrixB, 0, 5 ),
+  LED( "7",            &matrixB, 0, 6 ),
+  LED( "8",            &matrixB, 0, 7 ),
+  LED( "9",            &matrixB, 0, 8 ),
+  LED( "10",           &matrixB, 0, 9 ),
+  LED( "11",           &matrixB, 0, 10 ),
+  LED( "12",           &matrixB, 0, 11 ),
+  LED( "13",           &matrixB, 0, 12 ),
+  LED( "14",           &matrixB, 0, 13 ),
+  LED( "15",           &matrixB, 0, 14 ),
+  LED( "16",           &matrixB, 0, 15 ),
+  LED( "17",           &matrixB, 1, 0 ),
+  LED( "18",           &matrixB, 1, 1 ),
 
-  // C&WS
-  LED( "MasterAlarm",  &matrixA, 0, 0),
+  // CONTROL
+  LED( "CabinFan",     &matrixB, 3, 0 ),
+  LED( "H2OFlow",      &matrixB, 3, 1 ),
+  LED( "Lights",       &matrixB, 3, 2 ),
+  LED( "SuitComp",     &matrixB, 3, 3 ),
+  LED( "DockingProbe", &matrixB, 3, 4 ),
+  LED( "GlycolPump",   &matrixB, 3, 5 ),
+  LED( "SCEPower",     &matrixB, 3, 6 ),
+  LED( "WasteDump",    &matrixB, 3, 7 ),
+
+  // PANEL2
+  LED( "1",            &matrixD, 5, 8 ),
+  LED( "2",            &matrixD, 5, 9 ),
+  LED( "3",            &matrixD, 5, 10 ),
+  LED( "4",            &matrixD, 5, 11 ),
+  LED( "5",            &matrixD, 5, 12 ),
+  LED( "6",            &matrixD, 5, 13 ),
+  LED( "7",            &matrixD, 5, 14 ),
+  LED( "8",            &matrixD, 5, 15 ),
+  LED( "9",            &matrixD, 6, 8 ),
+  LED( "10",           &matrixD, 6, 9 ),
+  LED( "11",           &matrixD, 6, 10 ),
+  LED( "12",           &matrixD, 6, 11 ),
+  LED( "13",           &matrixD, 6, 12 ),
+  LED( "14",           &matrixD, 6, 13 ),
+  LED( "15",           &matrixD, 6, 14 ),
+  LED( "16",           &matrixD, 6, 15 ),
+  LED( "17",           &matrixD, 7, 8 ),
+  LED( "18",           &matrixD, 7, 9 ),
+    
+  // CRYOGENICS
+  LED( "O2Fan",        &matrixD, 7, 10 ),
+  LED( "H2Fan",        &matrixD, 7, 11 ),
+  LED( "Pumps",        &matrixD, 7, 12 ),
+  LED( "Heat",         &matrixD, 7, 13 ),
 
   // EVENT SEQUENCE
-  LED( "ES1",          &matrixA, 0, 0),
-  LED( "ES2",          &matrixA, 0, 0),
-  LED( "ES3",          &matrixA, 0, 0),
-  LED( "ES4",          &matrixA, 0, 0),
-  LED( "ES5",          &matrixA, 0, 0),
-  LED( "ES6",          &matrixA, 0, 0),
-  LED( "ES7",          &matrixA, 0, 0),
-  LED( "ES8",          &matrixA, 0, 0),
-  LED( "ES9",          &matrixA, 0, 0),
-  LED( "ES10",         &matrixA, 0, 0),
+  LED( "ES1",          &matrixE, 6, 0 ),
+  LED( "ES2",          &matrixE, 6, 1 ),
+  LED( "ES3",          &matrixE, 6, 2 ),
+  LED( "ES4",          &matrixE, 6, 3 ),
+  LED( "ES5",          &matrixE, 6, 4 ),
+  LED( "ES6",          &matrixE, 6, 5 ),
+  LED( "ES7",          &matrixE, 6, 6 ),
+  LED( "ES8",          &matrixE, 6, 7 ),
+  LED( "ES9",          &matrixE, 6, 8 ),
+  LED( "ES10",         &matrixE, 6, 9 ),
 
-  // CRYOGENICS
-  LED( "O2Fan",        &matrixA, 0, 0),
-  LED( "H2Fan",        &matrixA, 0, 0),
-  LED( "Pumps",        &matrixA, 0, 0),
-  LED( "Heat",         &matrixA, 0, 0)
+  // C&WS
+  LED( "MasterAlarm",  &matrixE, 7, 0 ),
+
+  // ABORT
+  LED( "abortSwitch",  &matrixE, 7, 1 )
 };
 
 void setup() {
