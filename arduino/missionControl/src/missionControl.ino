@@ -209,6 +209,7 @@ void setup() {
   initializeLEDMatrix( &matrixE, 0x74 );
 
   serialCommand.addCommand("Meter", setMeter);
+  serialCommand.addCommand("LED", setLED);
 
   forceInitialSwitchStateTransmission();
 }
@@ -309,6 +310,28 @@ void setMeter( char* meterLabel, int graphSetting ) {
   for( int i = 0; i < sizeof( meters ) / sizeof( LEDMeter ); i++ ) {
     if( strcmp( meterLabel, meters[i].getLabel() ) == 0 ) {
       meters[i].setBars( graphSetting );
+      break;
+    }
+  } 
+}
+
+void setLED() {
+    char* ledLabel = serialCommand.next();
+    char* value = serialCommand.next();
+
+    if( ledLabel != NULL && value != NULL ) {
+        bool isOn = strcmp( value, "on" ) == 0;
+        setLED( ledLabel, isOn );
+    }
+}
+
+void setLED( char* ledLabel, bool isOn ) {
+  for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ ) {
+    if( strcmp( ledLabel, leds[i].getLabel() ) == 0 ) {
+      if( isOn )
+        leds[i].on();
+      else
+        leds[i].off();
       break;
     }
   } 
