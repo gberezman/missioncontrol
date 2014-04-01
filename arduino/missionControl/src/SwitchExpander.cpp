@@ -6,8 +6,9 @@
 #include "SwitchExpander.h"
 #include "Arduino.h"
 
-SwitchExpander::SwitchExpander(uint8_t _address) {
+SwitchExpander::SwitchExpander(uint8_t _address, char* _pinLabels[]) {
   address = _address;
+  pinLabels = _pinLabels;
 }
 
 void SwitchExpander::ensureInitialized() {
@@ -40,15 +41,15 @@ void SwitchExpander::invert() {
 }
 
 bool SwitchExpander::wasPinTurnedOn( uint8_t pin ) {
-  return ( prevSwitchStates[pin] == 0 ) && ( currSwitchStates[pin] == 1 );
-}
-
-bool SwitchExpander::wasPinTurnedOff( uint8_t pin ) {
   return ( prevSwitchStates[pin] == 1 ) && ( currSwitchStates[pin] == 0 );
 }
 
-uint8_t SwitchExpander::getPinId( uint8_t pin ) {
-  return address * 16 + pin;
+bool SwitchExpander::wasPinTurnedOff( uint8_t pin ) {
+  return ( prevSwitchStates[pin] == 0 ) && ( currSwitchStates[pin] == 1 );
+}
+
+char* SwitchExpander::getPinId( uint8_t pin ) {
+  return pinLabels[pin];
 }
 
 void SwitchExpander::storePreviousSwitchStates(void) {

@@ -8,15 +8,16 @@
 
 class SwitchExpander {
   public:
-    SwitchExpander(uint8_t _address);
+    SwitchExpander(uint8_t _address, char* _pinLabels[]);
     void scanSwitches(void);
     bool wasPinTurnedOn( uint8_t _pin );
     bool wasPinTurnedOff( uint8_t _pin );
-    uint8_t getPinId( uint8_t _pin );
+    char* getPinId( uint8_t _pin );
     void invert( void );
 
   private:
     void ensureInitialized();
+    char** pinLabels;
     uint8_t address;
     Adafruit_MCP23017 mcp;
     uint8_t prevSwitchStates[NUM_EXPANDER_PINS];
