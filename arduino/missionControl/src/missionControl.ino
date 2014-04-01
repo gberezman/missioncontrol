@@ -147,18 +147,29 @@ LEDMeter meters[] = {
   LEDMeter( "Resistance", &matrixE, 3, 8, TWELVE_BAR_DIAL_COLORS ),
 };
 
-// NumericLED numerics[] = {
+LEDDigit digits[] = {
   // ATTITUDE
-  // NumericLED
-  // Pitch (3), A, 0-3, 0-7
-  // Yaw (3),   A, 0-3, 8-15
-  // Roll (3),  A, 4-5, 0-7
+  LEDDigit( "Pitch0", &matrixA, 0, 0 ),
+  LEDDigit( "Pitch1", &matrixA, 1, 0 ),
+  LEDDigit( "Pitch2", &matrixA, 2, 0 ),
+  LEDDigit( "Yaw0",   &matrixA, 0, 8 ),
+  LEDDigit( "Yaw1",   &matrixA, 1, 8 ),
+  LEDDigit( "Yaw2",   &matrixA, 2, 8 ),
+  LEDDigit( "Roll0",  &matrixA, 3, 0 ),
+  LEDDigit( "Roll1",  &matrixA, 4, 0 ),
+  LEDDigit( "Roll2",  &matrixA, 5, 0 ),
 
   // SURGEON
-  // IHR (3),  D, 1-4, 0-7
-  // AHR (3),  D, 1-4, 8-15
-  // ABR (3),  D, 5-7, 0-7
-// };
+  LEDDigit( "IHR0", &matrixD, 1, 0 ),
+  LEDDigit( "IHR1", &matrixD, 2, 0 ),
+  LEDDigit( "IHR2", &matrixD, 3, 0 ),
+  LEDDigit( "AHR0", &matrixD, 1, 8 ),
+  LEDDigit( "AHR1", &matrixD, 2, 8 ),
+  LEDDigit( "AHR2", &matrixD, 3, 8 ),
+  LEDDigit( "ABR0", &matrixD, 4, 0 ),
+  LEDDigit( "ABR1", &matrixD, 5, 0 ),
+  LEDDigit( "ABR2", &matrixD, 6, 0 )
+};
 
 // MissionClock (?)
 
@@ -194,30 +205,30 @@ LED leds[] = {
   LED( "WasteDump",    &matrixB, 3, 7 ),
 
   // PANEL2
-  LED( "1",            &matrixD, 5, 8 ),
-  LED( "2",            &matrixD, 5, 9 ),
-  LED( "3",            &matrixD, 5, 10 ),
-  LED( "4",            &matrixD, 5, 11 ),
-  LED( "5",            &matrixD, 5, 12 ),
-  LED( "6",            &matrixD, 5, 13 ),
-  LED( "7",            &matrixD, 5, 14 ),
-  LED( "8",            &matrixD, 5, 15 ),
-  LED( "9",            &matrixD, 6, 8 ),
-  LED( "10",           &matrixD, 6, 9 ),
-  LED( "11",           &matrixD, 6, 10 ),
-  LED( "12",           &matrixD, 6, 11 ),
-  LED( "13",           &matrixD, 6, 12 ),
-  LED( "14",           &matrixD, 6, 13 ),
-  LED( "15",           &matrixD, 6, 14 ),
-  LED( "16",           &matrixD, 6, 15 ),
-  LED( "17",           &matrixD, 7, 8 ),
-  LED( "18",           &matrixD, 7, 9 ),
+  LED( "1",            &matrixD, 4, 8 ),
+  LED( "2",            &matrixD, 4, 9 ),
+  LED( "3",            &matrixD, 4, 10 ),
+  LED( "4",            &matrixD, 4, 11 ),
+  LED( "5",            &matrixD, 4, 12 ),
+  LED( "6",            &matrixD, 4, 13 ),
+  LED( "7",            &matrixD, 4, 14 ),
+  LED( "8",            &matrixD, 4, 15 ),
+  LED( "9",            &matrixD, 5, 8 ),
+  LED( "10",           &matrixD, 5, 9 ),
+  LED( "11",           &matrixD, 5, 10 ),
+  LED( "12",           &matrixD, 5, 11 ),
+  LED( "13",           &matrixD, 5, 12 ),
+  LED( "14",           &matrixD, 5, 13 ),
+  LED( "15",           &matrixD, 5, 14 ),
+  LED( "16",           &matrixD, 5, 15 ),
+  LED( "17",           &matrixD, 6, 8 ),
+  LED( "18",           &matrixD, 6, 9 ),
     
   // CRYOGENICS
-  LED( "O2Fan",        &matrixD, 7, 10 ),
-  LED( "H2Fan",        &matrixD, 7, 11 ),
-  LED( "Pumps",        &matrixD, 7, 12 ),
-  LED( "Heat",         &matrixD, 7, 13 ),
+  LED( "O2Fan",        &matrixD, 7, 0 ),
+  LED( "H2Fan",        &matrixD, 7, 1 ),
+  LED( "Pumps",        &matrixD, 7, 2 ),
+  LED( "Heat",         &matrixD, 7, 3 ),
 
   // EVENT SEQUENCE
   LED( "ES1",          &matrixE, 6, 0 ),
