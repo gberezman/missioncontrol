@@ -14,15 +14,13 @@ class Port:
     def readCommand(self):
         result = self.port.readline()
 
-        if not result:
-            return None
-        print "received command {}".format( result )
-
-        try:
-            parser = Parser( result )
-            return self.commandFactory.getCommand( parser )
-        except ValueError:
-            return None
+        if result:
+            try:
+                print "received command {}".format( result )
+                parser = Parser( result )
+                return self.commandFactory.getCommand( parser )
+            except ValueError:
+                pass
 
     def write(self, message):
         self.port.write( message )
