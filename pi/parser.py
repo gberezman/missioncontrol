@@ -20,6 +20,3 @@ class Parser:
             return None
         self.index += 1
         return self.token()
-
-    def token(self):
-        return self.tokens[self.index]
