@@ -12,7 +12,7 @@ SerialCommand serialCommand;
 // index of switch corresponds to I/O pin of I/O Expander
 
 char* exp0Switches[16] = {
-  // Control 
+  // CONTROL
   "DockingProbe",
   "GlycolPump",
   "SCEPower",
@@ -22,7 +22,7 @@ char* exp0Switches[16] = {
   "IntLights",
   "SuitComp",
 
-  // Abort
+  // ABORT
   "ArmAbort",
   "Abort",
 
@@ -35,7 +35,7 @@ char* exp0Switches[16] = {
 };
 
 char* exp1Switches[16] = {
-  // Booster
+  // BOOSTER
   "SPS",
   "TEI",
   "TLI",
@@ -60,7 +60,7 @@ char* exp1Switches[16] = {
 };
 
 char* exp2Switches[16] = {
-  // Event Sequence
+  // EVENT SEQUENCE
   "ES1",
   "ES2",
   "ES3",
@@ -80,13 +80,13 @@ char* exp2Switches[16] = {
 };
 
 char* exp3Switches[16] = {
-  // Cryogenics
+  // CRYOGENICS
   "O2Fan",
   "H2Fan",
   "Pumps",
   "Heat",
 
-  // Pyrotechnics
+  // PYROTECHNICS
   "MainDeploy",
   "CSM/LVDeploy",
   "SM/CMDeploy",
@@ -112,15 +112,20 @@ Potentiometer potentiometers[] = {
   Potentiometer( "Speaker",    0 ),
   Potentiometer( "Headset",    1 ),
 
+  // ABORT
+  Potentiometer( "AbortMode",  2 ),
+
   // EECOM
-  Potentiometer( "Voltage",    2 ),
-  Potentiometer( "Current",    3 ),
-  Potentiometer( "Resistance", 4 ),
-  Potentiometer( "O2Flow",     5 ),
+  Potentiometer( "Voltage",    3 ),
+  Potentiometer( "Current",    4 ),
+  Potentiometer( "Resistance", 5 ),
+  Potentiometer( "O2Flow",     6 ),
 
   // INCO
-  Potentiometer( "AntPitch",   6 ),
-  Potentiometer( "AntYaw",     7 )
+  Potentiometer( "AntPitch",   7 ),
+  Potentiometer( "AntYaw",     8 ),
+  Potentiometer( "Tune",       9 ),
+  Potentiometer( "Beam",       10 )
 };
 
 Adafruit_LEDBackpack matrixA;
@@ -141,10 +146,10 @@ LEDMeter meters[] = {
   LEDMeter( "Signal2",    &matrixD, 0, 8, TWELVE_BAR_DIAL_COLORS ),
 
   // EECOM
-  LEDMeter( "Current",    &matrixE, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "O2",         &matrixE, 0, 8, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Voltage",    &matrixE, 3, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Resistance", &matrixE, 3, 8, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "Voltage",    &matrixE, 0, 0, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "Current",    &matrixE, 0, 8, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "Resistance", &matrixE, 3, 0, TWELVE_BAR_DIAL_COLORS ),
+  LEDMeter( "O2Flow",     &matrixE, 3, 8, TWELVE_BAR_DIAL_COLORS ),
 };
 
 LEDDigit digits[] = {
