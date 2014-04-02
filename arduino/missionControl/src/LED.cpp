@@ -13,6 +13,13 @@ char* LED::getLabel(void) {
     return label;
 }
 
+void LED::set( bool turnOn ) {
+    if( turnOn )
+        on();
+    else
+        off();
+}
+
 void LED::on(void) {
     matrix->displaybuffer[cathode] |= onMask;
     matrix->writeDisplay();

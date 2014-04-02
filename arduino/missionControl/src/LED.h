@@ -8,8 +8,9 @@
 class LED {
   public:
     LED(char* label, Adafruit_LEDBackpack* matrix, uint8_t cathode, uint8_t anode);
-    void on(void);
-    void off(void);
+    void set( bool turnOn );
+    void on( void );
+    void off( void );
     char* getLabel( void );
 
   private:

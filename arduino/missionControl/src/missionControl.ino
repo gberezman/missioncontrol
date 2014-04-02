@@ -377,12 +377,15 @@ void setMeter() {
 }
 
 void setMeter( char* meterLabel, int graphSetting ) {
-  for( int i = 0; i < sizeof( meters ) / sizeof( LEDMeter ); i++ ) {
-    if( strcmp( meterLabel, meters[i].getLabel() ) == 0 ) {
-      meters[i].setBars( graphSetting );
-      break;
-    }
-  } 
+  LEDMeter* meter = findLEDMeter( meterLabel );
+  if( meter != NULL )
+    meter->setBars( graphSetting );
+}
+
+LEDMeter* findLEDMeter( char* meterLabel ) {
+  for( int i = 0; i < sizeof( meters ) / sizeof( LEDMeter ); i++ ) 
+    if( strcmp( meterLabel, meters[i].getLabel() ) == 0 ) 
+        return &meters[i];
 }
 
 void setLED() {
@@ -390,21 +393,18 @@ void setLED() {
   char* value = serialCommand.next();
 
   if( ledLabel != NULL && value != NULL ) {
+    LED* led = findLed( ledLabel );
+    if( led != NULL ) {
       bool isOn = strcmp( value, "on" ) == 0;
-      setLED( ledLabel, isOn );
+      led.set( isOn );
+    }
   }
 }
 
-void setLED( char* ledLabel, bool isOn ) {
-  for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ ) {
-    if( strcmp( ledLabel, leds[i].getLabel() ) == 0 ) {
-      if( isOn )
-        leds[i].on();
-      else
-        leds[i].off();
-      break;
-    }
-  } 
+LED* findLED( char* ledLabel ) {
+  for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ ) 
+    if( strcmp( ledLabel, leds[i].getLabel() ) == 0 ) 
+        return &led[i];
 }
 
 void setDigit() {
@@ -416,10 +416,13 @@ void setDigit() {
 }
 
 void setDigit( char* digitLabel, int digit ) {
-  for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ ) {
-    if( strcmp( digitLabel, digits[i].getLabel() ) == 0 ) {
-      digits[i].setDigit( digit );
-      break;
-    }
-  } 
+  LEDDigit* led = findDigitLED( digitLabel );
+  if( led != NULL )
+      led->setDigit( digit );
+}
+
+LEDDigit* findDigitLED( char* digitLabel ) {
+  for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ ) 
+    if( strcmp( digitLabel, digits[i].getLabel() ) == 0 ) 
+      return &digits[i];
 }
