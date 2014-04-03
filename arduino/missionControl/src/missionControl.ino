@@ -103,167 +103,167 @@ char* exp3Switches[16] = {
 };
 
 SwitchExpander exp0(0, exp0Switches);
-SwitchExpander exp1(1, exp1Switches);
-SwitchExpander exp2(2, exp2Switches);
-SwitchExpander exp3(3, exp3Switches);
+// SwitchExpander exp1(1, exp1Switches);
+// SwitchExpander exp2(2, exp2Switches);
+// SwitchExpander exp3(3, exp3Switches);
 
 Potentiometer potentiometers[] = { 
   // CAPCOM
-  Potentiometer( "Speaker",    0 ),
-  Potentiometer( "Headset",    1 ),
+  Potentiometer( "Speaker",    A0 ),
+  // Potentiometer( "Headset",    A1 ),
 
   // ABORT
-  Potentiometer( "AbortMode",  2 ),
+  // Potentiometer( "AbortMode",  A2 ),
 
   // EECOM
-  Potentiometer( "Voltage",    3 ),
-  Potentiometer( "Current",    4 ),
-  Potentiometer( "Resistance", 5 ),
-  Potentiometer( "O2Flow",     6 ),
+  // Potentiometer( "Voltage",    A3 ),
+  // Potentiometer( "Current",    A4 ),
+  // Potentiometer( "Resistance", A5 ),
+  // Potentiometer( "O2Flow",     A6 ),
 
   // INCO
-  Potentiometer( "AntPitch",   7 ),
-  Potentiometer( "AntYaw",     8 ),
-  Potentiometer( "Tune",       9 ),
-  Potentiometer( "Beam",       10 )
+  // Potentiometer( "AntPitch",   A7 ),
+  // Potentiometer( "AntYaw",     A8 ),
+  // Potentiometer( "Tune",       A9 ),
+  // Potentiometer( "Beam",       A10 )
 };
 
 Adafruit_LEDBackpack matrixA;
-Adafruit_LEDBackpack matrixB;
-Adafruit_LEDBackpack matrixC;
-Adafruit_LEDBackpack matrixD;
-Adafruit_LEDBackpack matrixE;
+// Adafruit_LEDBackpack matrixB;
+// Adafruit_LEDBackpack matrixC;
+// Adafruit_LEDBackpack matrixD;
+// Adafruit_LEDBackpack matrixE;
 
 LEDMeter meters[] = { 
   // CRYOGENICS
-  LEDMeter( "O2Pressure", &matrixC, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "H2Pressure", &matrixC, 0, 8, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "O2Qty",      &matrixC, 3, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "H2Qty",      &matrixC, 3, 8, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "O2Pressure", &matrixC, 0, 0, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "H2Pressure", &matrixC, 0, 8, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "O2Qty",      &matrixC, 3, 0, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "H2Qty",      &matrixC, 3, 8, TWELVE_BAR_DIAL_COLORS ),
 
   // INCO
-  LEDMeter( "Signal1",    &matrixD, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Signal2",    &matrixD, 0, 8, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "Signal1",    &matrixD, 0, 0, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "Signal2",    &matrixD, 0, 8, TWELVE_BAR_DIAL_COLORS ),
 
   // EECOM
-  LEDMeter( "Voltage",    &matrixE, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Current",    &matrixE, 0, 8, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "Resistance", &matrixE, 3, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "O2Flow",     &matrixE, 3, 8, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "Voltage",    &matrixE, 0, 0, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "Current",    &matrixE, 0, 8, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "Resistance", &matrixE, 3, 0, TWELVE_BAR_DIAL_COLORS ),
+  // LEDMeter( "O2Flow",     &matrixE, 3, 8, TWELVE_BAR_DIAL_COLORS ),
 };
 
 LEDDigit digits[] = {
   // ATTITUDE
-  LEDDigit( "Pitch0", &matrixA, 0, 0 ),
-  LEDDigit( "Pitch1", &matrixA, 1, 0 ),
-  LEDDigit( "Pitch2", &matrixA, 2, 0 ),
-  LEDDigit( "Yaw0",   &matrixA, 0, 8 ),
-  LEDDigit( "Yaw1",   &matrixA, 1, 8 ),
-  LEDDigit( "Yaw2",   &matrixA, 2, 8 ),
-  LEDDigit( "Roll0",  &matrixA, 3, 0 ),
-  LEDDigit( "Roll1",  &matrixA, 4, 0 ),
-  LEDDigit( "Roll2",  &matrixA, 5, 0 ),
+  // LEDDigit( "Pitch0", &matrixA, 0, 0 ),
+  // LEDDigit( "Pitch1", &matrixA, 1, 0 ),
+  // LEDDigit( "Pitch2", &matrixA, 2, 0 ),
+  // LEDDigit( "Yaw0",   &matrixA, 0, 8 ),
+  // LEDDigit( "Yaw1",   &matrixA, 1, 8 ),
+  // LEDDigit( "Yaw2",   &matrixA, 2, 8 ),
+  // LEDDigit( "Roll0",  &matrixA, 3, 0 ),
+  // LEDDigit( "Roll1",  &matrixA, 4, 0 ),
+  // LEDDigit( "Roll2",  &matrixA, 5, 0 ),
 
   // SURGEON
-  LEDDigit( "IHR0", &matrixD, 1, 0 ),
-  LEDDigit( "IHR1", &matrixD, 2, 0 ),
-  LEDDigit( "IHR2", &matrixD, 3, 0 ),
-  LEDDigit( "AHR0", &matrixD, 1, 8 ),
-  LEDDigit( "AHR1", &matrixD, 2, 8 ),
-  LEDDigit( "AHR2", &matrixD, 3, 8 ),
-  LEDDigit( "ABR0", &matrixD, 4, 0 ),
-  LEDDigit( "ABR1", &matrixD, 5, 0 ),
-  LEDDigit( "ABR2", &matrixD, 6, 0 )
+  // LEDDigit( "IHR0", &matrixD, 1, 0 ),
+  // LEDDigit( "IHR1", &matrixD, 2, 0 ),
+  // LEDDigit( "IHR2", &matrixD, 3, 0 ),
+  // LEDDigit( "AHR0", &matrixD, 1, 8 ),
+  // LEDDigit( "AHR1", &matrixD, 2, 8 ),
+  // LEDDigit( "AHR2", &matrixD, 3, 8 ),
+  // LEDDigit( "ABR0", &matrixD, 4, 0 ),
+  // LEDDigit( "ABR1", &matrixD, 5, 0 ),
+  // LEDDigit( "ABR2", &matrixD, 6, 0 )
 };
 
 // MissionClock (?)
 
 LED leds[] = {
   // PANEL1
-  LED( "1",            &matrixB, 0, 0 ),
-  LED( "2",            &matrixB, 0, 1 ),
-  LED( "3",            &matrixB, 0, 2 ),
-  LED( "4",            &matrixB, 0, 3 ),
-  LED( "5",            &matrixB, 0, 4 ),
-  LED( "6",            &matrixB, 0, 5 ),
-  LED( "7",            &matrixB, 0, 6 ),
-  LED( "8",            &matrixB, 0, 7 ),
-  LED( "9",            &matrixB, 0, 8 ),
-  LED( "10",           &matrixB, 0, 9 ),
-  LED( "11",           &matrixB, 0, 10 ),
-  LED( "12",           &matrixB, 0, 11 ),
-  LED( "13",           &matrixB, 0, 12 ),
-  LED( "14",           &matrixB, 0, 13 ),
-  LED( "15",           &matrixB, 0, 14 ),
-  LED( "16",           &matrixB, 0, 15 ),
-  LED( "17",           &matrixB, 1, 0 ),
-  LED( "18",           &matrixB, 1, 1 ),
+  // LED( "1",            &matrixB, 0, 0 ),
+  // LED( "2",            &matrixB, 0, 1 ),
+  // LED( "3",            &matrixB, 0, 2 ),
+  // LED( "4",            &matrixB, 0, 3 ),
+  // LED( "5",            &matrixB, 0, 4 ),
+  // LED( "6",            &matrixB, 0, 5 ),
+  // LED( "7",            &matrixB, 0, 6 ),
+  // LED( "8",            &matrixB, 0, 7 ),
+  // LED( "9",            &matrixB, 0, 8 ),
+  // LED( "10",           &matrixB, 0, 9 ),
+  // LED( "11",           &matrixB, 0, 10 ),
+  // LED( "12",           &matrixB, 0, 11 ),
+  // LED( "13",           &matrixB, 0, 12 ),
+  // LED( "14",           &matrixB, 0, 13 ),
+  // LED( "15",           &matrixB, 0, 14 ),
+  // LED( "16",           &matrixB, 0, 15 ),
+  // LED( "17",           &matrixB, 1, 0 ),
+  // LED( "18",           &matrixB, 1, 1 ),
 
   // CONTROL
-  LED( "CabinFan",     &matrixB, 3, 0 ),
-  LED( "H2OFlow",      &matrixB, 3, 1 ),
-  LED( "Lights",       &matrixB, 3, 2 ),
-  LED( "SuitComp",     &matrixB, 3, 3 ),
-  LED( "DockingProbe", &matrixB, 3, 4 ),
-  LED( "GlycolPump",   &matrixB, 3, 5 ),
-  LED( "SCEPower",     &matrixB, 3, 6 ),
-  LED( "WasteDump",    &matrixB, 3, 7 ),
+  // LED( "CabinFan",     &matrixB, 3, 0 ),
+  // LED( "H2OFlow",      &matrixB, 3, 1 ),
+  // LED( "Lights",       &matrixB, 3, 2 ),
+  // LED( "SuitComp",     &matrixB, 3, 3 ),
+  // LED( "DockingProbe", &matrixB, 3, 4 ),
+  // LED( "GlycolPump",   &matrixB, 3, 5 ),
+  // LED( "SCEPower",     &matrixB, 3, 6 ),
+  // LED( "WasteDump",    &matrixB, 3, 7 ),
 
   // PANEL2
-  LED( "1",            &matrixD, 4, 8 ),
-  LED( "2",            &matrixD, 4, 9 ),
-  LED( "3",            &matrixD, 4, 10 ),
-  LED( "4",            &matrixD, 4, 11 ),
-  LED( "5",            &matrixD, 4, 12 ),
-  LED( "6",            &matrixD, 4, 13 ),
-  LED( "7",            &matrixD, 4, 14 ),
-  LED( "8",            &matrixD, 4, 15 ),
-  LED( "9",            &matrixD, 5, 8 ),
-  LED( "10",           &matrixD, 5, 9 ),
-  LED( "11",           &matrixD, 5, 10 ),
-  LED( "12",           &matrixD, 5, 11 ),
-  LED( "13",           &matrixD, 5, 12 ),
-  LED( "14",           &matrixD, 5, 13 ),
-  LED( "15",           &matrixD, 5, 14 ),
-  LED( "16",           &matrixD, 5, 15 ),
-  LED( "17",           &matrixD, 6, 8 ),
-  LED( "18",           &matrixD, 6, 9 ),
+  // LED( "1",            &matrixD, 4, 8 ),
+  // LED( "2",            &matrixD, 4, 9 ),
+  // LED( "3",            &matrixD, 4, 10 ),
+  // LED( "4",            &matrixD, 4, 11 ),
+  // LED( "5",            &matrixD, 4, 12 ),
+  // LED( "6",            &matrixD, 4, 13 ),
+  // LED( "7",            &matrixD, 4, 14 ),
+  // LED( "8",            &matrixD, 4, 15 ),
+  // LED( "9",            &matrixD, 5, 8 ),
+  // LED( "10",           &matrixD, 5, 9 ),
+  // LED( "11",           &matrixD, 5, 10 ),
+  // LED( "12",           &matrixD, 5, 11 ),
+  // LED( "13",           &matrixD, 5, 12 ),
+  // LED( "14",           &matrixD, 5, 13 ),
+  // LED( "15",           &matrixD, 5, 14 ),
+  // LED( "16",           &matrixD, 5, 15 ),
+  // LED( "17",           &matrixD, 6, 8 ),
+  // LED( "18",           &matrixD, 6, 9 ),
     
   // CRYOGENICS
-  LED( "O2Fan",        &matrixD, 7, 0 ),
-  LED( "H2Fan",        &matrixD, 7, 1 ),
-  LED( "Pumps",        &matrixD, 7, 2 ),
-  LED( "Heat",         &matrixD, 7, 3 ),
+  // LED( "O2Fan",        &matrixD, 7, 0 ),
+  // LED( "H2Fan",        &matrixD, 7, 1 ),
+  // LED( "Pumps",        &matrixD, 7, 2 ),
+  // LED( "Heat",         &matrixD, 7, 3 ),
 
   // EVENT SEQUENCE
-  LED( "ES1",          &matrixE, 6, 0 ),
-  LED( "ES2",          &matrixE, 6, 1 ),
-  LED( "ES3",          &matrixE, 6, 2 ),
-  LED( "ES4",          &matrixE, 6, 3 ),
-  LED( "ES5",          &matrixE, 6, 4 ),
-  LED( "ES6",          &matrixE, 6, 5 ),
-  LED( "ES7",          &matrixE, 6, 6 ),
-  LED( "ES8",          &matrixE, 6, 7 ),
-  LED( "ES9",          &matrixE, 6, 8 ),
-  LED( "ES10",         &matrixE, 6, 9 ),
+  // LED( "ES1",          &matrixE, 6, 0 ),
+  // LED( "ES2",          &matrixE, 6, 1 ),
+  // LED( "ES3",          &matrixE, 6, 2 ),
+  // LED( "ES4",          &matrixE, 6, 3 ),
+  // LED( "ES5",          &matrixE, 6, 4 ),
+  // LED( "ES6",          &matrixE, 6, 5 ),
+  // LED( "ES7",          &matrixE, 6, 6 ),
+  // LED( "ES8",          &matrixE, 6, 7 ),
+  // LED( "ES9",          &matrixE, 6, 8 ),
+  // LED( "ES10",         &matrixE, 6, 9 ),
 
   // C&WS
-  LED( "MasterAlarm",  &matrixE, 7, 0 ),
+  // LED( "MasterAlarm",  &matrixE, 7, 0 ),
 
   // ABORT
-  LED( "abortSwitch",  &matrixE, 7, 1 )
+  // LED( "abortSwitch",  &matrixE, 7, 1 )
 };
 
 void setup() {
   Serial.begin(115200);
-  
+
   Wire.begin();
 
   initializeLEDMatrix( &matrixA, 0x70 );
-  initializeLEDMatrix( &matrixB, 0x71 );
-  initializeLEDMatrix( &matrixC, 0x72 );
-  initializeLEDMatrix( &matrixD, 0x73 );
-  initializeLEDMatrix( &matrixE, 0x74 );
+  // initializeLEDMatrix( &matrixB, 0x71 );
+  // initializeLEDMatrix( &matrixC, 0x72 );
+  // initializeLEDMatrix( &matrixD, 0x73 );
+  // initializeLEDMatrix( &matrixE, 0x74 );
 
   serialCommand.addCommand("Meter", setMeter);
   serialCommand.addCommand("LED", setLED);
@@ -297,9 +297,9 @@ void clearLEDs() {
 
 void invertSwitchStates() {
   exp0.invert();
-  exp1.invert();
-  exp2.invert();
-  exp3.invert();
+  // exp1.invert();
+  // exp2.invert();
+  // exp3.invert();
 }
 
 void loop() {
@@ -316,16 +316,16 @@ void loop() {
 
 void scanSwitches() {
   exp0.scanSwitches();
-  exp1.scanSwitches();
-  exp2.scanSwitches();
-  exp3.scanSwitches();
+  // exp1.scanSwitches();
+  // exp2.scanSwitches();
+  // exp3.scanSwitches();
 }
 
 void sendSwitchStates() {
   sendSwitchStatesToSerial(exp0);
-  sendSwitchStatesToSerial(exp1);
-  sendSwitchStatesToSerial(exp2);
-  sendSwitchStatesToSerial(exp3);
+  // sendSwitchStatesToSerial(exp1);
+  // sendSwitchStatesToSerial(exp2);
+  // sendSwitchStatesToSerial(exp3);
 }
 
 void sendSwitchStatesToSerial(SwitchExpander exp) {
@@ -350,8 +350,10 @@ void sendSwitchOff( SwitchExpander exp, int pin ) {
 }
 
 void scanPots() {
-  for( int i = 0; i < sizeof( potentiometers ) / sizeof( Potentiometer ); i++ ) 
+  for( int i = 0; i < sizeof( potentiometers ) / sizeof( Potentiometer ); i++ ) {
     potentiometers[i].scan();
+    delay(2); // recommended pause when accessing analog pins
+  }
 }
 
 void sendPotStates() {
