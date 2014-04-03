@@ -154,7 +154,7 @@ class Rules:
 
             # CRYOGENICS
             'O2Fan'           : lambda : self.audio.o2fan.stop(),
-            'H2Fan'           : lambda : self.audio.h2fan.stop()
+            'H2Fan'           : lambda : self.audio.h2fan.stop(),
             'Pumps'           : lambda : noAction,
             'Heat'            : lambda : noAction,
 
