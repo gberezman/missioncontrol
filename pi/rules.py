@@ -8,7 +8,7 @@ class Rules:
 
     def sendMeterSetting(self, port, meterId, meterValue):
         print "sending meter {} = {}".format( meterId, meterValue )
-        port.write( "Meter " + meterID + " " + str(meterValue) + "\n" )
+        port.write( "Meter " + meterId + " " + str(meterValue) + "\n" )
 
     def playES(self, sound):
         self.audio.esChannel.stop() 
