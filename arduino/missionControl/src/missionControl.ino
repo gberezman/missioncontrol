@@ -24,13 +24,15 @@ From Geometry files:
     char* exp3Switches[16];
 */
 
-Adafruit_LEDBackpack matrixA matrices[] = {
-    // Adafruit_LEDBackpack(),
-    // Adafruit_LEDBackpack(),
-    // Adafruit_LEDBackpack(),
-    // Adafruit_LEDBackpack(),
-    Adafruit_LEDBackpack()
-}
+Adafruit_LEDBackpack matrixA;
+Adafruit_LEDBackpack matrixB;
+Adafruit_LEDBackpack matrixC;
+Adafruit_LEDBackpack matrixD;
+Adafruit_LEDBackpack matrixE;
+
+Adafruit_LEDBackpack* matrices[] = {
+    &matrixA
+};
 
 SwitchExpander expanders[] = {
   SwitchExpander(0, exp0Switches),
@@ -46,8 +48,8 @@ void setup() {
 
   Wire.begin();
 
-  for( int i = 0; i < sizeof( matrices ) / sizeof( Adafruite_LEDBackpack ); i++ )
-    initializeLEDMatrix( &matrixA, 0x70 + i);
+  for( int i = 0; i < sizeof( matrices ) / sizeof( Adafruit_LEDBackpack ); i++ )
+    initializeLEDMatrix( matrices[i], 0x70 + i);
 
   serialCommand.addCommand("Meter", setMeter);
   serialCommand.addCommand("LED", setLED);
