@@ -1,9 +1,7 @@
 #ifndef _LEDDIGIT_H
-#define _LEDIGIT_H
+#define _LEDDIGIT_H
 
-#include <Wire.h>
 #include "Adafruit_LEDBackpack.h"
-#include "Adafruit_MCP23017.h"
 
 class LEDDigit {
   public:
