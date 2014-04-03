@@ -393,10 +393,10 @@ void setLED() {
   char* value = serialCommand.next();
 
   if( ledLabel != NULL && value != NULL ) {
-    LED* led = findLed( ledLabel );
+    LED* led = findLED( ledLabel );
     if( led != NULL ) {
       bool isOn = strcmp( value, "on" ) == 0;
-      led.set( isOn );
+      led->set( isOn );
     }
   }
 }
@@ -404,7 +404,7 @@ void setLED() {
 LED* findLED( char* ledLabel ) {
   for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ ) 
     if( strcmp( ledLabel, leds[i].getLabel() ) == 0 ) 
-        return &led[i];
+        return &leds[i];
 }
 
 void setDigit() {
