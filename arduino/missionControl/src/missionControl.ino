@@ -102,10 +102,12 @@ char* exp3Switches[16] = {
   "unused"
 };
 
-SwitchExpander exp0(0, exp0Switches);
-// SwitchExpander exp1(1, exp1Switches);
-// SwitchExpander exp2(2, exp2Switches);
-// SwitchExpander exp3(3, exp3Switches);
+SwitchExpander expanders[] = {
+  SwitchExpander(0, exp0Switches),
+  // SwitchExpander(1, exp1Switches),
+  // SwitchExpander(2, exp2Switches),
+  // SwitchExpander(3, exp3Switches)
+};
 
 Potentiometer potentiometers[] = { 
   // CAPCOM
@@ -296,10 +298,8 @@ void clearLEDs() {
 }
 
 void invertSwitchStates() {
-  exp0.invert();
-  // exp1.invert();
-  // exp2.invert();
-  // exp3.invert();
+  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
+    expanders[i].invert();
 }
 
 void loop() {
@@ -315,17 +315,13 @@ void loop() {
 }
 
 void scanSwitches() {
-  exp0.scanSwitches();
-  // exp1.scanSwitches();
-  // exp2.scanSwitches();
-  // exp3.scanSwitches();
+  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
+    expanders[i].scanSwitches();
 }
 
 void sendSwitchStates() {
-  sendSwitchStatesToSerial(exp0);
-  // sendSwitchStatesToSerial(exp1);
-  // sendSwitchStatesToSerial(exp2);
-  // sendSwitchStatesToSerial(exp3);
+  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
+    sendSwitchStatesToSerial(expanders[i]);
 }
 
 void sendSwitchStatesToSerial(SwitchExpander exp) {
