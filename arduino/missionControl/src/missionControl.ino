@@ -1,11 +1,13 @@
 #include <Wire.h>
 #include "comm/SerialCommand.h"
 #include "controls/Adafruit_LEDBackpack.h"
-#include "controls/LEDDigit.h"
+
 #include "controls/Expanders.h"
 #include "controls/Potentiometers.h"
 #include "controls/LEDs.h"
 #include "controls/LEDMeters.h"
+#include "controls/LEDDigits.h"
+
 #include "geometry/LEDGeometry.h"
 #include "geometry/LEDMeterGeometry.h"
 #include "geometry/PotentiometerGeometry.h"
@@ -31,6 +33,7 @@ Expanders expanders( SWITCH_EXPANDERS );
 Potentiometers pots( POTENTIOMETERS );
 LEDs leds = LEDs( LEDS );
 LEDMeters meters = LEDMeters( METERS );
+LEDDigits digits = LEDDigits( DIGITS );
 
 SerialCommand serialCommand;
 
@@ -42,7 +45,7 @@ void setup() {
   initializeMatrices();
   expanders.initialize();
 
-  clearDigits();
+  digits.clear();
   leds.clear();
 
   serialCommand.addCommand("Meter", setMeter);
@@ -59,11 +62,6 @@ void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
   matrix->begin( address );
   matrix->clear();  
   matrix->writeDisplay();
-}
-
-void clearDigits() {
-  for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ ) 
-    digits[i].clear();
 }
 
 void loop() {
@@ -114,13 +112,7 @@ void setDigit() {
 }
 
 void setDigit( char* digitLabel, int digit ) {
-  LEDDigit* led = findDigitLED( digitLabel );
+  LEDDigit* led = digits.findLEDDigit( digitLabel );
   if( led != NULL )
       led->setDigit( digit );
-}
-
-LEDDigit* findDigitLED( char* digitLabel ) {
-  for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ ) 
-    if( strcmp( digitLabel, digits[i].getLabel() ) == 0 ) 
-      return &digits[i];
 }

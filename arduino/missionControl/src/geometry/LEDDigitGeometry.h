@@ -10,7 +10,7 @@ extern Adafruit_LEDBackpack matrixC;
 extern Adafruit_LEDBackpack matrixD;
 extern Adafruit_LEDBackpack matrixE;
 
-LEDDigit digits[] = {
+LEDDigit DIGITS[] = {
   // ATTITUDE
   // LEDDigit( "Pitch0", &matrixA, 0, 0 ),
   // LEDDigit( "Pitch1", &matrixA, 1, 0 ),
