@@ -10,7 +10,7 @@ extern Adafruit_LEDBackpack matrixC;
 extern Adafruit_LEDBackpack matrixD;
 extern Adafruit_LEDBackpack matrixE;
 
-LEDMeter meters[] = { 
+LEDMeter METERS[] = { 
   // CRYOGENICS
   // LEDMeter( "O2Pressure", &matrixC, 0, 0, TWELVE_BAR_DIAL_COLORS ),
   // LEDMeter( "H2Pressure", &matrixC, 0, 8, TWELVE_BAR_DIAL_COLORS ),

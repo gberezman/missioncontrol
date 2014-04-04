@@ -7,7 +7,6 @@ class LEDs {
   public:
     LEDs( LED leds[] );
     void clear( void );
-    char* getCommandLabel( void );
     LED* findLED( char* label );
 
   private:

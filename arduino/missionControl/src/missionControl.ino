@@ -1,11 +1,11 @@
 #include <Wire.h>
 #include "comm/SerialCommand.h"
 #include "controls/Adafruit_LEDBackpack.h"
-#include "controls/LEDMeter.h"
 #include "controls/LEDDigit.h"
 #include "controls/Expanders.h"
 #include "controls/Potentiometers.h"
 #include "controls/LEDs.h"
+#include "controls/LEDMeters.h"
 #include "geometry/LEDGeometry.h"
 #include "geometry/LEDMeterGeometry.h"
 #include "geometry/PotentiometerGeometry.h"
@@ -14,7 +14,6 @@
 
 /*
 From Geometry files:
-    LEDMeter meters[];
     LEDDigit digits[];
 */
 
@@ -31,6 +30,7 @@ Adafruit_LEDBackpack* matrices[] = {
 Expanders expanders( SWITCH_EXPANDERS );
 Potentiometers pots( POTENTIOMETERS );
 LEDs leds = LEDs( LEDS );
+LEDMeters meters = LEDMeters( METERS );
 
 SerialCommand serialCommand;
 
@@ -87,15 +87,9 @@ void setMeter() {
 }
 
 void setMeter( char* meterLabel, int graphSetting ) {
-  LEDMeter* meter = findLEDMeter( meterLabel );
+  LEDMeter* meter = meters.findLEDMeter( meterLabel );
   if( meter != NULL )
     meter->setBars( graphSetting );
-}
-
-LEDMeter* findLEDMeter( char* meterLabel ) {
-  for( int i = 0; i < sizeof( meters ) / sizeof( LEDMeter ); i++ ) 
-    if( strcmp( meterLabel, meters[i].getLabel() ) == 0 ) 
-        return &meters[i];
 }
 
 void setLED() {
