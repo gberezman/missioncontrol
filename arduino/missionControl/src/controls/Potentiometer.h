@@ -12,8 +12,8 @@ class Potentiometer {
   private:
     uint8_t pin;
     char* potId;
-    uint8_t currentState = 0;
-    uint8_t previousState = 0;
+    uint8_t currentState;
+    uint8_t previousState;
 };
 
 #endif

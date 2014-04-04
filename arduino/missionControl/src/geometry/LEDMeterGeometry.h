@@ -1,8 +1,8 @@
 #ifndef LEDMETER_GEOMETRY_H
 #define LEDMETER_GEOMETRY_H
 
-#include "LEDMeter.h"
-#include "Adafruit_LEDBackpack.h"
+#include "controls/LEDMeter.h"
+#include "controls/Adafruit_LEDBackpack.h"
 
 extern Adafruit_LEDBackpack matrixA;
 extern Adafruit_LEDBackpack matrixB;

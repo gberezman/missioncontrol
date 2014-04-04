@@ -9,6 +9,7 @@
 SwitchExpander::SwitchExpander(uint8_t _address, char* _pinLabels[]) {
   address = _address;
   pinLabels = _pinLabels;
+  initialized = false;
 }
 
 void SwitchExpander::ensureInitialized() {

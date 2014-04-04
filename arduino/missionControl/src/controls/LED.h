@@ -1,9 +1,7 @@
 #ifndef _LED_H
 #define _LED_H
 
-#include <Wire.h>
 #include "Adafruit_LEDBackpack.h"
-#include "Adafruit_MCP23017.h"
 
 class LED {
   public:

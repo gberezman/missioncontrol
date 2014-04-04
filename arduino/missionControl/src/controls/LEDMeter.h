@@ -1,9 +1,7 @@
 #ifndef _LEDMETER_H
 #define _LEDMETER_H
 
-#include <Wire.h>
 #include "Adafruit_LEDBackpack.h"
-#include "Adafruit_MCP23017.h"
 
 #define BAR_LED_GREEN  B11110000
 #define BAR_LED_RED    B00001111

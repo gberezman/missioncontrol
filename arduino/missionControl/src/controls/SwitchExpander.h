@@ -1,7 +1,6 @@
 #ifndef _SWITCH_EXPANDER_H
 #define _SWITCH_EXPANDER_H
 
-#include <Wire.h>
 #include "Adafruit_MCP23017.h"
 
 #define NUM_EXPANDER_PINS 16
@@ -22,7 +21,7 @@ class SwitchExpander {
     Adafruit_MCP23017 mcp;
     uint8_t prevSwitchStates[NUM_EXPANDER_PINS];
     uint8_t currSwitchStates[NUM_EXPANDER_PINS];
-    bool initialized = false;
+    bool initialized;
 
     void storePreviousSwitchStates(void);
 };
