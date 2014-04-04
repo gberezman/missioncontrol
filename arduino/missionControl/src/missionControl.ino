@@ -51,12 +51,12 @@ void setup() {
   initializeMatrices();
   initializeExpanders();
 
+  clearDigits();
+  clearLEDs();
+
   serialCommand.addCommand("Meter", setMeter);
   serialCommand.addCommand("LED", setLED);
   serialCommand.addCommand("Digit", setDigit);
-
-  clearDigits();
-  clearLEDs();
 }
 
 void initializeMatrices() {
@@ -104,28 +104,7 @@ void scanSwitches() {
 
 void sendSwitchStates() {
   for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
-    sendSwitchStatesToSerial(expanders[i]);
-}
-
-void sendSwitchStatesToSerial(SwitchExpander exp) {
-  for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) {
-    if( exp.wasPinTurnedOn( pin ) )
-      sendSwitchOn( exp, pin );
-    else if ( exp.wasPinTurnedOff( pin ) ) 
-      sendSwitchOff( exp, pin );
-  }
-}
-
-void sendSwitchOn( SwitchExpander exp, int pin ) {
-  Serial.print( "S " );
-  Serial.print( exp.getPinId(pin) );
-  Serial.print( " True\n" );
-}
-
-void sendSwitchOff( SwitchExpander exp, int pin ) {
-  Serial.print( "S " );
-  Serial.print( exp.getPinId(pin) );
-  Serial.print( " False\n" );
+    expanders[i].sendChangedStatesToSerial();
 }
 
 void scanPots() {

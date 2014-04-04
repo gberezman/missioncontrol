@@ -12,9 +12,12 @@ class SwitchExpander {
     void scanSwitches(void);
     bool wasPinTurnedOn( uint8_t _pin );
     bool wasPinTurnedOff( uint8_t _pin );
+    bool didPinChangeState( uint8_t pin );
+    void sendChangedStatesToSerial();
     char* getPinId( uint8_t _pin );
 
   private:
+    void sendStateToSerial( uint8_t pin );
     void invertSwitches( void );
     char** pinLabels;
     uint8_t address;

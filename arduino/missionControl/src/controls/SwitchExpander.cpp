@@ -47,11 +47,31 @@ bool SwitchExpander::wasPinTurnedOff( uint8_t pin ) {
   return ( prevSwitchStates[pin] == 0 ) && ( currSwitchStates[pin] == 1 );
 }
 
+bool SwitchExpander::didPinChangeState( uint8_t pin ) {
+  return wasPinTurnedOn( pin) || wasPinTurnedOff( pin );
+}
+
 char* SwitchExpander::getPinId( uint8_t pin ) {
   return pinLabels[pin];
 }
 
-void SwitchExpander::storePreviousSwitchStates(void) {
+void SwitchExpander::storePreviousSwitchStates( void ) {
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) 
     prevSwitchStates[pin] = currSwitchStates[pin];
+}
+
+void SwitchExpander::sendChangedStatesToSerial( void ) {
+  for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) 
+    if( didPinChangeState( pin ) )
+       sendStateToSerial( pin );
+}
+
+void SwitchExpander::sendStateToSerial( uint8_t pin ) {
+  Serial.print( "S " );
+  Serial.print( getPinId(pin) );
+
+  if( wasPinTurnedOn( pin ) )
+    Serial.print( " True\n" );
+  else if ( wasPinTurnedOff( pin ) )
+    Serial.print( " False\n" );
 }
