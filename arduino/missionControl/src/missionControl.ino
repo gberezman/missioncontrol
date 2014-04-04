@@ -139,15 +139,7 @@ void scanPots() {
 void sendPotStates() {
   for( int i = 0; i < sizeof( potentiometers ) / sizeof( Potentiometer ); i++ ) 
     if( potentiometers[i].hasChanged() )
-        sendPotState( &potentiometers[i] );
-}
-
-void sendPotState( Potentiometer* pot ) {
-  Serial.print( "P " );
-  Serial.print( pot->id() );
-  Serial.print( " " );
-  Serial.print( pot->reading() );
-  Serial.print( "\n" );
+      potentiometers[i].sendToSerial();
 }
 
 void setMeter() {

@@ -23,3 +23,11 @@ uint8_t Potentiometer::reading( void ) {
 bool Potentiometer::hasChanged( void ) {
   return previousState != currentState;
 }
+
+void Potentiometer::sendToSerial( void ) {
+  Serial.print( "P " );
+  Serial.print( id() );
+  Serial.print( " " );
+  Serial.print( reading() );
+  Serial.print( "\n" );
+}

@@ -8,6 +8,7 @@ class Potentiometer {
     char* id( void );
     uint8_t reading( void );
     bool hasChanged( void );
+    void sendToSerial( void );
 
   private:
     uint8_t pin;
