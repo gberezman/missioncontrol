@@ -10,7 +10,7 @@ extern Adafruit_LEDBackpack matrixC;
 extern Adafruit_LEDBackpack matrixD;
 extern Adafruit_LEDBackpack matrixE;
 
-LED leds[] = {
+LED LEDS[] = {
   // PANEL1
   // LED( "1",            &matrixB, 0, 0 ),
   // LED( "2",            &matrixB, 0, 1 ),

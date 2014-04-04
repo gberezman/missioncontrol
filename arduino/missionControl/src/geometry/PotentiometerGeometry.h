@@ -3,7 +3,7 @@
 
 #include "controls/Potentiometer.h"
 
-Potentiometer potentiometers[] = { 
+Potentiometer POTENTIOMETERS[] = { 
   // CAPCOM
   Potentiometer( "Speaker",    A0 ),
   // Potentiometer( "Headset",    A1 ),

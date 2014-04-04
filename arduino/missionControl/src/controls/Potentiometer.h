@@ -1,6 +1,8 @@
 #ifndef _POTENTIOMETER_H
 #define _POTENTIOMETER_H
 
+#include "Arduino.h"
+
 class Potentiometer {
   public:
     Potentiometer( char* _potId, uint8_t _analogPin );
