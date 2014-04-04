@@ -48,8 +48,8 @@ void setup() {
 
   Wire.begin();
 
-  for( int i = 0; i < sizeof( matrices ) / sizeof( Adafruit_LEDBackpack ); i++ )
-    initializeLEDMatrix( matrices[i], 0x70 + i);
+  initializeMatrices();
+  initializeExpanders();
 
   serialCommand.addCommand("Meter", setMeter);
   serialCommand.addCommand("LED", setLED);
@@ -57,7 +57,11 @@ void setup() {
 
   clearDigits();
   clearLEDs();
-  forceInitialSwitchStateTransmission();
+}
+
+void initializeMatrices() {
+  for( int i = 0; i < sizeof( matrices ) / sizeof( Adafruit_LEDBackpack ); i++ )
+    initializeLEDMatrix( matrices[i], 0x70 + i);
 }
 
 void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
@@ -66,9 +70,9 @@ void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
   matrix->writeDisplay();
 }
 
-void forceInitialSwitchStateTransmission() {
-  scanSwitches();
-  invertSwitchStates();
+void initializeExpanders() {
+  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
+    expanders[i].initialize();
 }
 
 void clearDigits() {
@@ -79,11 +83,6 @@ void clearDigits() {
 void clearLEDs() {
   for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ ) 
     leds[i].off();
-}
-
-void invertSwitchStates() {
-  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
-    expanders[i].invert();
 }
 
 void loop() {

@@ -12,7 +12,7 @@ SwitchExpander::SwitchExpander(uint8_t _address, char* _pinLabels[]) {
   initialized = false;
 }
 
-void SwitchExpander::ensureInitialized() {
+void SwitchExpander::initialize() {
   if( ! initialized ) {
     mcp.begin(address);
   
@@ -21,13 +21,14 @@ void SwitchExpander::ensureInitialized() {
         mcp.pullUp(pin, HIGH);  // 100K pullup 
     }
 
+    scanSwitches();
+    invertSwitches();
+
     initialized = true;
   }
 }
 
 void SwitchExpander::scanSwitches() {
-  ensureInitialized();
-
   storePreviousSwitchStates();
 
   uint16_t gpioState = mcp.readGPIOAB();
@@ -35,7 +36,7 @@ void SwitchExpander::scanSwitches() {
     currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
 }
 
-void SwitchExpander::invert() {
+void SwitchExpander::invertSwitches() {
   storePreviousSwitchStates();
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ )
     currSwitchStates[pin] = ! currSwitchStates[pin];
@@ -54,8 +55,6 @@ char* SwitchExpander::getPinId( uint8_t pin ) {
 }
 
 void SwitchExpander::storePreviousSwitchStates(void) {
-  ensureInitialized();
-
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) 
     prevSwitchStates[pin] = currSwitchStates[pin];
 }
