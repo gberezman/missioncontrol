@@ -1,6 +1,3 @@
-#ifndef _SWITCH_EXPANDER_CPP
-#define _SWITCH_EXPANDER_CPP
-
 #include <Wire.h>
 #include "Adafruit_MCP23017.h"
 #include "SwitchExpander.h"
@@ -58,5 +55,3 @@ void SwitchExpander::storePreviousSwitchStates(void) {
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) 
     prevSwitchStates[pin] = currSwitchStates[pin];
 }
-
-#endif
