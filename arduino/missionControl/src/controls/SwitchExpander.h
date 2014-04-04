@@ -1,6 +1,7 @@
 #ifndef _SWITCH_EXPANDER_H
 #define _SWITCH_EXPANDER_H
 
+#include "Arduino.h"
 #include "Adafruit_MCP23017.h"
 
 #define NUM_EXPANDER_PINS 16

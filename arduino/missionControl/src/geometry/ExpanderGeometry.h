@@ -1,29 +1,24 @@
-#ifndef EXPANDER_GEOMETRY_H
-#define EXPANDER_GEOMETRY_H
-
-// index of switch corresponds to I/O pin of I/O Expander
-
 char* exp0Switches[16] = {
-  // CONTROL
-  "DockingProbe",
-  "GlycolPump",
-  "SCEPower",
-  "WasteDump",
-  "CabinFan",
-  "H2OFlow",
-  "IntLights",
-  "SuitComp",
+    // CONTROL
+    "DockingProbe",
+    "GlycolPump",
+    "SCEPower",
+    "WasteDump",
+    "CabinFan",
+    "H2OFlow",
+    "IntLights",
+    "SuitComp",
 
-  // ABORT
-  "ArmAbort",
-  "Abort",
+    // ABORT
+    "ArmAbort",
+    "Abort",
 
-  "unused",
-  "unused",
-  "unused",
-  "unused",
-  "unused",
-  "unused"
+    "unused",
+    "unused",
+    "unused",
+    "unused",
+    "unused",
+    "unused"
 };
 
 char* exp1Switches[16] = {
@@ -94,4 +89,9 @@ char* exp3Switches[16] = {
   "unused"
 };
 
-#endif
+SwitchExpander SWITCH_EXPANDERS[] = {
+  SwitchExpander( 0, exp0Switches )
+  // SwitchExpander( 1, exp1Switches ),
+  // SwitchExpander( 2, exp2Switches ),
+  // SwitchExpander( 3, exp3Switches ),
+};

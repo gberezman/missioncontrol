@@ -5,12 +5,13 @@
 #include "controls/LEDMeter.h"
 #include "controls/LEDDigit.h"
 #include "controls/Potentiometer.h"
-#include "controls/SwitchExpander.h"
-#include "geometry/ExpanderGeometry.h"
+#include "controls/Expanders.h"
 #include "geometry/LEDGeometry.h"
 #include "geometry/LEDMeterGeometry.h"
 #include "geometry/PotentiometerGeometry.h"
 #include "geometry/LEDDigitGeometry.h"
+
+#include "geometry/ExpanderGeometry.h"
 
 /*
 From Geometry files:
@@ -18,10 +19,6 @@ From Geometry files:
     LEDMeter meters[];
     LEDDigit digits[];
     LED leds[];
-    char* exp0Switches[16];
-    char* exp1Switches[16];
-    char* exp2Switches[16];
-    char* exp3Switches[16];
 */
 
 Adafruit_LEDBackpack matrixA;
@@ -34,12 +31,7 @@ Adafruit_LEDBackpack* matrices[] = {
     &matrixA
 };
 
-SwitchExpander expanders[] = {
-  SwitchExpander(0, exp0Switches),
-  // SwitchExpander(1, exp1Switches),
-  // SwitchExpander(2, exp2Switches),
-  // SwitchExpander(3, exp3Switches)
-};
+Expanders expanders( SWITCH_EXPANDERS );
 
 SerialCommand serialCommand;
 
@@ -49,7 +41,7 @@ void setup() {
   Wire.begin();
 
   initializeMatrices();
-  initializeExpanders();
+  expanders.initialize();
 
   clearDigits();
   clearLEDs();
@@ -70,11 +62,6 @@ void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
   matrix->writeDisplay();
 }
 
-void initializeExpanders() {
-  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
-    expanders[i].initialize();
-}
-
 void clearDigits() {
   for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ ) 
     digits[i].clear();
@@ -86,25 +73,15 @@ void clearLEDs() {
 }
 
 void loop() {
-  scanSwitches();
+  expanders.scan();
 
-  sendSwitchStates();
+  expanders.sendSwitchStates();
 
   scanPots();
   
   sendPotStates();
 
   serialCommand.readSerial();
-}
-
-void scanSwitches() {
-  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
-    expanders[i].scanSwitches();
-}
-
-void sendSwitchStates() {
-  for( int i = 0; i < sizeof(expanders)/sizeof(SwitchExpander); i++ )
-    expanders[i].sendChangedStatesToSerial();
 }
 
 void scanPots() {
