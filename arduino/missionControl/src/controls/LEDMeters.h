@@ -5,11 +5,7 @@
 
 class LEDMeters {
   public:
-    LEDMeters( LEDMeter meters[] );
     LEDMeter* findLEDMeter( char* label );
-
-  private:
-    LEDMeter* meters;
 };
 
 #endif

@@ -8,7 +8,6 @@
 #include "controls/LEDMeters.h"
 #include "controls/LEDDigits.h"
 
-#include "geometry/LEDMeterGeometry.h"
 #include "geometry/LEDDigitGeometry.h"
 
 Adafruit_LEDBackpack matrixA;
@@ -24,7 +23,7 @@ Adafruit_LEDBackpack* matrices[] = {
 Expanders expanders;
 Potentiometers pots;
 LEDs leds;
-LEDMeters meters = LEDMeters( METERS );
+LEDMeters meters;
 LEDDigits digits = LEDDigits( DIGITS );
 
 SerialCommand serialCommand;
