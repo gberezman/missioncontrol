@@ -10,7 +10,6 @@
 
 #include "geometry/LEDMeterGeometry.h"
 #include "geometry/LEDDigitGeometry.h"
-#include "geometry/ExpanderGeometry.h"
 
 Adafruit_LEDBackpack matrixA;
 Adafruit_LEDBackpack matrixB;
@@ -22,7 +21,7 @@ Adafruit_LEDBackpack* matrices[] = {
     &matrixA
 };
 
-Expanders expanders( SWITCH_EXPANDERS );
+Expanders expanders;
 Potentiometers pots;
 LEDs leds;
 LEDMeters meters = LEDMeters( METERS );

@@ -1,3 +1,5 @@
+#include "../controls/SwitchExpander.h"
+
 char* exp0Switches[16] = {
     // CONTROL
     "DockingProbe",
