@@ -1,8 +1,8 @@
 #ifndef LEDDIGIT_GEOMETRY_H
 #define LEDDIGIT_GEOMETRY_H
 
-#include "controls/LEDDigit.h"
-#include "controls/Adafruit_LEDBackpack.h"
+#include "../controls/LEDDigit.h"
+#include "../controls/Adafruit_LEDBackpack.h"
 
 extern Adafruit_LEDBackpack matrixA;
 extern Adafruit_LEDBackpack matrixB;

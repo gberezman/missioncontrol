@@ -5,12 +5,8 @@
 
 class LEDDigits {
   public:
-    LEDDigits( LEDDigit digits[] );
     LEDDigit* findLEDDigit( char* label );
     void clear( void );
-
-  private:
-    LEDDigit* digits;
 };
 
 #endif

@@ -1,17 +1,14 @@
 #include "LEDDigits.h"
-
-LEDDigits::LEDDigits( LEDDigit _digits[] ) {
-    digits = _digits;
-}
+#include "../geometry/LEDDigitGeometry.h"
 
 void LEDDigits::clear( void ) {
-    for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ )
-        digits[i].clear();
+    for( int i = 0; i < sizeof( DIGITS ) / sizeof( LEDDigit ); i++ )
+        DIGITS[i].clear();
 }
 
 LEDDigit* LEDDigits::findLEDDigit( char* label ) {
-  for( int i = 0; i < sizeof( digits ) / sizeof( LEDDigit ); i++ )
-    if( strcmp( label, digits[i].getLabel() ) == 0 )
-        return &digits[i];
+  for( int i = 0; i < sizeof( DIGITS ) / sizeof( LEDDigit ); i++ )
+    if( strcmp( label, DIGITS[i].getLabel() ) == 0 )
+        return &DIGITS[i];
 }
 
