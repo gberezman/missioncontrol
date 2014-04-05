@@ -5,12 +5,8 @@
 
 class Potentiometers {
   public:
-    Potentiometers( Potentiometer pots[] );
     void scan( void );
     void sendPotStates( void );
-
-  private:
-    Potentiometer* pots;
 };
 
 #endif

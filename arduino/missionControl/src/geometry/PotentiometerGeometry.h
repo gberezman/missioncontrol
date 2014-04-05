@@ -1,7 +1,7 @@
 #ifndef POTENTIOMETER_GEOMETRY_H
 #define POTENTIOMETER_GEOMETRY_H
 
-#include "controls/Potentiometer.h"
+#include "../controls/Potentiometer.h"
 
 Potentiometer POTENTIOMETERS[] = { 
   // CAPCOM

@@ -10,14 +10,8 @@
 
 #include "geometry/LEDGeometry.h"
 #include "geometry/LEDMeterGeometry.h"
-#include "geometry/PotentiometerGeometry.h"
 #include "geometry/LEDDigitGeometry.h"
 #include "geometry/ExpanderGeometry.h"
-
-/*
-From Geometry files:
-    LEDDigit digits[];
-*/
 
 Adafruit_LEDBackpack matrixA;
 Adafruit_LEDBackpack matrixB;
@@ -30,7 +24,7 @@ Adafruit_LEDBackpack* matrices[] = {
 };
 
 Expanders expanders( SWITCH_EXPANDERS );
-Potentiometers pots( POTENTIOMETERS );
+Potentiometers pots;
 LEDs leds = LEDs( LEDS );
 LEDMeters meters = LEDMeters( METERS );
 LEDDigits digits = LEDDigits( DIGITS );
