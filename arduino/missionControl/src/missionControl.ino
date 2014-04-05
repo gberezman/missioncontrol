@@ -43,7 +43,7 @@ void setup() {
 }
 
 void initializeMatrices() {
-  for( int i = 0; i < sizeof( matrices ) / sizeof( Adafruit_LEDBackpack ); i++ )
+  for( int i = 0; i < sizeof( matrices ) / sizeof( Adafruit_LEDBackpack* ); i++ )
     initializeLEDMatrix( matrices[i], 0x70 + i);
 }
 
