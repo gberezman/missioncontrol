@@ -8,7 +8,6 @@
 #include "controls/LEDMeters.h"
 #include "controls/LEDDigits.h"
 
-#include "geometry/LEDGeometry.h"
 #include "geometry/LEDMeterGeometry.h"
 #include "geometry/LEDDigitGeometry.h"
 #include "geometry/ExpanderGeometry.h"
@@ -25,7 +24,7 @@ Adafruit_LEDBackpack* matrices[] = {
 
 Expanders expanders( SWITCH_EXPANDERS );
 Potentiometers pots;
-LEDs leds = LEDs( LEDS );
+LEDs leds;
 LEDMeters meters = LEDMeters( METERS );
 LEDDigits digits = LEDDigits( DIGITS );
 

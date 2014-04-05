@@ -1,16 +1,13 @@
 #include "LEDs.h"
-
-LEDs::LEDs( LED _leds[] ) {
-    leds = _leds;
-}
+#include "../geometry/LEDGeometry.h"
 
 void LEDs::clear( void ) {
-  for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ )
-    leds[i].off();
+  for( int i = 0; i < sizeof( LEDS ) / sizeof( LED ); i++ )
+    LEDS[i].off();
 }
 
 LED* LEDs::findLED( char* label ) {
-  for( int i = 0; i < sizeof( leds ) / sizeof( LED ); i++ )
-    if( strcmp( label, leds[i].getLabel() ) == 0 )
-        return &leds[i];
+  for( int i = 0; i < sizeof( LEDS ) / sizeof( LED ); i++ )
+    if( strcmp( label, LEDS[i].getLabel() ) == 0 )
+        return &LEDS[i];
 }
