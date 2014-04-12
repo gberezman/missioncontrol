@@ -1,169 +1,270 @@
-from audio import Audio
 from time import sleep
+from audio import Audio
+
+class Meter:
+   
+    def __init__(self, port):
+        self.port = port
+
+    def setMeter(self, meterId, meterValue):
+        self.port.write( "Meter {} {}\n".format( meterId, meterValue ) )
+
+class LED:
+
+    def __init__(self, port):
+        self.port = port
+
+    def on(self, ledId):
+        self.port.write( "LED {} on\n".format( ledId ) )
+        
+    def off(self, ledId):
+        self.port.write( "LED {} off\n".format( ledId ) )
+
+class Abort:
+
+    def __init__(self, audio, led):
+        self.audio = audio
+        self.led = led
+
+        self.armed = False
+        self.mode = 1
+
+    def arm(self):
+        self.armed = True
+        self.led.on( 'ArmAbort' )
+        self.led.on( 'Abort' ),
+
+    def disarm(self):
+        self.armed = False
+        self.led.off( 'ArmAbort' )
+        self.led.off( 'Abort' ),
+
+    def setAbortMode(self, mode):
+        self.mode = mode
+
+    def abort(self):
+        if self.armed:
+            if self.mode == 1:
+                self.audio.abortPad.play()
+            elif self.mode == 2:
+                self.audio.abortI.play()
+            elif self.mode == 3:
+                self.audio.abortII.play()
+            elif self.mode == 4:
+                self.audio.abortIII.play()
+            elif self.mode == 5:
+                self.audio.abortSIVB.play()
+            elif self.mode == 6:
+                self.audio.abortSomething.play()
+
+            # shutdown sequence "sudo halt"
+
+class ThrustStatus:
+
+    def __init__(self, led):
+        self.led = led
+        self.buttonCount = 0
+
+    def on(self):
+        self.buttonCount += 1
+        if self.buttonCount > 0:
+            self.led.on('Thrust')
+
+    def off(self):
+        self.buttonCount -= 1
+        if self.buttonCount <= 0:
+            self.led.off('Thrust')
 
 class Rules:
    
-    def noAction( self, *args ):
+    def noAction(self, *args):
         pass
 
-    def sendMeterSetting(self, port, meterId, meterValue):
-        print "sending meter {} = {}".format( meterId, meterValue )
-        port.write( "Meter " + meterId + " " + str(meterValue) + "\n" )
+    def checkTimers(self):
+        pass
 
-    def playES(self, sound):
-        self.audio.esChannel.stop() 
-        self.audio.esChannel.play( sound )
+    def __init__(self, audio, port):
+        self.audio = audio
+        self.port = port
+        self.led = LED(port)
+        self.abort = Abort(audio, self.led)
+        self.thrustStatus  = ThrustStatus(self.led)
 
-    def playCaution(self, sound):
-        self.audio.cautionChannel.stop() 
-        self.audio.cautionChannel.play( sound )
-        
-    def __init__(self):
-        self.audio = Audio()
+        self.potReadings = {}
 
         self.potRule = {
             # CAPCOM
-            'Speaker'    : lambda port, potValue: self.noAction,
-            'Headset'    : lambda port, potValue: self.noAction,
+            'Speaker'    : lambda potValue: self.noAction, # Adjust speaker volume
+            'Headset'    : lambda potValue: self.noAction, # Adjust headset volume
+            # Consideration: How do I manage these separately. I definitely need a switch or switch recognition
 
             # ABORT
-            'AbortMode'  : lambda port, potValue: self.noAction,
+            'AbortMode'  : lambda potValue: self.abort.setAbortMode(potValue),
 
             # EECOM
-            'Voltage'    : lambda port, potValue: self.sendMeterSetting(port, "Voltage", 12 - potValue),
-            'Current'    : lambda port, potValue: self.noAction,
-            'Resistance' : lambda port, potValue: self.noAction,
-            'O2Flow'     : lambda port, potValue: self.sendMeterSetting(port, "O2Flow", 12 - potValue),
+            'Voltage'    : lambda potValue: self.potReadings.update({'Voltage': potValue}),
+            'Current'    : lambda potValue: self.potReadings.update({'Current': potValue}),
+            'Resistance' : lambda potValue: self.potReadings.update({'Resistance': potValue}),
+            'O2Flow'     : lambda potValue: self.potReadings.update({'O2Flow': potValue}),
+            # In Arduino, tie the 4 pots directly to their LED graphs
 
             # INCO
-            'AntPitch'   : lambda port, potValue: self.noAction,
-            'AntYaw'     : lambda port, potValue: self.noAction,
-            'Tune'       : lambda port, potValue: self.noAction,
-            'Beam'       : lambda port, potValue: self.noAction
+            'AntPitch'   : lambda potValue: self.potReadings.update({'AntPitch': potValue}),
+            'AntYaw'     : lambda potValue: self.potReadings.update({'AntYaw': potValue}),
+            'Tune'       : lambda potValue: self.potReadings.update({'Tune': potValue}),
+            'Beam'       : lambda potValue: self.potReadings.update({'Beam': potValue}),
+            # In Arduino, tie the 4 pots directly to the LED graph:
+                # Tune moves the focal section up and down the graph (i.e. moves the beam)
+                # Beam adjusts the width of the focal section
+                # AntPitch changes the focus of the green section (yellow, red the further you move away from focus)
+                # AntYaw changes the the width of the green section
         }
 
-        self.onRule = {
+        self.switchRules = {
             # CONTROL
-            'DockingProbe'    : lambda : self.audio.spsThruster.play(loops = -1),
-            'GlycolPump'      : lambda : self.noAction,
-            'SCEPower'        : lambda : self.noAction,
-            'WasteDump'       : lambda : self.noAction,
-            'CabinFan'        : lambda : self.audio.fan.play(loops = -1),
-            'H2OFlow'         : lambda : self.noAction,
-            'IntLights'       : lambda : self.noAction,
-            'SuitComp'        : lambda : self.noAction,
+            # Replace with three way switch:
+            'DockingProbeRetract' : { 'on'  : lambda : self.audio.dockingProbeRetract.play() 
+                                                       or self.led.on('DockingProbe'),
+                                      'off' : lambda : self.audio.dockingProbeRetract.stop() 
+                                                       or self.led.off('DockingProbe') },
+
+            'DockingProbeExtend'  : { 'on'  : lambda : self.audio.dockingProbeExtend.play() 
+                                                       or self.led.on('DockingProbe'),
+                                      'off' : lambda : self.audio.dockingProbeExtend.stop() 
+                                                       or self.led.off('DockingProbe') },
+
+            'GlycolPump'          : { 'on'  : lambda : self.audio.glycolPump.play(loops = -1) 
+                                                       or self.led.on('GlycolPump'),
+                                      'off' : lambda : self.audio.glycolPump.stop() 
+                                                       or self.led.off('GlycolPump') },
+
+            'SCEPower'            : { 'on'  : lambda : self.led.on('SCEPower'),
+                                      'off' : lambda : self.led.off('SCEPower') },
+
+            'WasteDump'           : { 'on'  : lambda : self.audio.waste.play() 
+                                                       or self.led.on('WasteDump') },
+
+            'CabinFan'            : { 'on'  : lambda : self.audio.fan.play(loops = -1) 
+                                                       or self.led.on('CabinFan'),
+                                      'off' : lambda : self.audio.fan.stop() 
+                                                       or self.led.off('CabinFan') },
+
+            'H2OFlow'             : { 'on'  : lambda : self.audio.H2OFlow.play(loops = -1) 
+                                                       or self.led.on('H2OFlow'),
+                                      'off' : lambda : self.audio.H2OFlow.stop() 
+                                                       or self.led.off('H2OFlow') },
+
+            'IntLights'           : { 'on'  : lambda : self.led.on('IntLights'),
+                                      'off' : lambda : self.led.off('IntLights') },
+
+            'SuitComp'            : { 'on'  : lambda : self.led.on('SuitComp'),
+                                      'off' : lambda : self.led.off('SuitComp') },
 
             # ABORT
-            'ArmAbort'        : lambda : self.noAction,
-            'Abort'           : lambda : self.noAction,
+            'ArmAbort'            : { 'on'  : lambda : self.abort.arm(),
+                                      'off' : lambda : self.abort.disarm() },
+
+            'Abort'               : { 'on'  : lambda : self.abort() },
 
             # BOOSTER
-            'SPS'             : lambda : self.audio.spsThruster.play(loops = -1),
-            'TEI'             : lambda : self.noAction,
-            'TLI'             : lambda : self.noAction,
-            'S-IC'            : lambda : self.noAction,
-            'S-II'            : lambda : self.noAction,
-            'S-iVB'           : lambda : self.noAction,
-            'M-I'             : lambda : self.noAction,
-            'M-II'            : lambda : self.noAction,
-            'M-III'           : lambda : self.noAction,
+            'SPS'                 : { 'on'  : lambda : self.audio.spsThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.spsThruster.stop() 
+                                                       or self.thrustStatus.off() },
+
+            'TEI'                 : { 'on'  : lambda : self.audio.teiThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.teiThruster.stop() 
+                                                       or self.thrustStatus.off() },
+
+            'TLI'                 : { 'on'  : lambda : self.audio.tliThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.tliThruster.stop() 
+                                                       or self.thrustStatus.off() },
+
+            'S-IC'                : { 'on'  : lambda : self.audio.sicThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.sicThruster.stop() 
+                                                       or self.thrustStatus.off() },
+
+            'S-II'                : { 'on'  : lambda : self.audio.siiThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.siiThruster.stop() 
+                                                       or self.thrustStatus.off() },
+
+            'S-iVB'               : { 'on'  : lambda : self.audio.sivbThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.sivbThruster.stop() 
+                                                       or self.thrustStatus.off() },
+
+            'M-I'                 : { 'on'  : lambda : self.audio.miThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.miThruster.stop() 
+                                                       or self.thrustStatus.off() },
+
+            'M-II'                : { 'on'  : lambda : self.audio.miiThruster.play(loops = -1) 
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.miiiThruster.stop() 
+                                                       or self.thrustStatus.off() },
 
             # C&WS
-            'Power'           : lambda : self.noAction,
-            'Mode'            : lambda : self.noAction,
-            'Lamp'            : lambda : self.noAction,
-            'Ack'             : lambda : self.noAction,
+            # 'Caution'
+            # 'Power' 
+            # 'Mode'
+            # 'Lamp' # Wire Lamp to light all LED's directly
+            # 'Ack'
 
             # CAPCOM
-            'PTT'             : lambda : self.audio.quindarin.play(),
+            'PTT'                 : { 'on'  : lambda : self.audio.quindarin.play(),
+                                      'off' : lambda : self.audio.quindarout.play() },
 
             # EVENT SEQUENCE
-            'ES1'             : lambda : playES( self.audio.ES1 ),
-            'ES2'             : lambda : playES( self.audio.ES2 ),
-            'ES3'             : lambda : self.noAction,
-            'ES4'             : lambda : self.noAction,
-            'ES5'             : lambda : self.noAction,
-            'ES6'             : lambda : self.noAction,
-            'ES7'             : lambda : self.noAction,
-            'ES8'             : lambda : self.noAction,
-            'ES9'             : lambda : self.noAction,
-            'ES10'            : lambda : self.noAction,
+            'ES1'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES1 ) },
+            'ES2'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES2 ) },
+            'ES3'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES3 ) },
+            'ES4'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES4 ) },
+            'ES5'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES5 ) },
+            'ES6'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES6 ) },
+            'ES7'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES7 ) },
+            'ES8'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES8 ) },
+            'ES9'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES9 ) },
+            'ES10'                : { 'on'  : lambda : self.audio.playES( self.audio.ES10 ) },
 
             # CRYOGENICS
-            'O2Fan'           : lambda : self.audio.o2fan.play(loops = -1),
-            'H2Fan'           : lambda : self.audio.h2fan.play(loops = -1),
-            'Pumps'           : lambda : self.noAction,
-            'Heat'            : lambda : self.noAction,
+
+            'O2Fan'               : { 'on'  : lambda : self.audio.o2fan.play(loops = -1),
+                                      'off' : lambda : self.audio.o2fan.stop() },
+
+            'H2Fan'               : { 'on'  : lambda : self.audio.h2fan.play(loops = -1),
+                                      'off' : lambda : self.audio.h2fan.stop() },
+
+            'Pumps'               : { 'on'  : lambda : self.audio.pumps.play(loops = -1),
+                                      'off' : lambda : self.audio.pumps.stop() },
+
+            'Heat'                : { 'on'  : lambda : self.audio.heat.play(loops = -1),
+                                      'off' : lambda : self.audio.heat.stop() },
 
             # PYROTECHNICS
-            'MainDeploy'      : lambda : self.noAction,
-            'CSM/LVDeploy'    : lambda : self.audio.csmDeploy.play(),
-            'SM/CMDeploy'     : lambda : self.noAction,
-            'DrogueDeploy'    : lambda : self.noAction,
-            'CanardDeploy'    : lambda : self.noAction,
-            'ApexCoverJettsn' : lambda : self.noAction,
-            'LesMotorFire'    : lambda : self.noAction
+            'CSM/LVDeploy'        : { 'on'  : lambda : self.audio.csmDeploy.play() },
+            # 'MainDeploy'
+            # 'SM/CMDeploy'
+            # 'CanardDeploy'
+            # 'ApexCoverJettsn'
+            # 'LesMotorFire'
         }
 
-        self.offRule = {
-            # CONTROL
-            'DockingProbe'    : lambda : self.noAction,
-            'GlycolPump'      : lambda : self.noAction,
-            'SCEPower'        : lambda : self.noAction,
-            'WasteDump'       : lambda : self.noAction,
-            'CabinFan'        : lambda : self.audio.fan.stop(),
-            'H2OFlow'         : lambda : self.noAction,
-            'IntLights'       : lambda : self.noAction,
-            'SuitComp'        : lambda : self.noAction,
+class StubbedPort:
 
-            # ABORT
-            'ArmAbort'        : lambda : self.noAction,
-            'Abort'           : lambda : self.noAction,
+    def write(self, arg):
+        self.lastMessage = arg
 
-            # BOOSTER
-            'SPS'               : lambda : self.audio.spsThruster.stop(),
-            'TEI'             : lambda : self.noAction,
-            'TLI'             : lambda : self.noAction,
-            'S-IC'            : lambda : self.noAction,
-            'S-II'            : lambda : self.noAction,
-            'S-iVB'           : lambda : self.noAction,
-            'M-I'             : lambda : self.noAction,
-            'M-II'            : lambda : self.noAction,
-            'M-III'           : lambda : self.noAction,
+if __name__ == '__main__':
 
-            # C&WS
-            'Power'           : lambda : self.noAction,
-            'Mode'            : lambda : self.noAction,
-            'Lamp'            : lambda : self.noAction,
-            'Ack'             : lambda : self.noAction,
+    port = StubbedPort()
+    rules = Rules(Audio(), port)
 
-            # CAPCOM
-            'PTT'             : lambda : self.audio.quindarout.play(),
+    res = rules.switchRules['DockingProbeRetract']['on']()
+    assert port.lastMessage == 'LED DockingProbe on\n'
 
-            # EVENT SEQUENCE
-            'ES1'             : lambda : self.noAction,
-            'ES2'             : lambda : self.noAction,
-            'ES3'             : lambda : self.noAction,
-            'ES4'             : lambda : self.noAction,
-            'ES5'             : lambda : self.noAction,
-            'ES6'             : lambda : self.noAction,
-            'ES7'             : lambda : self.noAction,
-            'ES8'             : lambda : self.noAction,
-            'ES9'             : lambda : self.noAction,
-            'ES10'            : lambda : self.noAction,
-
-            # CRYOGENICS
-            'O2Fan'           : lambda : self.audio.o2fan.stop(),
-            'H2Fan'           : lambda : self.audio.h2fan.stop(),
-            'Pumps'           : lambda : self.noAction,
-            'Heat'            : lambda : self.noAction,
-
-            # PYROTECHNICS
-            'MainDeploy'      : lambda : self.noAction,
-            'CSM/LVDeploy'    : lambda : self.noAction,
-            'SM/CMDeploy'     : lambda : self.noAction,
-            'DrogueDeploy'    : lambda : self.noAction,
-            'CanardDeploy'    : lambda : self.noAction,
-            'ApexCoverJettsn' : lambda : self.noAction,
-            'LesMotorFire'    : lambda : self.noAction
-        }
+    res = rules.switchRules['DockingProbeRetract']['off']()
+    assert port.lastMessage == 'LED DockingProbe off\n'

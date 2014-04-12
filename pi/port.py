@@ -16,11 +16,12 @@ class Port:
 
         if result:
             try:
-                print "received command {}".format( result )
+                print "Received command {}".format( result )
                 parser = Parser( result )
                 return self.commandFactory.getCommand( parser )
             except ValueError:
                 pass
 
     def write(self, message):
+        print "Sending {}".format( message )
         self.port.write( message )

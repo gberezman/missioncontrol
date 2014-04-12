@@ -23,17 +23,19 @@ class Potentiometer:
         self.id = id
         self.potValue = int( potValue )
 
-    def fire(self, port, rules):
+    def fire(self, rules):
         rule = rules.potRule.get(self.id)
         if rule:
-            rule(port, self.potValue)
+            rule(self.potValue)
 
 class Switch:
     def __init__(self, id, value):
         self.id = id
         self.isOn = value.lower() in ( "yes", "true", "1", "t" )
 
-    def fire(self, port, rules):
-        rule = rules.onRule.get( self.id ) if self.isOn else rules.offRule.get(self.id)
+    def fire(self, rules):
+        rule = rules.switchRules.get( self.id )
         if rule:
-            rule()
+            a = rule.get( 'on' ) if self.isOn else rule.get( 'off' )
+            if a:
+                a()
