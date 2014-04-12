@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2014-03-07 19:59:55 +0000</string>
+	<string>2014-04-12 15:48:41 +0000</string>
 	<key>Modifier</key>
 	<string>Gregory Berezowsky</string>
 	<key>NotesVisible</key>
@@ -14150,7 +14150,7 @@ CHUTE}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{283.17316173822303, 101.35267934056644}, {71, 23}}</string>
+					<string>{{278.17316173822303, 101.35267934056644}, {81, 23}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -14201,7 +14201,7 @@ CHUTE}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\fs36 \cf0 ULAGE}</string>
+\f0\fs36 \cf0 ULLAGE}</string>
 						<key>VerticalPad</key>
 						<integer>0</integer>
 					</dict>
@@ -16438,7 +16438,7 @@ GMBL 1}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>15</integer>
+		<integer>13</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>FitInWindow</key>
@@ -16458,7 +16458,7 @@ GMBL 1}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{0, 0}, {1321.7086874705435, 733.00001444872942}}</string>
+		<string>{{-372, 0}, {1321.7086874705437, 731.84568371731405}}</string>
 		<key>Zoom</key>
 		<real>0.86630284786224365</real>
 		<key>ZoomValues</key>

@@ -39,7 +39,7 @@ class Abort:
         self.led.off( 'ArmAbort' )
         self.led.off( 'Abort' ),
 
-    def setAbortMode(self, mode):
+    def setMode(self, mode):
         self.mode = mode
 
     def abort(self):
@@ -59,21 +59,22 @@ class Abort:
 
             # shutdown sequence "sudo halt"
 
-class ThrustStatus:
+class LatchedLED:
 
-    def __init__(self, led):
+    def __init__(self, ledDriver, led):
+        self.ledDriver = ledDriver
         self.led = led
         self.buttonCount = 0
 
     def on(self):
         self.buttonCount += 1
         if self.buttonCount > 0:
-            self.led.on('Thrust')
+            self.ledDriver.on(led)
 
     def off(self):
         self.buttonCount -= 1
         if self.buttonCount <= 0:
-            self.led.off('Thrust')
+            self.ledDriver.off(led)
 
 class Rules:
    
@@ -83,36 +84,45 @@ class Rules:
     def checkTimers(self):
         pass
 
+    def getPotRule(self, pot):
+        return self.__potRules.get(pot, lambda potValue: self.noAction())
+
+    def getSwitchOnRule(self, switch):
+        rules = self.__switchRule.get(switch, {})
+        return rules.get('on', lambda : self.noAction())
+
+    def getSwitchOffRule(self, switch):
+        rules = self.__switchRule.get(switch, {})
+        return rules.get('off', lambda : self.noAction())
+
     def __init__(self, audio, port):
         self.audio = audio
         self.port = port
         self.led = LED(port)
         self.abort = Abort(audio, self.led)
-        self.thrustStatus  = ThrustStatus(self.led)
+        self.thrustStatus  = LatchedLED(self.led, 'Thrust')
 
-        self.potReadings = {}
-
-        self.potRule = {
+        self.__potRules = {
             # CAPCOM
-            'Speaker'    : lambda potValue: self.noAction, # Adjust speaker volume
-            'Headset'    : lambda potValue: self.noAction, # Adjust headset volume
+            # 'Speaker'    # Adjust speaker volume
+            # 'Headset'    # Adjust headset volume
             # Consideration: How do I manage these separately. I definitely need a switch or switch recognition
 
             # ABORT
-            'AbortMode'  : lambda potValue: self.abort.setAbortMode(potValue),
+            'AbortMode'  : lambda potValue: self.abort.setMode(potValue),
 
             # EECOM
-            'Voltage'    : lambda potValue: self.potReadings.update({'Voltage': potValue}),
-            'Current'    : lambda potValue: self.potReadings.update({'Current': potValue}),
-            'Resistance' : lambda potValue: self.potReadings.update({'Resistance': potValue}),
-            'O2Flow'     : lambda potValue: self.potReadings.update({'O2Flow': potValue}),
+            # 'Voltage'
+            # 'Current'
+            # 'Resistance'
+            # 'O2Flow'
             # In Arduino, tie the 4 pots directly to their LED graphs
 
             # INCO
-            'AntPitch'   : lambda potValue: self.potReadings.update({'AntPitch': potValue}),
-            'AntYaw'     : lambda potValue: self.potReadings.update({'AntYaw': potValue}),
-            'Tune'       : lambda potValue: self.potReadings.update({'Tune': potValue}),
-            'Beam'       : lambda potValue: self.potReadings.update({'Beam': potValue}),
+            # 'AntPitch'
+            # 'AntYaw'
+            # 'Tune'
+            # 'Beam'
             # In Arduino, tie the 4 pots directly to the LED graph:
                 # Tune moves the focal section up and down the graph (i.e. moves the beam)
                 # Beam adjusts the width of the focal section
@@ -120,38 +130,38 @@ class Rules:
                 # AntYaw changes the the width of the green section
         }
 
-        self.switchRules = {
+        self.__switchRules = {
             # CONTROL
             # Replace with three way switch:
-            'DockingProbeRetract' : { 'on'  : lambda : self.audio.sounds['dockingProbeRetract'].play() 
+            'DockingProbeRetract' : { 'on'  : lambda : self.audio.play('dockingProbeRetract')
                                                        or self.led.on('DockingProbe'),
-                                      'off' : lambda : self.audio.sounds['dockingProbeRetract'].stop() 
+                                      'off' : lambda : self.audio.stop('dockingProbeRetract')
                                                        or self.led.off('DockingProbe') },
 
-            'DockingProbeExtend'  : { 'on'  : lambda : self.audio.sounds['dockingProbeExtend'].play() 
+            'DockingProbeExtend'  : { 'on'  : lambda : self.audio.play('dockingProbeExtend')
                                                        or self.led.on('DockingProbe'),
-                                      'off' : lambda : self.audio.sounds['dockingProbeExtend'].stop() 
+                                      'off' : lambda : self.audio.stop('dockingProbeExtend')
                                                        or self.led.off('DockingProbe') },
 
-            'GlycolPump'          : { 'on'  : lambda : self.audio.sounds['glycolPump'].play(loops = -1) 
+            'GlycolPump'          : { 'on'  : lambda : self.audio.playContinuous('glycolPump')
                                                        or self.led.on('GlycolPump'),
-                                      'off' : lambda : self.audio.sounds['glycolPump'].stop() 
+                                      'off' : lambda : self.audio.stop('glycolPump')
                                                        or self.led.off('GlycolPump') },
 
             'SCEPower'            : { 'on'  : lambda : self.led.on('SCEPower'),
                                       'off' : lambda : self.led.off('SCEPower') },
 
-            'WasteDump'           : { 'on'  : lambda : self.audio.sounds['waste'].play() 
+            'WasteDump'           : { 'on'  : lambda : self.audio.play('waste')
                                                        or self.led.on('WasteDump') },
 
-            'CabinFan'            : { 'on'  : lambda : self.audio.sounds['fan'].play(loops = -1) 
+            'CabinFan'            : { 'on'  : lambda : self.audio.playContinuous('fan')
                                                        or self.led.on('CabinFan'),
-                                      'off' : lambda : self.audio.sounds['fan'].stop() 
+                                      'off' : lambda : self.audio.stop('fan')
                                                        or self.led.off('CabinFan') },
 
-            'H2OFlow'             : { 'on'  : lambda : self.audio.sounds['H2OFlow'].play(loops = -1) 
+            'H2OFlow'             : { 'on'  : lambda : self.audio.playContinuous('H2OFlow')
                                                        or self.led.on('H2OFlow'),
-                                      'off' : lambda : self.audio.sounds['H2OFlow'].stop() 
+                                      'off' : lambda : self.audio.stop('H2OFlow')
                                                        or self.led.off('H2OFlow') },
 
             'IntLights'           : { 'on'  : lambda : self.led.on('IntLights'),
@@ -167,104 +177,188 @@ class Rules:
             'Abort'               : { 'on'  : lambda : self.abort() },
 
             # BOOSTER
-            'SPS'                 : { 'on'  : lambda : self.audio.sounds['spsThruster'].play(loops = -1) 
+            # Service propulsion system
+            'SPS'                 : { 'on'  : lambda : self.audio.playContinuous('spsThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['spsThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('spsThruster')
                                                        or self.thrustStatus.off() },
 
-            'TEI'                 : { 'on'  : lambda : self.audio.sounds['teiThruster'].play(loops = -1) 
+            # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
+            'TEI'                 : { 'on'  : lambda : self.audio.playContinuous('teiThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['teiThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('teiThruster')
                                                        or self.thrustStatus.off() },
 
-            'TLI'                 : { 'on'  : lambda : self.audio.sounds['tliThruster'].play(loops = -1) 
+            # Trans-Lunar injection (puts on path towards moon)
+            'TLI'                 : { 'on'  : lambda : self.audio.playContinuous('tliThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['tliThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('tliThruster')
                                                        or self.thrustStatus.off() },
 
-            'S-IC'                : { 'on'  : lambda : self.audio.sounds['sicThruster'].play(loops = -1) 
+            
+            # Saturn, first stage
+            'S-IC'                : { 'on'  : lambda : self.audio.playContinuous('sicThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['sicThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('sicThruster')
                                                        or self.thrustStatus.off() },
 
-            'S-II'                : { 'on'  : lambda : self.audio.sounds['siiThruster'].play(loops = -1) 
+            # Saturn, second stage
+            'S-II'                : { 'on'  : lambda : self.audio.playContinuous('siiThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['siiThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('siiThruster')
                                                        or self.thrustStatus.off() },
 
-            'S-iVB'               : { 'on'  : lambda : self.audio.sounds['sivbThruster'].play(loops = -1) 
+            # Saturn V, third stage
+            'S-iVB'               : { 'on'  : lambda : self.audio.playContinuous('sivbThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['sivbThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('sivbThruster')
                                                        or self.thrustStatus.off() },
 
-            'M-I'                 : { 'on'  : lambda : self.audio.sounds['miThruster'].play(loops = -1) 
+            'M-I'                 : { 'on'  : lambda : self.audio.playContinuous('miThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['miThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('miThruster')
                                                        or self.thrustStatus.off() },
 
-            'M-II'                : { 'on'  : lambda : self.audio.sounds['miiThruster'].play(loops = -1) 
+            'M-II'                : { 'on'  : lambda : self.audio.playContinuous('miiThruster')
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sounds['miiiThruster'].stop() 
+                                      'off' : lambda : self.audio.stop('miiThruster')
+                                                       or self.thrustStatus.off() },
+
+            'M-III'               : { 'on'  : lambda : self.audio.playContinuous('miiiThruster')
+                                                       or self.thrustStatus.on(),
+                                      'off' : lambda : self.audio.stop('miiiThruster')
                                                        or self.thrustStatus.off() },
 
             # C&WS
-            # 'Caution'
-            # 'Power' 
-            # 'Mode'
+            # square wave alternating between 750 and 2000cps changing 2.5 times per second
+            # 'Caution' # lights up when C&WS fires
+                # pressing clears tone, but leaves lights on
+            # 'Power'  # Resets the C&WS system
+            # 'Mode' # what systems to be monitored (CM deactivates the SM monitors)
             # 'Lamp' # Wire Lamp to light all LED's directly
-            # 'Ack'
+            # 'Ack' # no lights, audio and master alarm only, probably should be illuminated
 
             # CAPCOM
-            'PTT'                 : { 'on'  : lambda : self.audio.sounds['quindarin'].play(),
-                                      'off' : lambda : self.audio.sounds['quindarout'].play() },
+            'PTT'                 : { 'on'  : lambda : self.audio.play('quindarin'),
+                                      'off' : lambda : self.audio.play('quindarout') },
 
             # EVENT SEQUENCE
-            'ES1'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES1 ) },
-            'ES2'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES2 ) },
-            'ES3'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES3 ) },
-            'ES4'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES4 ) },
-            'ES5'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES5 ) },
-            'ES6'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES6 ) },
-            'ES7'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES7 ) },
-            'ES8'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES8 ) },
-            'ES9'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES9 ) },
-            'ES10'                : { 'on'  : lambda : self.audio.playES( self.audio.ES10 ) },
+            'ES1'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES1 ) 
+                                                       or self.led.on( 'ES1' ) },
+            'ES2'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES2 )
+                                                       or self.led.on( 'ES2' ) },
+            'ES3'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES3 )
+                                                       or self.led.on( 'ES3' ) },
+            'ES4'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES4 )
+                                                       or self.led.on( 'ES4' ) },
+            'ES5'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES5 )
+                                                       or self.led.on( 'ES5' ) },
+            'ES6'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES6 )
+                                                       or self.led.on( 'ES6' ) },
+            'ES7'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES7 )
+                                                       or self.led.on( 'ES7' ) },
+            'ES8'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES8 )
+                                                       or self.led.on( 'ES8' ) },
+            'ES9'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES9 )
+                                                       or self.led.on( 'ES9' ) },
+            'ES10'                : { 'on'  : lambda : self.audio.playES( self.audio.ES10 )
+                                                       or self.led.on( 'ES10' ) },
 
             # CRYOGENICS
 
-            'O2Fan'               : { 'on'  : lambda : self.audio.sounds['o2fan'].play(loops = -1),
-                                      'off' : lambda : self.audio.sounds['o2fan'].stop() },
+            'O2Fan'               : { 'on'  : lambda : self.audio.playContinuous('o2fan'),
+                                      'off' : lambda : self.audio.stop('o2fan') },
 
-            'H2Fan'               : { 'on'  : lambda : self.audio.sounds['h2fan'].play(loops = -1),
-                                      'off' : lambda : self.audio.sounds['h2fan'].stop() },
+            'H2Fan'               : { 'on'  : lambda : self.audio.playContinuous('h2fan'),
+                                      'off' : lambda : self.audio.stop('h2fan') },
 
-            'Pumps'               : { 'on'  : lambda : self.audio.sounds['pumps'].play(loops = -1),
-                                      'off' : lambda : self.audio.sounds['pumps'].stop() },
+            'Pumps'               : { 'on'  : lambda : self.audio.playContinuous('pumps'),
+                                      'off' : lambda : self.audio.stop('pumps') },
 
-            'Heat'                : { 'on'  : lambda : self.audio.sounds['heat'].play(loops = -1),
-                                      'off' : lambda : self.audio.sounds['heat'].stop() },
+            'Heat'                : { 'on'  : lambda : self.audio.playContinuous('heat'),
+                                      'off' : lambda : self.audio.stop('heat') },
 
             # PYROTECHNICS
-            'CSM/LVDeploy'        : { 'on'  : lambda : self.audio.sounds['csmDeploy'].play() },
-            # 'MainDeploy'
-            # 'SM/CMDeploy'
-            # 'CanardDeploy'
-            # 'ApexCoverJettsn'
-            # 'LesMotorFire'
+            'DrogueDeploy'        : { 'on'  : lambda : self.audio.play('DrogueDeploy')
+                                                       or self.led.on('DrogueChute') },
+
+            # manually deploy the CM main parachutes.
+            'MainDeploy'          : { 'on'  : lambda : self.audio.play('mainDeploy')
+                                                       or self.led.on('MainChute') },
+
+            # Manually separate the CSM from the launch vehicle during an abort or in normal operation.
+            'CSM/LVDeploy'        : { 'on'  : lambda : self.audio.play('CSM/LVDeploy') },
+
+            # Separate for reentry
+            'SM/CMDeploy'         : { 'on'  : lambda : self.audio.play('SM/CMDeploy') },
+
+            # Deploy the Launch Escape System Canard Parachutes
+            'CanardDeploy'        : { 'on'  : lambda : self.audio.play('CanardDeploy') },
+
+            # Push-switch to jettison CM apex cover if automatic system fails during an abort or earth landing after a normal mission. 
+            'ApexCoverJettsn'     : { 'on'  : lambda : self.audio.play('ApexCoverJettsn')
+                                                       or led.on('Hatch') },
+
+            # Manually operates the Launch Escape System, either to jettison the LES tower or to fire the motor in the event of an LES abort.  In the former case, the explosive bolts connecting the LES tower to the CSM must fire first.
+            'LesMotorFire'        : { 'on'  : lambda : self.audio.play('LesMotorFire') },
         }
 
-class StubbedPort:
+# Overuse of SPS engine:
+    # SPSPress  # SPS engine pressure
+    # SPSFlngTempHi # lights when sps flange temperature is too high
 
-    def write(self, arg):
-        self.lastMessage = arg
+# Major overuse of SPS, shuts down engine
+    # SPSRoughEco # lights when fcsm senses rough combustion and terminates thrust
 
-if __name__ == '__main__':
+# Engine overuse
+    # BMag1Temp # Body mounted attitude gyro temperature out of range (detects spacecraft rate)
+    # BMag2Temp # Body mounted attitude gyro temperature out of range
 
-    port = StubbedPort()
-    rules = Rules(Audio(), port)
+# M-I to M-III engines (like Thrust):
+    # Ullage # small engines prior to big fire for fine control
 
-    res = rules.switchRules['DockingProbeRetract']['on']()
-    assert port.lastMessage == 'LED DockingProbe on\n'
+# Overuse of M-I to M-III
+    # PitchGimbl1 # overcurrent conditions based on time/pressure
+    # PitchGimbl2
+    # yawGimbl1
+    # yawGimbl2
+    # CMRCS1 # Reaction Control System pressure out of range - only when CM/CSM is in CM position
+    # CMRCS2 # RCS pressure out of range - only when CM/CSM is in CM position
+    # SMRCSA # Service Module RCS
+    # SMRCSB
+    # SMRCSC
+    # SMRCSD
 
-    res = rules.switchRules['DockingProbeRetract']['off']()
-    assert port.lastMessage == 'LED DockingProbe off\n'
+# Massive overuse of M-I to M-III
+    # GimbalLock # bad, no orientation in space (flash to warn)
+
+# Voltage too low for too long
+    # ACBus1 # Power bus voltage low
+    # ACBus2 # Power bus voltage low
+
+# Current too high for too long
+    # ACBus1Overload # too much current over timer period
+    # ACBus2Overload # too much current over timer period
+    # FCBusDiscnnct # Forward current hi, reverse current low
+
+# O2 flow too high (or leak...)
+    # O2FlowHi # too much O2 flow 
+
+# O2 flow to low for too long
+    # CO2PPHi # CO2 pressure too hi
+
+# H2 / O2 too high or too low for too long
+    # CryoPress # H2 or O2 pressure out of rnage
+
+# Random, fix by switching on suit comp
+    # SuitComp # suit compressor pressure low
+
+# Signal out of band for too long:
+    # HGAntScanLimit # high gain antenna scan limit problems
+
+# DockingTarget
+# CrewAlert # activated by ground crew; cleared by ground crew
+# CW # Alarm tone inoperative
+# UplinkActivity # data transmission to ship
+# GlycolTempLow # glycol (water) temp low
+

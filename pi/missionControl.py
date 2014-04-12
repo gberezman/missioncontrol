@@ -21,7 +21,7 @@ def eventLoop():
                 sleep( .1 )
                 continue
 
-            command.fire(rules)
+            command.applyRules(rules)
 
         except KeyboardInterrupt:
             exit()
