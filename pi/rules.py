@@ -123,35 +123,35 @@ class Rules:
         self.switchRules = {
             # CONTROL
             # Replace with three way switch:
-            'DockingProbeRetract' : { 'on'  : lambda : self.audio.dockingProbeRetract.play() 
+            'DockingProbeRetract' : { 'on'  : lambda : self.audio.sounds['dockingProbeRetract'].play() 
                                                        or self.led.on('DockingProbe'),
-                                      'off' : lambda : self.audio.dockingProbeRetract.stop() 
+                                      'off' : lambda : self.audio.sounds['dockingProbeRetract'].stop() 
                                                        or self.led.off('DockingProbe') },
 
-            'DockingProbeExtend'  : { 'on'  : lambda : self.audio.dockingProbeExtend.play() 
+            'DockingProbeExtend'  : { 'on'  : lambda : self.audio.sounds['dockingProbeExtend'].play() 
                                                        or self.led.on('DockingProbe'),
-                                      'off' : lambda : self.audio.dockingProbeExtend.stop() 
+                                      'off' : lambda : self.audio.sounds['dockingProbeExtend'].stop() 
                                                        or self.led.off('DockingProbe') },
 
-            'GlycolPump'          : { 'on'  : lambda : self.audio.glycolPump.play(loops = -1) 
+            'GlycolPump'          : { 'on'  : lambda : self.audio.sounds['glycolPump'].play(loops = -1) 
                                                        or self.led.on('GlycolPump'),
-                                      'off' : lambda : self.audio.glycolPump.stop() 
+                                      'off' : lambda : self.audio.sounds['glycolPump'].stop() 
                                                        or self.led.off('GlycolPump') },
 
             'SCEPower'            : { 'on'  : lambda : self.led.on('SCEPower'),
                                       'off' : lambda : self.led.off('SCEPower') },
 
-            'WasteDump'           : { 'on'  : lambda : self.audio.waste.play() 
+            'WasteDump'           : { 'on'  : lambda : self.audio.sounds['waste'].play() 
                                                        or self.led.on('WasteDump') },
 
-            'CabinFan'            : { 'on'  : lambda : self.audio.fan.play(loops = -1) 
+            'CabinFan'            : { 'on'  : lambda : self.audio.sounds['fan'].play(loops = -1) 
                                                        or self.led.on('CabinFan'),
-                                      'off' : lambda : self.audio.fan.stop() 
+                                      'off' : lambda : self.audio.sounds['fan'].stop() 
                                                        or self.led.off('CabinFan') },
 
-            'H2OFlow'             : { 'on'  : lambda : self.audio.H2OFlow.play(loops = -1) 
+            'H2OFlow'             : { 'on'  : lambda : self.audio.sounds['H2OFlow'].play(loops = -1) 
                                                        or self.led.on('H2OFlow'),
-                                      'off' : lambda : self.audio.H2OFlow.stop() 
+                                      'off' : lambda : self.audio.sounds['H2OFlow'].stop() 
                                                        or self.led.off('H2OFlow') },
 
             'IntLights'           : { 'on'  : lambda : self.led.on('IntLights'),
@@ -167,44 +167,44 @@ class Rules:
             'Abort'               : { 'on'  : lambda : self.abort() },
 
             # BOOSTER
-            'SPS'                 : { 'on'  : lambda : self.audio.spsThruster.play(loops = -1) 
+            'SPS'                 : { 'on'  : lambda : self.audio.sounds['spsThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.spsThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['spsThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
-            'TEI'                 : { 'on'  : lambda : self.audio.teiThruster.play(loops = -1) 
+            'TEI'                 : { 'on'  : lambda : self.audio.sounds['teiThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.teiThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['teiThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
-            'TLI'                 : { 'on'  : lambda : self.audio.tliThruster.play(loops = -1) 
+            'TLI'                 : { 'on'  : lambda : self.audio.sounds['tliThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.tliThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['tliThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
-            'S-IC'                : { 'on'  : lambda : self.audio.sicThruster.play(loops = -1) 
+            'S-IC'                : { 'on'  : lambda : self.audio.sounds['sicThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sicThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['sicThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
-            'S-II'                : { 'on'  : lambda : self.audio.siiThruster.play(loops = -1) 
+            'S-II'                : { 'on'  : lambda : self.audio.sounds['siiThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.siiThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['siiThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
-            'S-iVB'               : { 'on'  : lambda : self.audio.sivbThruster.play(loops = -1) 
+            'S-iVB'               : { 'on'  : lambda : self.audio.sounds['sivbThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.sivbThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['sivbThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
-            'M-I'                 : { 'on'  : lambda : self.audio.miThruster.play(loops = -1) 
+            'M-I'                 : { 'on'  : lambda : self.audio.sounds['miThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.miThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['miThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
-            'M-II'                : { 'on'  : lambda : self.audio.miiThruster.play(loops = -1) 
+            'M-II'                : { 'on'  : lambda : self.audio.sounds['miiThruster'].play(loops = -1) 
                                                        or self.thrustStatus.on(),
-                                      'off' : lambda : self.audio.miiiThruster.stop() 
+                                      'off' : lambda : self.audio.sounds['miiiThruster'].stop() 
                                                        or self.thrustStatus.off() },
 
             # C&WS
@@ -215,8 +215,8 @@ class Rules:
             # 'Ack'
 
             # CAPCOM
-            'PTT'                 : { 'on'  : lambda : self.audio.quindarin.play(),
-                                      'off' : lambda : self.audio.quindarout.play() },
+            'PTT'                 : { 'on'  : lambda : self.audio.sounds['quindarin'].play(),
+                                      'off' : lambda : self.audio.sounds['quindarout'].play() },
 
             # EVENT SEQUENCE
             'ES1'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES1 ) },
@@ -232,20 +232,20 @@ class Rules:
 
             # CRYOGENICS
 
-            'O2Fan'               : { 'on'  : lambda : self.audio.o2fan.play(loops = -1),
-                                      'off' : lambda : self.audio.o2fan.stop() },
+            'O2Fan'               : { 'on'  : lambda : self.audio.sounds['o2fan'].play(loops = -1),
+                                      'off' : lambda : self.audio.sounds['o2fan'].stop() },
 
-            'H2Fan'               : { 'on'  : lambda : self.audio.h2fan.play(loops = -1),
-                                      'off' : lambda : self.audio.h2fan.stop() },
+            'H2Fan'               : { 'on'  : lambda : self.audio.sounds['h2fan'].play(loops = -1),
+                                      'off' : lambda : self.audio.sounds['h2fan'].stop() },
 
-            'Pumps'               : { 'on'  : lambda : self.audio.pumps.play(loops = -1),
-                                      'off' : lambda : self.audio.pumps.stop() },
+            'Pumps'               : { 'on'  : lambda : self.audio.sounds['pumps'].play(loops = -1),
+                                      'off' : lambda : self.audio.sounds['pumps'].stop() },
 
-            'Heat'                : { 'on'  : lambda : self.audio.heat.play(loops = -1),
-                                      'off' : lambda : self.audio.heat.stop() },
+            'Heat'                : { 'on'  : lambda : self.audio.sounds['heat'].play(loops = -1),
+                                      'off' : lambda : self.audio.sounds['heat'].stop() },
 
             # PYROTECHNICS
-            'CSM/LVDeploy'        : { 'on'  : lambda : self.audio.csmDeploy.play() },
+            'CSM/LVDeploy'        : { 'on'  : lambda : self.audio.sounds['csmDeploy'].play() },
             # 'MainDeploy'
             # 'SM/CMDeploy'
             # 'CanardDeploy'
