@@ -14,7 +14,7 @@ def eventLoop():
 
     while True:
         try:
-            rules.checkTimers( port )
+            rules.applyTemporalRules()
 
             command = port.readCommand()
             if not command:
