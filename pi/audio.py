@@ -15,14 +15,17 @@ class Audio:
         self.__esChannel.stop()
         self.__esChannel.play( sound )
 
-    def playCaution(self, sound):
+    def playCaution(self):
         self.__cautionChannel.stop()
-        self.__cautionChannel.play( sound )
+        self.__cautionChannel.play( self.__sounds['caution'], loops = -1 )
+
+    def stopCaution(self):
+        self.__cautionChannel.stop()
 
     def play(self, sound):
         __getSound(sound).play()
 
-    def play(self, sound):
+    def playContinuously(self, sound):
         __getSound(sound).play(loops = -1)
 
     def stop(self, sound):
@@ -71,6 +74,7 @@ class Audio:
             #'miiiThruster'        : DummySound(), # continuous
 
             # C&WS
+            'caution'             : pygame.mixer.Sound( 'audio/caution.wav' ),
 
             # CAPCOM
             'quindarin'           : pygame.mixer.Sound( 'audio/quindar-in.wav' ),

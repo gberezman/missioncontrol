@@ -1,6 +1,24 @@
 from time import sleep,time
 from audio import Audio
 
+class CautionWarning:
+
+    def __init__(self, audio, port):
+        self.audio = audio
+        self.port = port
+        self.state = 'inactive'
+
+    def alert(self):
+        if self.state == 'inactive':
+            self.state = 'active'
+            self.audio.playCaution()
+            self.port.ledOn( 'caution' )
+
+    def clear(self):
+        self.state = 'inactive'
+        self.audio.stopCaution()
+        self.port.ledOff( 'caution' )
+
 class Abort:
 
     def __init__(self, audio, port):
@@ -80,11 +98,13 @@ class Rules:
     def applyTemporalRules(self):
         if self.SPSPresses.hitsInTheLastNSeconds(2) > 5:
             self.port.LedOn('SPSPress')
+            self.cw.alert()
         else:
             self.port.ledOff('SPSPress')
 
         if self.SPSPresses.hitsInTheLastNSeconds(4) > 5:
             self.port.LedOn('SPSFlngTempHi')
+            self.cw.alert()
         else:
             self.port.ledOff('SPSPress')
 
@@ -102,9 +122,11 @@ class Rules:
     def __init__(self, audio, port):
         self.audio = audio
         self.port = port
+
         self.abort = Abort(audio, self.port)
         self.thrustStatus = LatchedLED(self.port, 'Thrust')
         self.SPSPresses = EventRecord()
+        self.cw = CautionWarning(audio, port)
 
         self.__potRules = {
             # CAPCOM
