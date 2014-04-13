@@ -1,43 +1,24 @@
 from time import sleep,time
 from audio import Audio
 
-class Meter:
-   
-    def __init__(self, port):
-        self.port = port
-
-    def setMeter(self, meterId, meterValue):
-        self.port.write( "Meter {} {}\n".format( meterId, meterValue ) )
-
-class LEDDriver:
-
-    def __init__(self, port):
-        self.port = port
-
-    def on(self, ledId):
-        self.port.write( "LED {} on\n".format( ledId ) )
-        
-    def off(self, ledId):
-        self.port.write( "LED {} off\n".format( ledId ) )
-
 class Abort:
 
-    def __init__(self, audio, led):
+    def __init__(self, audio, port):
         self.audio = audio
-        self.led = led
+        self.port = port
 
         self.armed = False
         self.mode = 1
 
     def arm(self):
         self.armed = True
-        self.led.on( 'ArmAbort' )
-        self.led.on( 'Abort' ),
+        self.port.ledOn( 'ArmAbort' )
+        self.port.ledOn( 'Abort' ),
 
     def disarm(self):
         self.armed = False
-        self.led.off( 'ArmAbort' )
-        self.led.off( 'Abort' ),
+        self.port.ledOff( 'ArmAbort' )
+        self.port.ledOff( 'Abort' ),
 
     def setMode(self, mode):
         self.mode = mode
@@ -76,20 +57,20 @@ class EventRecord:
 
 class LatchedLED:
 
-    def __init__(self, ledDriver, led):
-        self.ledDriver = ledDriver
+    def __init__(self, port, led):
+        self.port = port
         self.led = led
         self.buttonCount = 0
 
     def on(self, button):
         self.buttonCount += 1
         if self.buttonCount > 0:
-            self.ledDriver.on(led)
+            self.port.LedOn(led)
 
     def off(self, button):
         self.buttonCount -= 1
         if self.buttonCount <= 0:
-            self.ledDriver.off(led)
+            self.port.ledOff(led)
 
 class Rules:
    
@@ -98,14 +79,14 @@ class Rules:
 
     def applyTemporalRules(self):
         if self.SPSPresses.hitsInTheLastNSeconds(2) > 5:
-            self.ledDriver.on('SPSPress')
+            self.port.LedOn('SPSPress')
         else:
-            self.ledDriver.off('SPSPress')
+            self.port.ledOff('SPSPress')
 
         if self.SPSPresses.hitsInTheLastNSeconds(4) > 5:
-            self.ledDriver.on('SPSFlngTempHi')
+            self.port.LedOn('SPSFlngTempHi')
         else:
-            self.ledDriver.off('SPSPress')
+            self.port.ledOff('SPSPress')
 
     def getPotRule(self, pot):
         return self.__potRules.get(pot, lambda potValue: self.noAction())
@@ -121,9 +102,8 @@ class Rules:
     def __init__(self, audio, port):
         self.audio = audio
         self.port = port
-        self.ledDriver = LEDDriver(port)
-        self.abort = Abort(audio, self.ledDriver)
-        self.thrustStatus = LatchedLED(self.ledDriver, 'Thrust')
+        self.abort = Abort(audio, self.port)
+        self.thrustStatus = LatchedLED(self.port, 'Thrust')
         self.SPSPresses = EventRecord()
 
         self.__potRules = {
@@ -158,41 +138,41 @@ class Rules:
             # CONTROL
             # Replace with three way switch:
             'DockingProbeRetract' : { 'on'  : lambda : self.audio.play('dockingProbeRetract')
-                                                       or self.ledDriver.on('DockingProbe'),
+                                                       or self.port.ledOn('DockingProbe'),
                                       'off' : lambda : self.audio.stop('dockingProbeRetract')
-                                                       or self.ledDriver.off('DockingProbe') },
+                                                       or self.port.ledOff('DockingProbe') },
 
             'DockingProbeExtend'  : { 'on'  : lambda : self.audio.play('dockingProbeExtend')
-                                                       or self.ledDriver.on('DockingProbe'),
+                                                       or self.port.LedOn('DockingProbe'),
                                       'off' : lambda : self.audio.stop('dockingProbeExtend')
-                                                       or self.ledDriver.off('DockingProbe') },
+                                                       or self.port.ledOff('DockingProbe') },
 
             'GlycolPump'          : { 'on'  : lambda : self.audio.playContinuous('glycolPump')
-                                                       or self.ledDriver.on('GlycolPump'),
+                                                       or self.port.LedOn('GlycolPump'),
                                       'off' : lambda : self.audio.stop('glycolPump')
-                                                       or self.ledDriver.off('GlycolPump') },
+                                                       or self.port.ledOff('GlycolPump') },
 
-            'SCEPower'            : { 'on'  : lambda : self.ledDriver.on('SCEPower'),
-                                      'off' : lambda : self.ledDriver.off('SCEPower') },
+            'SCEPower'            : { 'on'  : lambda : self.port.LedOn('SCEPower'),
+                                      'off' : lambda : self.port.ledOff('SCEPower') },
 
             'WasteDump'           : { 'on'  : lambda : self.audio.play('waste')
-                                                       or self.ledDriver.on('WasteDump') },
+                                                       or self.port.LedOn('WasteDump') },
 
             'CabinFan'            : { 'on'  : lambda : self.audio.playContinuous('fan')
-                                                       or self.ledDriver.on('CabinFan'),
+                                                       or self.port.LedOn('CabinFan'),
                                       'off' : lambda : self.audio.stop('fan')
-                                                       or self.ledDriver.off('CabinFan') },
+                                                       or self.port.ledOff('CabinFan') },
 
             'H2OFlow'             : { 'on'  : lambda : self.audio.playContinuous('H2OFlow')
-                                                       or self.ledDriver.on('H2OFlow'),
+                                                       or self.port.LedOn('H2OFlow'),
                                       'off' : lambda : self.audio.stop('H2OFlow')
-                                                       or self.ledDriver.off('H2OFlow') },
+                                                       or self.port.ledOff('H2OFlow') },
 
-            'IntLights'           : { 'on'  : lambda : self.ledDriver.on('IntLights'),
-                                      'off' : lambda : self.ledDriver.off('IntLights') },
+            'IntLights'           : { 'on'  : lambda : self.port.LedOn('IntLights'),
+                                      'off' : lambda : self.port.ledOff('IntLights') },
 
-            'SuitComp'            : { 'on'  : lambda : self.ledDriver.on('SuitComp'),
-                                      'off' : lambda : self.ledDriver.off('SuitComp') },
+            'SuitComp'            : { 'on'  : lambda : self.port.LedOn('SuitComp'),
+                                      'off' : lambda : self.port.ledOff('SuitComp') },
 
             # ABORT
             'ArmAbort'            : { 'on'  : lambda : self.abort.arm(),
@@ -269,25 +249,25 @@ class Rules:
 
             # EVENT SEQUENCE
             'ES1'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES1 ) 
-                                                       or self.ledDriver.on( 'ES1' ) },
+                                                       or self.port.LedOn( 'ES1' ) },
             'ES2'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES2 )
-                                                       or self.ledDriver.on( 'ES2' ) },
+                                                       or self.port.LedOn( 'ES2' ) },
             'ES3'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES3 )
-                                                       or self.ledDriver.on( 'ES3' ) },
+                                                       or self.port.LedOn( 'ES3' ) },
             'ES4'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES4 )
-                                                       or self.ledDriver.on( 'ES4' ) },
+                                                       or self.port.LedOn( 'ES4' ) },
             'ES5'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES5 )
-                                                       or self.ledDriver.on( 'ES5' ) },
+                                                       or self.port.LedOn( 'ES5' ) },
             'ES6'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES6 )
-                                                       or self.ledDriver.on( 'ES6' ) },
+                                                       or self.port.LedOn( 'ES6' ) },
             'ES7'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES7 )
-                                                       or self.ledDriver.on( 'ES7' ) },
+                                                       or self.port.LedOn( 'ES7' ) },
             'ES8'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES8 )
-                                                       or self.ledDriver.on( 'ES8' ) },
+                                                       or self.port.LedOn( 'ES8' ) },
             'ES9'                 : { 'on'  : lambda : self.audio.playES( self.audio.ES9 )
-                                                       or self.ledDriver.on( 'ES9' ) },
+                                                       or self.port.LedOn( 'ES9' ) },
             'ES10'                : { 'on'  : lambda : self.audio.playES( self.audio.ES10 )
-                                                       or self.ledDriver.on( 'ES10' ) },
+                                                       or self.port.LedOn( 'ES10' ) },
 
             # CRYOGENICS
 
@@ -305,11 +285,11 @@ class Rules:
 
             # PYROTECHNICS
             'DrogueDeploy'        : { 'on'  : lambda : self.audio.play('DrogueDeploy')
-                                                       or self.ledDriver.on('DrogueChute') },
+                                                       or self.port.LedOn('DrogueChute') },
 
             # manually deploy the CM main parachutes.
             'MainDeploy'          : { 'on'  : lambda : self.audio.play('mainDeploy')
-                                                       or self.ledDriver.on('MainChute') },
+                                                       or self.port.LedOn('MainChute') },
 
             # Manually separate the CSM from the launch vehicle during an abort or in normal operation.
             'CSM/LVDeploy'        : { 'on'  : lambda : self.audio.play('CSM/LVDeploy') },
@@ -322,7 +302,7 @@ class Rules:
 
             # Push-switch to jettison CM apex cover if automatic system fails during an abort or earth landing after a normal mission. 
             'ApexCoverJettsn'     : { 'on'  : lambda : self.audio.play('ApexCoverJettsn')
-                                                       or self.ledDriver.on('Hatch') },
+                                                       or self.port.LedOn('Hatch') },
 
             # Manually operates the Launch Escape System, either to jettison the LES tower or to fire the motor in the event of an LES abort.  In the former case, the explosive bolts connecting the LES tower to the CSM must fire first.
             'LesMotorFire'        : { 'on'  : lambda : self.audio.play('LesMotorFire') },
@@ -386,4 +366,3 @@ class Rules:
 # CW # Alarm tone inoperative
 # UplinkActivity # data transmission to ship
 # GlycolTempLow # glycol (water) temp low
-

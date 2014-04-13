@@ -25,3 +25,12 @@ class Port:
     def write(self, message):
         print "Sending {}".format( message )
         self.port.write( message )
+
+    def setMeter(self, meterId, meterValue):
+        self.write( "Meter {} {}\n".format( meterId, meterValue ) ) 
+
+    def ledOn(self, ledId):
+        self.write( "LED {} on\n".format( ledId ) )
+
+    def ledOff(self, ledId):
+        self.write( "LED {} off\n".format( ledId ) )
