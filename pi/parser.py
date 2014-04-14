@@ -1,6 +1,3 @@
-from time import sleep
-import serial
-
 class Parser:
 
     def __init__(self, text):
