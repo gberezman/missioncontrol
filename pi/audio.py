@@ -132,3 +132,6 @@ if __name__ == '__main__':
     audio.playES( 'ES1' )
     sleep(2)
     audio.stopES()
+
+    print "playing dummy sound (should be no audio or error)"
+    audio.play( 'missing' )
