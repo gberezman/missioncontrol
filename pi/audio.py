@@ -11,6 +11,15 @@ class DummySound:
 
 class Audio:
 
+    def play(self, sound):
+        self.__getSound(sound).play()
+
+    def playContinuously(self, sound):
+        self.__getSound(sound).play(loops = -1)
+
+    def stop(self, sound):
+        self.__getSound(sound).stop()
+
     def playES(self, sound):
         self.stopES()
         self.__esChannel.play( self.__getSound(sound) )
@@ -27,15 +36,6 @@ class Audio:
 
     def sounds(self):
         return self.__sounds.keys()
-
-    def play(self, sound):
-        self.__getSound(sound).play()
-
-    def playContinuously(self, sound):
-        self.__getSound(sound).play(loops = -1)
-
-    def stop(self, sound):
-        self.__getSound(sound).stop()
 
     def __getSound(self, sound):
         return self.__sounds.get(sound, DummySound())
@@ -107,6 +107,16 @@ class Audio:
             # PYROTECHNICS
             'csmDeploy'           : pygame.mixer.Sound( 'audio/csmDeploy.wav' )
         }
+
+class StubbedAudio:
+    def play(self, sound): pass
+    def playContinuously(self, sound): pass
+    def stop(self, sound): pass
+    def playES(self, sound): pass
+    def stopES(self): pass
+    def playCaution(self): pass
+    def stopCaution(self): pass
+    def sounds(self): pass
 
 if __name__ == '__main__':
 
