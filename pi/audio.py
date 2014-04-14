@@ -12,17 +12,17 @@ class DummySound:
 class Audio:
 
     def play(self, sound):
-        self.__getSound(sound).play()
+        self.__getSound( sound ).play()
 
     def playContinuously(self, sound):
-        self.__getSound(sound).play(loops = -1)
+        self.__getSound( sound ).play( loops = -1 )
 
     def stop(self, sound):
-        self.__getSound(sound).stop()
+        self.__getSound( sound ).stop()
 
     def playES(self, sound):
         self.stopES()
-        self.__esChannel.play( self.__getSound(sound) )
+        self.__esChannel.play( self.__getSound( sound ) )
 
     def stopES(self):
         self.__esChannel.stop()
@@ -38,15 +38,15 @@ class Audio:
         return self.__sounds.keys()
 
     def __getSound(self, sound):
-        return self.__sounds.get(sound, DummySound())
+        return self.__sounds.get( sound, DummySound() )
 
     def __init__(self):
         pygame.mixer.quit()
         pygame.mixer.init( frequency = 48000, buffer = 1024 )
         pygame.mixer.set_reserved( 2 )
 
-        self.__cautionChannel = pygame.mixer.Channel(0)
-        self.__esChannel      = pygame.mixer.Channel(1)
+        self.__cautionChannel = pygame.mixer.Channel( 0 )
+        self.__esChannel      = pygame.mixer.Channel( 1 )
 
         self.__sounds = {
             # CONTROL
@@ -123,24 +123,24 @@ if __name__ == '__main__':
     audio = Audio()
 
     for sound in audio.sounds():
-        print "playing {} for at most 1 second".format(sound)
+        print "playing {} for at most 1 second".format( sound )
         audio.play( sound )
         sleep( 1 )
         audio.stop( sound )
 
     print "playing continuously for 2 seconds"
     audio.playContinuously( 'spsThruster' )
-    sleep(2)
+    sleep( 2 )
     audio.stop( 'spsThruster' )
 
     print "playing caution for 2 seconds"
     audio.playCaution()
-    sleep(2)
+    sleep( 2 )
     audio.stopCaution()
 
     print "playing an event sequence for 2 seconds"
     audio.playES( 'ES1' )
-    sleep(2)
+    sleep( 2 )
     audio.stopES()
 
     print "playing dummy sound (should be no audio or error)"
