@@ -34,3 +34,10 @@ class Port:
 
     def ledOff(self, ledId):
         self.write( "LED {} off\n".format( ledId ) )
+
+class StubbedPort:
+    def readCommand(self): pass
+    def write(self, message): pass
+    def setMeter(self, meterId, meterValue): pass
+    def ledOn(self, ledId): pass
+    def ledOff(self, ledId): pass

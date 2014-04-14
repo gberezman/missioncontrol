@@ -1,5 +1,7 @@
 from time import sleep,time
+from command import CommandFactory
 from audio import Audio
+from port import StubbedPort
 
 class CautionWarning:
 
@@ -65,7 +67,7 @@ class EventRecord:
         hits = []
 
     def record(self):
-        hits.insert(0, int(time())
+        hits.insert(0, int(time()))
         del hits[size:]
 
     def hitsInTheLastNSeconds(self, seconds):
@@ -208,7 +210,7 @@ class Rules:
                                                        or self.thrustStatus.on('SPS')
                                                        or self.SPSPresses.record(),
                                       'off' : lambda : self.audio.stop('spsThruster')
-                                                       or self.thrustStatus.off('SPS') }
+                                                       or self.thrustStatus.off('SPS') },
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
             'TEI'                 : { 'on'  : lambda : self.audio.playContinuous('teiThruster')
@@ -388,3 +390,9 @@ class Rules:
 # CW # Alarm tone inoperative
 # UplinkActivity # data transmission to ship
 # GlycolTempLow # glycol (water) temp low
+
+if __name__ == '__main__':
+   
+    audio = Audio()
+    port = StubbedPort()
+    rules = Rules(audio, port)
