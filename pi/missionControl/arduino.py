@@ -1,6 +1,6 @@
 from time import sleep
-from parser import Parser
 import serial
+from parser import Parser
 
 class ArduinoSerial:
 

@@ -1,4 +1,4 @@
-from eventParser import EventParser
+from missionControl.eventParser import EventParser
 
 class TestCommandFactory:
 

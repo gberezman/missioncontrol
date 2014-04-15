@@ -1,9 +1,9 @@
-from arduino import StubbedArduinoSerial, ArduinoMatrixDriver
-from time import sleep
-from rules import Rules
-from audio import Audio
-from eventParser import EventParser
 import threading
+from time import sleep
+from missionControl.arduino import StubbedArduinoSerial, ArduinoMatrixDriver
+from missionControl.rules import Rules
+from missionControl.audio import Audio
+from missionControl.eventParser import EventParser
 
 def eventLoop():
 

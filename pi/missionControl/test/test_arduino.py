@@ -1,4 +1,4 @@
-from arduino import StubbedArduinoSerial, ArduinoMatrixDriver
+from missionControl.arduino import StubbedArduinoSerial, ArduinoMatrixDriver
 
 class TestStubbedArduinoSerial:
 

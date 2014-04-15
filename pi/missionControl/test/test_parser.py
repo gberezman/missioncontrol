@@ -1,4 +1,4 @@
-from parser import Parser
+from missionControl.parser import Parser
 
 class TestParser:
 
