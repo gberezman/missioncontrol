@@ -1,4 +1,4 @@
-from event import EventParser
+from eventParser import EventParser
 
 class TestCommandFactory:
 
