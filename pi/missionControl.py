@@ -1,14 +1,19 @@
-from port import Port
+from arduino import StubbedArduinoSerial, ArduinoMatrixDriver
 from time import sleep
 from rules import Rules
 from audio import Audio
-from command import CommandFactory
+from eventParser import EventParser
 import threading
 
-port = Port(CommandFactory(), timeout = .5)
-rules = Rules(Audio(), port)
-
 def eventLoop():
+
+    #serial = ArduinoSerial( timeout = .5 )
+    serial = StubbedArduinoSerial()
+    matrixDriver = ArduinoMatrixDriver( serial )
+    audio = Audio()
+
+    rules = Rules( audio, matrixDriver )
+    eventParser = EventParser()
 
     print "Starting event loop"
 
@@ -16,13 +21,12 @@ def eventLoop():
         try:
             rules.applyTemporalRules()
 
-            command = port.readCommand()
-            if not command:
-                sleep( .1 )
-                continue
+            data = serial.read()
+            (eventId, eventValue) = eventParser.getEventTuple( data )
 
-            command.applyRules(rules)
-
+            rule = rules.getRule( eventId )
+            rule( eventValue )
+            
         except KeyboardInterrupt:
             exit()
 
