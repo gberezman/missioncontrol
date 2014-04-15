@@ -7,13 +7,15 @@ from missionControl.eventParser import EventParser
 
 class Mission( threading.Thread ):
 
+    def __init__(self, audio, serial):
+        self.audio  = audio
+        self.serial = serial
+
     def run(self):
 
-        serial = ArduinoSerial( timeout = .5 )
         matrixDriver = ArduinoMatrixDriver( serial )
-        audio = Audio()
 
-        rules = Rules( audio, matrixDriver )
+        rules = Rules( self.audio, matrixDriver )
         eventParser = EventParser()
 
         print "Starting event loop"
@@ -33,5 +35,5 @@ class Mission( threading.Thread ):
 
 if __name__ == '__main__':
 
-    mainThread = Mission()
+    mainThread = Mission( Audio(), ArduinoSerial( timeout = .5 ) )
     mainThread.start()
