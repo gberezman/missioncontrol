@@ -29,12 +29,10 @@ class Abort:
 
     def arm(self):
         self.armed = True
-        self.matrixDriver.ledOn( 'ArmAbort' )
         self.matrixDriver.ledOn( 'Abort' ),
 
     def disarm(self):
         self.armed = False
-        self.matrixDriver.ledOff( 'ArmAbort' )
         self.matrixDriver.ledOff( 'Abort' ),
 
     def setMode(self, mode):
@@ -64,13 +62,13 @@ class EventRecord:
         self.hits = []
 
     def record(self):
-        hits.insert(0, int(time()))
-        del self.hits[size:]
+        self.hits.insert( 0, time() )
+        del self.hits[self.size:]
 
     def hitsInTheLastNSeconds(self, seconds):
-        now = int(time())
+        now = time()
         checkTime = now - seconds
-        return sum(logTime > checkTime for logTime in self.hits)
+        return sum( logTime > checkTime for logTime in self.hits )
 
 class LatchedLED:
 
@@ -79,15 +77,15 @@ class LatchedLED:
         self.led = led
         self.buttonCount = 0
 
-    def on(self, button):
+    def on(self):
         self.buttonCount += 1
         if self.buttonCount > 0:
-            self.matrixDriver.LedOn(led)
+            self.matrixDriver.ledOn(self.led)
 
-    def off(self, button):
-        self.buttonCount -= 1
+    def off(self):
+        self.buttonCount = self.buttonCount - 1 if self.buttonCount > 0 else 0
         if self.buttonCount <= 0:
-            self.matrixDriver.ledOff(led)
+            self.matrixDriver.ledOff(self.led)
 
 class Rules:
    
@@ -182,38 +180,38 @@ class Rules:
 
             # BOOSTER Switches
             # Service propulsion system
-            'SPS'                 : lambda isOn: audio.play('spsThruster') or self.thrustStatus.on('SPS') or self.SPSPresses.record() if isOn
-                                                 else audio.stop('spsThruster') or self.thrustStatus.off('SPS'),
+            'SPS'                 : lambda isOn: audio.play('spsThruster') or self.thrustStatus.on() or self.SPSPresses.record() if isOn
+                                                 else audio.stop('spsThruster') or self.thrustStatus.off(),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
-            'TEI'                 : lambda isOn: audio.playContinuous('teiThruster') or self.thrustStatus.on('TEI') if isOn
-                                                 else audio.stop('teiThruster') or self.thrustStatus.off('TEI'),
+            'TEI'                 : lambda isOn: audio.playContinuous('teiThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('teiThruster') or self.thrustStatus.off(),
 
             # Trans-Lunar injection (puts on path towards moon)
-            'TLI'                 : lambda isOn: audio.playContinuous('tliThruster') or self.thrustStatus.on('TLI') if isOn
-                                                 else audio.stop('tliThruster') or self.thrustStatus.off('TLI'),
+            'TLI'                 : lambda isOn: audio.playContinuous('tliThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('tliThruster') or self.thrustStatus.off(),
 
             
             # Saturn, first stage
-            'S-IC'                : lambda isOn: audio.playContinuous('sicThruster') or self.thrustStatus.on('S-IC') if isOn
-                                                 else audio.stop('sicThruster') or self.thrustStatus.off('S-IC'),
+            'S-IC'                : lambda isOn: audio.playContinuous('sicThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('sicThruster') or self.thrustStatus.off(),
 
             # Saturn, second stage
-            'S-II'                : lambda isOn: audio.playContinuous('siiThruster') or self.thrustStatus.on('S-II') if isOn
-                                                 else audio.stop('siiThruster') or self.thrustStatus.off('S-II'),
+            'S-II'                : lambda isOn: audio.playContinuous('siiThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('siiThruster') or self.thrustStatus.off(),
 
             # Saturn V, third stage
-            'S-iVB'               : lambda isOn: audio.playContinuous('sivbThruster') or self.thrustStatus.on('S-iVB') if isOn
-                                                 else audio.stop('sivbThruster') or self.thrustStatus.off('S-iVB'),
+            'S-iVB'               : lambda isOn: audio.playContinuous('sivbThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('sivbThruster') or self.thrustStatus.off(),
 
-            'M-I'                 : lambda isOn: audio.playContinuous('miThruster') or self.thrustStatus.on('M-I') if isOn
-                                                 else audio.stop('miThruster') or self.thrustStatus.off('M-I'),
+            'M-I'                 : lambda isOn: audio.playContinuous('miThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('miThruster') or self.thrustStatus.off(),
 
-            'M-II'                : lambda isOn: audio.playContinuous('miiThruster') or self.thrustStatus.on('M-II') if isOn
-                                                 else audio.stop('miiThruster') or self.thrustStatus.off('M-II'),
+            'M-II'                : lambda isOn: audio.playContinuous('miiThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('miiThruster') or self.thrustStatus.off(),
 
-            'M-III'               : lambda isOn: audio.playContinuous('miiiThruster') or self.thrustStatus.on('M-III') if isOn
-                                                 else audio.stop('miiiThruster') or self.thrustStatus.off('M-III'),
+            'M-III'               : lambda isOn: audio.playContinuous('miiiThruster') or self.thrustStatus.on() if isOn
+                                                 else audio.stop('miiiThruster') or self.thrustStatus.off(),
 
             # C&WS Switches
             # square wave alternating between 750 and 2000cps changing 2.5 times per second
