@@ -109,14 +109,29 @@ class Audio:
         }
 
 class StubbedAudio:
-    def play(self, sound): pass
-    def playContinuously(self, sound): pass
-    def stop(self, sound): pass
-    def playES(self, sound): pass
-    def stopES(self): pass
-    def playCaution(self): pass
-    def stopCaution(self): pass
-    def sounds(self): pass
+    def __init__(self):
+        self.lastFn = None
+
+    def play(self, sound): 
+        self.lastFn = 'play'
+
+    def playContinuously(self, sound):
+        self.lastFn = 'playContinuously'
+
+    def stop(self, sound):
+        self.lastFn = 'stop'
+
+    def playES(self, sound):
+        self.lastFn = 'playES'
+
+    def stopES(self):
+        self.lastFn = 'stopES'
+
+    def playCaution(self):
+        self.lastFn = 'playCaution'
+
+    def stopCaution(self):
+        self.lastFn = 'stopCaution'
 
 if __name__ == '__main__':
 
