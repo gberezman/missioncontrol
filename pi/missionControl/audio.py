@@ -34,6 +34,18 @@ class Audio:
     def stopCaution(self):
         self.__cautionChannel.stop()
 
+    def setPlayState(self, sound, isOn):
+        if isOn:
+            self.play( sound )
+        else:
+            self.stop( sound )
+
+    def setContinuousPlayState(self, sound, isOn):
+        if isOn:
+            self.playContinuously( sound )
+        else:
+            self.stop( sound )
+
     def sounds(self):
         return self.__sounds.keys()
 
@@ -132,6 +144,15 @@ class StubbedAudio:
 
     def stopCaution(self):
         self.lastFn = 'stopCaution'
+
+    def setPlayState(self, sound, isOn):
+        self.lastFn = 'setPlayState'
+
+    def setContinuousPlayState(self, sound, isOn):
+        self.lastFn = 'setContinuousPlayState'
+
+    def sounds(self):
+        return []
 
 if __name__ == '__main__':
 
