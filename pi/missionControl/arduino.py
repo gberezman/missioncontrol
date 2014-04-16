@@ -49,3 +49,9 @@ class ArduinoMatrixDriver:
 
     def ledOff(self, ledId):
         self.serial.write( "LED {} off\n".format( ledId ) )
+
+    def setLed(self, ledId, state):
+        if state:
+            self.ledOn(ledId)
+        else:
+            self.ledOff(ledId)

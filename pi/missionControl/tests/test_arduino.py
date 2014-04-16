@@ -59,3 +59,21 @@ class TestArduinoMatrixDriver:
         sent = serial.getLastWrite()
         assert sent == 'LED anLed off\n'
         
+    def test_setLed_on(self):
+        serial = StubbedArduinoSerial()
+        driver = ArduinoMatrixDriver(serial)
+
+        driver.setLed( 'anLed', True )
+        
+        sent = serial.getLastWrite()
+        assert sent == 'LED anLed on\n'
+        
+    def test_setLed_off(self):
+        serial = StubbedArduinoSerial()
+        driver = ArduinoMatrixDriver(serial)
+
+        driver.setLed( 'anLed', False )
+        
+        sent = serial.getLastWrite()
+        assert sent == 'LED anLed off\n'
+        
