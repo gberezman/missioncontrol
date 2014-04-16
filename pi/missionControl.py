@@ -10,10 +10,11 @@ class Mission( threading.Thread ):
     def __init__(self, audio, serial):
         self.audio  = audio
         self.serial = serial
+        super(Mission, self).__init__()
 
     def run(self):
 
-        matrixDriver = ArduinoMatrixDriver( serial )
+        matrixDriver = ArduinoMatrixDriver( self.serial )
 
         rules = Rules( self.audio, matrixDriver )
         eventParser = EventParser()
@@ -24,7 +25,7 @@ class Mission( threading.Thread ):
             try:
                 rules.applyTemporalRules()
 
-                data = serial.read()
+                data = self.serial.read()
                 (eventId, eventValue) = eventParser.getEventTuple( data )
 
                 rule = rules.getRule( eventId )
@@ -36,4 +37,5 @@ class Mission( threading.Thread ):
 if __name__ == '__main__':
 
     mainThread = Mission( Audio(), ArduinoSerial( timeout = .5 ) )
+    # mainThread = Mission( Audio(), StubbedArduinoSerial() )
     mainThread.start()

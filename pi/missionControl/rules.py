@@ -27,9 +27,12 @@ class Abort:
         self.armed = False
         self.mode = 1
 
-    def arm(self):
-        self.armed = True
-        self.matrixDriver.ledOn( 'Abort' ),
+    def arm(self, isOn = True):
+        if isOn:
+            self.armed = True
+            self.matrixDriver.ledOn( 'Abort' ),
+        else:
+            self.disarm()
 
     def disarm(self):
         self.armed = False
@@ -38,8 +41,8 @@ class Abort:
     def setMode(self, mode):
         self.mode = mode
 
-    def abort(self):
-        if self.armed:
+    def abort(self, doAbort = True):
+        if doAbort and self.armed:
             if self.mode == 1:
                 self.audio.play('abortPad')
             elif self.mode == 2:
@@ -61,9 +64,10 @@ class EventRecord:
         self.size = size
         self.hits = []
 
-    def record(self):
-        self.hits.insert( 0, time() )
-        del self.hits[self.size:]
+    def record(self, isOn = True):
+        if isOn:
+            self.hits.insert( 0, time() )
+            del self.hits[self.size:]
 
     def hitsInTheLastNSeconds(self, seconds):
         now = time()
@@ -77,11 +81,14 @@ class LatchedLED:
         self.led = led
         self.buttonCount = 0
 
-    def on(self):
-        self.buttonCount += 1
-        if self.buttonCount > 0:
-            self.matrixDriver.ledOn(self.led)
-
+    def on(self, isOn = True):
+        if isOn:
+            self.buttonCount += 1
+            if self.buttonCount > 0:
+                self.matrixDriver.ledOn(self.led)
+        else:
+            self.off()
+    
     def off(self):
         self.buttonCount = self.buttonCount - 1 if self.buttonCount > 0 else 0
         if self.buttonCount <= 0:
@@ -145,69 +152,67 @@ class Rules:
                 # AntYaw changes the the width of the green section
 
             # CONTROL Switches
-            'DockingProbe'    : lambda isOn: audio.stop('dockingProbeExtend') or audio.play('dockingProbeRetract') or matrixDriver.ledOn('DockingProbe') if isOn
-                                                 else audio.stop('dockingProbeRetract') or audio.play('dockingProbeExtend') or matrixDriver.ledOff('DockingProbe'),
+            'DockingProbe'    : lambda isOn: matrixDriver.setLed( 'DockingProbe', isOn ) \
+                                             or audio.setPlayState( 'dockingProbeRetract', isOn ) \
+                                             or audio.setPlayState( 'dockingProbeExtend', not isOn ),
 
-            'GlycolPump'      : lambda isOn: audio.playContinuous('glycolPump') or matrixDriver.LedOn('GlycolPump') if isOn
-                                                 else audio.stop('glycolPump') or matrixDriver.ledOff('GlycolPump'),
+            'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'glycolPump', isOn ) \
+                                             or audio.setContinuousPlayState( 'glycolPump', isOn ),
 
-            'SCEPower'        : lambda isOn: matrixDriver.LedOn('SCEPower') if isOn
-                                                 else matrixDriver.ledOff('SCEPower'),
+            'SCEPower'        : lambda isOn: matrixDriver.setLed('SCEPower', isOn ),
 
-            'WasteDump'       : lambda isOn: audio.play('waste') or matrixDriver.LedOn('WasteDump') if isOn else self.noAction(),
+            'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
+                                             or ( audio.play('waste') if isOn else self.noAction() ),
 
-            'CabinFan'        : lambda isOn: audio.playContinuous('fan') or matrixDriver.LedOn('CabinFan') if isOn
-                                                 else audio.stop('fan') or matrixDriver.ledOff('CabinFan'),
+            'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
+                                             or audio.setContinuousPlayState( 'fan', isOn ),
 
-            'H2OFlow'         : lambda isOn: audio.playContinuous('H2OFlow') or matrixDriver.LedOn('H2OFlow') if isOn
-                                                 else audio.stop('H2OFlow') or matrixDriver.ledOff('H2OFlow'),
+            'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow' ) \
+                                             or audio.setContinuousPlayState( 'H2OFlow', isOn ),
 
-            'IntLights'       : lambda isOn: matrixDriver.LedOn('IntLights') if isOn
-                                                 else matrixDriver.ledOff('IntLights'),
+            'IntLights'       : lambda isOn: matrixDriver.setLed('IntLights', isOn ),
 
-            'SuitComp'        : lambda isOn: matrixDriver.LedOn('SuitComp') if isOn
-                                                 else matrixDriver.ledOff('SuitComp'),
+            'SuitComp'        : lambda isOn: matrixDriver.setLed('SuitComp', isOn ),
 
             # ABORT
-            'ArmAbort'        : lambda isOn: self.abort.arm() if isOn
-                                                 else self.abort.disarm(),
+            'ArmAbort'        : lambda isOn: self.abort.arm( isOn ),
 
-            'Abort'           : lambda isOn: self.abort() if isOn else self.noAction(),
+            'Abort'           : lambda isOn: self.abort( isOn ),
 
             # BOOSTER Switches
             # Service propulsion system
-            'SPS'             : lambda isOn: audio.play('spsThruster') or self.thrustStatus.on() or self.SPSPresses.record() if isOn
-                                                 else audio.stop('spsThruster') or self.thrustStatus.off(),
+            'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setPlayState( 'spsThruster', isOn ) \
+                                             or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
-            'TEI'             : lambda isOn: audio.playContinuous('teiThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('teiThruster') or self.thrustStatus.off(),
+            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'teiThruster' ),
 
             # Trans-Lunar injection (puts on path towards moon)
-            'TLI'             : lambda isOn: audio.playContinuous('tliThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('tliThruster') or self.thrustStatus.off(),
-
+            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'tliThruster' ),
             
             # Saturn, first stage
-            'S-IC'            : lambda isOn: audio.playContinuous('sicThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('sicThruster') or self.thrustStatus.off(),
+            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'sicThruster' ),
 
             # Saturn, second stage
-            'S-II'            : lambda isOn: audio.playContinuous('siiThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('siiThruster') or self.thrustStatus.off(),
+            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'siiThruster' ),
 
             # Saturn V, third stage
-            'S-iVB'           : lambda isOn: audio.playContinuous('sivbThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('sivbThruster') or self.thrustStatus.off(),
+            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'sivbThruster' ),
 
-            'M-I'             : lambda isOn: audio.playContinuous('miThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('miThruster') or self.thrustStatus.off(),
+            'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'miThruster' ),
 
-            'M-II'            : lambda isOn: audio.playContinuous('miiThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('miiThruster') or self.thrustStatus.off(),
+            'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'miiThruster' ),
 
-            'M-III'           : lambda isOn: audio.playContinuous('miiiThruster') or self.thrustStatus.on() if isOn
-                                                 else audio.stop('miiiThruster') or self.thrustStatus.off(),
+            'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.setContinuousPlayState( 'miiiThruster' ),
 
             # C&WS Switches
             # square wave alternating between 750 and 2000cps changing 2.5 times per second
@@ -219,8 +224,8 @@ class Rules:
             # 'Ack' # no lights, audio and master alarm only, probably should be illuminated
 
             # CAPCOM Switches
-            'PTT'             : lambda isOn: audio.play('quindarin') if isOn
-                                                 else audio.play('quindarout'),
+            'PTT'             : lambda isOn: audio.setPlayState( 'quindarin', isOn ) \
+                                             or audio.setPlayState( 'quindarout', not isOn ),
 
             # EVENT SEQUENCE Switches
             'ES1'             : lambda isOn: audio.playES( audio.ES1 ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
@@ -236,13 +241,10 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            'O2Fan'           : lambda isOn: audio.playContinuous('o2fan') if isOn else audio.stop('o2fan'),
-
-            'H2Fan'           : lambda isOn: audio.playContinuous('h2fan') if isOn else audio.stop('h2fan'),
-
-            'Pumps'           : lambda isOn: audio.playContinuous('pumps') if isOn else audio.stop('pumps'),
-
-            'Heat'            : lambda isOn: audio.playContinuous('heat') if isOn else audio.stop('heat'),
+            'O2Fan'           : lambda isOn: audio.setContinuousPlayState( 'o2fan', isOn ),
+            'H2Fan'           : lambda isOn: audio.setContinuousPlayState( 'h2fan', isOn ),
+            'Pumps'           : lambda isOn: audio.setContinuousPlayState( 'pumps', isOn ),
+            'Heat'            : lambda isOn: audio.setContinuousPlayState( 'heat', isOn ),
 
             # PYROTECHNICS Switches
             'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),

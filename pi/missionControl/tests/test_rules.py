@@ -78,7 +78,7 @@ class TestAbort:
 
         assert serial.getLastWrite() == 'LED Abort on\n'
 
-    def test_diarm_DisablesAbortLed(self):
+    def test_disarm_DisablesAbortLed(self):
         serial = StubbedArduinoSerial()
         abort = Abort( StubbedAudio(), ArduinoMatrixDriver( serial ) )
         abort.arm()
@@ -104,6 +104,24 @@ class TestAbort:
 
         assert audio.lastFn == None
 
+    def test_abort_doesNotPlayAudio_ifExplicitlyToldNotToAbort(self):
+        audio = StubbedAudio()
+        abort = Abort( audio, ArduinoMatrixDriver( StubbedArduinoSerial() ) )
+      
+        abort.abort( False ) 
+
+        assert audio.lastFn == None
+
+    def test_armed_setExplicitlyOff_disarms(self):
+        serial = StubbedArduinoSerial()
+        abort = Abort( StubbedAudio(), ArduinoMatrixDriver( serial ) )
+        abort.arm()
+
+        abort.arm(isOn = False)
+
+        assert serial.getLastWrite() == 'LED Abort off\n'
+
+
 class TestEventRecord:
 
     def test_record_recordsHit(self):
@@ -112,6 +130,13 @@ class TestEventRecord:
         eventRecord.record()
 
         assert len( eventRecord.hits ) == 1
+
+    def test_record_skips_ifNotOn(self):
+        eventRecord = EventRecord()
+
+        eventRecord.record( False )
+
+        assert len( eventRecord.hits ) == 0
 
     def test_record_recordsLimitedHits(self):
         size = 5
@@ -146,6 +171,14 @@ class TestLatchedLED:
         latch.on()
 
         assert latch.buttonCount == 1
+
+    def test_on_decrementsButtonCount_ifNotOn(self):
+        latch = LatchedLED( ArduinoMatrixDriver( StubbedArduinoSerial() ), 'Button' )
+
+        latch.on()
+        latch.on( False )
+
+        assert latch.buttonCount == 0
 
     def test_off_decrementsButtonCount(self):
         latch = LatchedLED( ArduinoMatrixDriver( StubbedArduinoSerial() ), 'Button' )
