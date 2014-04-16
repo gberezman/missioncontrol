@@ -28,7 +28,7 @@ class Audio:
         self.__esChannel.stop()
 
     def playCaution(self):
-        self.__cautionChannel.stop()
+        self.stopCaution()
         self.__cautionChannel.play( self.__getSound('caution'), loops = -1 )
 
     def stopCaution(self):
