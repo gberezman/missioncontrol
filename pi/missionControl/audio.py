@@ -12,11 +12,11 @@ class Audio:
     def stop(self, clip):
         self.getSound( clip ).stop()
 
-    def playES(self, clip):
+    def playEventSequence(self, clip):
         self.stopES()
         self.__esChannel.play( self.getSound( clip ) )
 
-    def stopES(self):
+    def stopEventSequence(self):
         self.__esChannel.stop()
 
     def playCaution(self, clip = 'caution'):

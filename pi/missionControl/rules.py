@@ -227,16 +227,16 @@ class Rules:
                                              or audio.setPlayState( 'quindarout', not isOn ),
 
             # EVENT SEQUENCE Switches
-            'ES1'             : lambda isOn: audio.playES( audio.ES1 ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
-            'ES2'             : lambda isOn: audio.playES( audio.ES2 ) or matrixDriver.LedOn( 'ES2' ) if isOn else self.noAction(),
-            'ES3'             : lambda isOn: audio.playES( audio.ES3 ) or matrixDriver.LedOn( 'ES3' ) if isOn else self.noAction(),
-            'ES4'             : lambda isOn: audio.playES( audio.ES4 ) or matrixDriver.LedOn( 'ES4' ) if isOn else self.noAction(),
-            'ES5'             : lambda isOn: audio.playES( audio.ES5 ) or matrixDriver.LedOn( 'ES5' ) if isOn else self.noAction(),
-            'ES6'             : lambda isOn: audio.playES( audio.ES6 ) or matrixDriver.LedOn( 'ES6' ) if isOn else self.noAction(),
-            'ES7'             : lambda isOn: audio.playES( audio.ES7 ) or matrixDriver.LedOn( 'ES7' ) if isOn else self.noAction(),
-            'ES8'             : lambda isOn: audio.playES( audio.ES8 ) or matrixDriver.LedOn( 'ES8' ) if isOn else self.noAction(),
-            'ES9'             : lambda isOn: audio.playES( audio.ES9 ) or matrixDriver.LedOn( 'ES9' ) if isOn else self.noAction(),
-            'ES10'            : lambda isOn: audio.playES( audio.ES10 ) or matrixDriver.LedOn( 'ES10' ) if isOn else self.noAction(),
+            'ES1'             : lambda isOn: audio.playEventSequence( audio.ES1 ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
+            'ES2'             : lambda isOn: audio.playEventSequence( audio.ES2 ) or matrixDriver.LedOn( 'ES2' ) if isOn else self.noAction(),
+            'ES3'             : lambda isOn: audio.playEventSequence( audio.ES3 ) or matrixDriver.LedOn( 'ES3' ) if isOn else self.noAction(),
+            'ES4'             : lambda isOn: audio.playEventSequence( audio.ES4 ) or matrixDriver.LedOn( 'ES4' ) if isOn else self.noAction(),
+            'ES5'             : lambda isOn: audio.playEventSequence( audio.ES5 ) or matrixDriver.LedOn( 'ES5' ) if isOn else self.noAction(),
+            'ES6'             : lambda isOn: audio.playEventSequence( audio.ES6 ) or matrixDriver.LedOn( 'ES6' ) if isOn else self.noAction(),
+            'ES7'             : lambda isOn: audio.playEventSequence( audio.ES7 ) or matrixDriver.LedOn( 'ES7' ) if isOn else self.noAction(),
+            'ES8'             : lambda isOn: audio.playEventSequence( audio.ES8 ) or matrixDriver.LedOn( 'ES8' ) if isOn else self.noAction(),
+            'ES9'             : lambda isOn: audio.playEventSequence( audio.ES9 ) or matrixDriver.LedOn( 'ES9' ) if isOn else self.noAction(),
+            'ES10'            : lambda isOn: audio.playEventSequence( audio.ES10 ) or matrixDriver.LedOn( 'ES10' ) if isOn else self.noAction(),
 
             # CRYOGENICS Switches
 
