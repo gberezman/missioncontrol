@@ -3,6 +3,9 @@ from time import sleep
 
 class DummySound:
 
+    def __init__(self, sound):
+        self.sound = sound
+
     def play(self, *args):
         pass
 
@@ -12,24 +15,24 @@ class DummySound:
 class Audio:
 
     def play(self, sound):
-        self.__getSound( sound ).play()
+        self.getSound( sound ).play()
 
     def playContinuously(self, sound):
-        self.__getSound( sound ).play( loops = -1 )
+        self.getSound( sound ).play( loops = -1 )
 
     def stop(self, sound):
-        self.__getSound( sound ).stop()
+        self.getSound( sound ).stop()
 
     def playES(self, sound):
         self.stopES()
-        self.__esChannel.play( self.__getSound( sound ) )
+        self.__esChannel.play( self.getSound( sound ) )
 
     def stopES(self):
         self.__esChannel.stop()
 
     def playCaution(self):
         self.stopCaution()
-        self.__cautionChannel.play( self.__getSound('caution'), loops = -1 )
+        self.__cautionChannel.play( self.getSound('caution'), loops = -1 )
 
     def stopCaution(self):
         self.__cautionChannel.stop()
@@ -49,16 +52,18 @@ class Audio:
     def sounds(self):
         return self.__sounds.keys()
 
-    def __getSound(self, sound):
-        return self.__sounds.get( sound, DummySound() )
+    def getSound(self, sound):
+        return self.__sounds.get( sound, DummySound( sound ) )
 
-    def __init__(self):
-        pygame.mixer.quit()
-        pygame.mixer.init( frequency = 48000, buffer = 1024 )
-        pygame.mixer.set_reserved( 2 )
+    def __init__(self, mixer):
 
-        self.__cautionChannel = pygame.mixer.Channel( 0 )
-        self.__esChannel      = pygame.mixer.Channel( 1 )
+        mixer.quit()
+        #pygame.mixer.init( frequency = 48000, buffer = 1024 )
+        mixer.init( )
+        mixer.set_reserved( 2 )
+
+        self.__cautionChannel = mixer.Channel( 0 )
+        self.__esChannel      = mixer.Channel( 1 )
 
         self.__sounds = {
             # CONTROL
@@ -67,7 +72,7 @@ class Audio:
             #'glycolPump'          : DummySound(), # continuous
             #'SCEPower'            : DummySound(),
             #'waste'               : DummySound(),
-            'fan'                 : pygame.mixer.Sound( 'audio/cabinFan.wav' ),
+            'fan'                 : mixer.Sound( 'audio/cabinFan.wav' ),
             #'H2OFlow'             : DummySound(), # continuous
             #'intLights'           : DummySound(), # continuous
             #'suitComp'            : DummySound(), # continuous
@@ -81,7 +86,7 @@ class Audio:
             #'abortSomething'      : DummySound(),
 
             # BOOSTER 
-            'spsThruster'         : pygame.mixer.Sound( 'audio/rocket.wav' ), # continuous
+            'spsThruster'         : mixer.Sound( 'audio/rocket.wav' ), # continuous
             #'teiThruster'         : DummySound(), # continuous
             #'tliThruster'         : DummySound(), # continuous
             #'sicThruster'         : DummySound(), # continuous
@@ -92,15 +97,15 @@ class Audio:
             #'miiiThruster'        : DummySound(), # continuous
 
             # C&WS
-            'caution'             : pygame.mixer.Sound( 'audio/caution.wav' ),
+            'caution'             : mixer.Sound( 'audio/caution.wav' ),
 
             # CAPCOM
-            'quindarin'           : pygame.mixer.Sound( 'audio/quindar-in.wav' ),
-            'quindarout'          : pygame.mixer.Sound( 'audio/quindar-out.wav' ),
+            'quindarin'           : mixer.Sound( 'audio/quindar-in.wav' ),
+            'quindarout'          : mixer.Sound( 'audio/quindar-out.wav' ),
 
             # EVENT SEQUENCE
-            'ES1'                 : pygame.mixer.Sound( 'audio/ES1.wav' ),
-            'ES2'                 : pygame.mixer.Sound( 'audio/ES2.wav' ),
+            'ES1'                 : mixer.Sound( 'audio/ES1.wav' ),
+            'ES2'                 : mixer.Sound( 'audio/ES2.wav' ),
             #'ES3'                 : DummySound(),
             #'ES4'                 : DummySound(),
             #'ES5'                 : DummySound(),
@@ -111,14 +116,31 @@ class Audio:
             #'ES10'                : DummySound(),
 
             # CRYOGENICS
-            'o2fan'               : pygame.mixer.Sound( 'audio/o2fan.wav' ), # continuous
-            'h2fan'               : pygame.mixer.Sound( 'audio/h2fan.wav' ), # continuous
+            'o2fan'               : mixer.Sound( 'audio/o2fan.wav' ), # continuous
+            'h2fan'               : mixer.Sound( 'audio/h2fan.wav' ), # continuous
             #'pumps'               : DummySound(), # continuous
             #'heat'                : DummySound(), # continuous
 
             # PYROTECHNICS
-            'csmDeploy'           : pygame.mixer.Sound( 'audio/csmDeploy.wav' )
+            'csmDeploy'           : mixer.Sound( 'audio/csmDeploy.wav' )
         }
+
+class StubbedMixer:
+
+    def quit(self):
+        pass
+
+    def init(self, *args):
+        pass
+
+    def set_reserved(self, channel):
+        pass
+
+    def Sound(sound):
+        return DummySound( sound )
+
+    def Channel(channel):
+        return DummySound( sound )
 
 class StubbedAudio:
     def __init__(self):
@@ -156,7 +178,7 @@ class StubbedAudio:
 
 if __name__ == '__main__':
 
-    audio = Audio()
+    audio = Audio( pygame.mixer )
 
     for sound in audio.sounds():
         print "playing {} for at most 1 second".format( sound )

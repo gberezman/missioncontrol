@@ -153,8 +153,8 @@ class Rules:
 
             # CONTROL Switches
             'DockingProbe'    : lambda isOn: matrixDriver.setLed( 'DockingProbe', isOn ) \
-                                             or audio.setPlayState( 'dockingProbeRetract', isOn ) \
-                                             or audio.setPlayState( 'dockingProbeExtend', not isOn ),
+                                             or audio.setPlayState( 'dockingProbeRetract', not isOn ) \
+                                             or audio.setPlayState( 'dockingProbeExtend', isOn ),
 
             'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'glycolPump', isOn ) \
                                              or audio.setContinuousPlayState( 'glycolPump', isOn ),
