@@ -3,25 +3,25 @@ from time import sleep
 
 class Audio:
 
-    def play(self, sound):
-        self.getSound( sound ).play()
+    def play(self, clip):
+        self.getSound( clip ).play()
 
-    def playContinuously(self, sound):
-        self.getSound( sound ).play( loops = -1 )
+    def playContinuously(self, clip):
+        self.getSound( clip ).play( loops = -1 )
 
-    def stop(self, sound):
-        self.getSound( sound ).stop()
+    def stop(self, clip):
+        self.getSound( clip ).stop()
 
-    def playES(self, sound):
+    def playES(self, clip):
         self.stopES()
-        self.__esChannel.play( self.getSound( sound ) )
+        self.__esChannel.play( self.getSound( clip ) )
 
     def stopES(self):
         self.__esChannel.stop()
 
-    def playCaution(self, sound = 'caution'):
+    def playCaution(self, clip = 'caution'):
         self.stopCaution()
-        self.__cautionChannel.play( self.getSound( sound ), loops = -1 )
+        self.__cautionChannel.play( self.getSound( clip ), loops = -1 )
 
     def stopCaution(self):
         self.__cautionChannel.stop()
@@ -29,23 +29,23 @@ class Audio:
     def isCautionPlaying(self):
         return self.__cautionChannel.get_busy()
 
-    def setPlayState(self, sound, isOn):
+    def setPlayState(self, clip, isOn):
         if isOn:
-            self.play( sound )
+            self.play( clip )
         else:
-            self.stop( sound )
+            self.stop( clip )
 
-    def setContinuousPlayState(self, sound, isOn):
+    def setContinuousPlayState(self, clip, isOn):
         if isOn:
-            self.playContinuously( sound )
+            self.playContinuously( clip )
         else:
-            self.stop( sound )
+            self.stop( clip )
 
-    def isPlaying(self, sound):
-        return self.getSound( sound ).get_num_channels() > 0
+    def isPlaying(self, clip):
+        return self.getSound( clip ).get_num_channels() > 0
 
-    def getSound(self, sound):
-        return self.sounds.setdefault( sound, self.defaultSound )
+    def getSound(self, clip):
+        return self.sounds.setdefault( clip, self.defaultSound )
 
     def stopAll(self):
         pygame.mixer.stop()
@@ -121,40 +121,6 @@ class Audio:
             # PYROTECHNICS
             'csmDeploy'           : pygame.mixer.Sound( 'audio/csmDeploy.wav' )
         }
-
-class StubbedAudio:
-    def __init__(self):
-        self.lastFn = None
-
-    def play(self, sound): 
-        self.lastFn = 'play'
-
-    def playContinuously(self, sound):
-        self.lastFn = 'playContinuously'
-
-    def stop(self, sound):
-        self.lastFn = 'stop'
-
-    def playES(self, sound):
-        self.lastFn = 'playES'
-
-    def stopES(self):
-        self.lastFn = 'stopES'
-
-    def playCaution(self):
-        self.lastFn = 'playCaution'
-
-    def stopCaution(self):
-        self.lastFn = 'stopCaution'
-
-    def setPlayState(self, sound, isOn):
-        self.lastFn = 'setPlayState'
-
-    def setContinuousPlayState(self, sound, isOn):
-        self.lastFn = 'setContinuousPlayState'
-
-    def sounds(self):
-        return []
 
 if __name__ == '__main__':
 
