@@ -29,7 +29,7 @@ class Audio:
     def isCautionPlaying(self):
         return self.__cautionChannel.get_busy()
 
-    def setPlayState(self, clip, isOn):
+    def togglePlay(self, clip, isOn):
         if isOn:
             self.play( clip )
         else:

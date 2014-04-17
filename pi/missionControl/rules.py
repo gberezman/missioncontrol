@@ -152,8 +152,8 @@ class Rules:
 
             # CONTROL Switches
             'DockingProbe'    : lambda isOn: matrixDriver.setLed( 'DockingProbe', isOn ) \
-                                             or audio.setPlayState( 'dockingProbeRetract', not isOn ) \
-                                             or audio.setPlayState( 'dockingProbeExtend', isOn ),
+                                             or audio.togglePlay( 'dockingProbeRetract', not isOn ) \
+                                             or audio.togglePlay( 'dockingProbeExtend', isOn ),
 
             'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'glycolPump', isOn ) \
                                              or audio.setContinuousPlayState( 'glycolPump', isOn ),
@@ -181,7 +181,7 @@ class Rules:
             # BOOSTER Switches
             # Service propulsion system
             'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.setPlayState( 'spsThruster', isOn ) \
+                                             or audio.togglePlay( 'spsThruster', isOn ) \
                                              or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
@@ -223,8 +223,8 @@ class Rules:
             # 'Ack' # no lights, audio and master alarm only, probably should be illuminated
 
             # CAPCOM Switches
-            'PTT'             : lambda isOn: audio.setPlayState( 'quindarin', isOn ) \
-                                             or audio.setPlayState( 'quindarout', not isOn ),
+            'PTT'             : lambda isOn: audio.togglePlay( 'quindarin', isOn ) \
+                                             or audio.togglePlay( 'quindarout', not isOn ),
 
             # EVENT SEQUENCE Switches
             'ES1'             : lambda isOn: audio.playEventSequence( audio.ES1 ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
