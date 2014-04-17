@@ -1,49 +1,8 @@
 from time import sleep
 import pytest
-from missionControl.rules import EventRecord, Rules, LatchedLED
+from missionControl.rules import Rules, LatchedLED
 from missionControl.audio import Audio, StubbedAudio
 from missionControl.arduino import StubbedArduinoSerial, ArduinoMatrixDriver
-
-class TestEventRecord:
-
-    def test_record_recordsHit(self):
-        eventRecord = EventRecord()
-
-        eventRecord.record()
-
-        assert len( eventRecord.hits ) == 1
-
-    def test_record_skips_ifNotOn(self):
-        eventRecord = EventRecord()
-
-        eventRecord.record( False )
-
-        assert len( eventRecord.hits ) == 0
-
-    def test_record_recordsLimitedHits(self):
-        size = 5
-        eventRecord = EventRecord( size )
-
-        for c in range( 1, 2 * size ):
-            eventRecord.record()
-
-        assert len( eventRecord.hits ) == 5
-
-    def test_hitsInTheLastNSeconds_returnsZeroIfAllExpired(self):
-        eventRecord = EventRecord()
-        eventRecord.record()
-        sleep( .02 )
-
-        assert eventRecord.hitsInTheLastNSeconds( .01 ) == 0
-
-    def test_hitsInTheLastNSeconds_returnsCorrectCount(self):
-        eventRecord = EventRecord()
-        eventRecord.record()
-        sleep( .05 )
-
-        eventRecord.record()
-
-        assert eventRecord.hitsInTheLastNSeconds( .04 ) == 1
 
 class TestLatchedLED:
 
