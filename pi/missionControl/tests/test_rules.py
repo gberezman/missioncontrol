@@ -1,43 +1,57 @@
 from time import sleep
 import pytest
-from missionControl.rules import Rules
-from missionControl.audio import StubbedAudio
-from missionControl.arduino import StubbedArduinoSerial, ArduinoMatrixDriver
 
 class TestRules:
 
-    def setup_method(self, method):
-        self.audio = StubbedAudio()
-        self.serial = StubbedArduinoSerial()
-        self.rules = Rules( self.audio, ArduinoMatrixDriver( self.serial ) )
+    @pytest.fixture
+    def audio(self, request):
+        from missionControl.audio import Audio
+        audio = Audio()
 
-    def test_getBogusRule_returnsRule(self):
-        rule = self.rules.getRule('Bogus')
+        def fin():
+            audio.stopAll()
+        request.addfinalizer(fin)
+
+        return audio
+
+    @pytest.fixture
+    def serial(self):
+        from missionControl.arduino import StubbedArduinoSerial
+        return StubbedArduinoSerial()
+
+    @pytest.fixture
+    def rules(self, audio, serial):
+        from missionControl.rules import Rules
+        from missionControl.arduino import ArduinoMatrixDriver
+        return Rules( audio, ArduinoMatrixDriver( serial ) )
+
+    def test_getBogusRule_returnsRule(self, rules):
+        rule = rules.getRule('Bogus')
         assert rule is not None
 
-    def test_abortModePotentiometer_setsAbortMode(self):
-        rule = self.rules.getRule( 'AbortMode' )
+    def test_abortModePotentiometer_setsAbortMode(self, rules):
+        rule = rules.getRule( 'AbortMode' )
         rule( 10 )
 
-        assert self.rules.abort.mode == 10
+        assert rules.abort.mode == 10
 
-    def test_DockingProbeOn_setsDockingProbeLedOn(self):
-        rule = self.rules.getRule( 'DockingProbe' )
+    def test_DockingProbeOn_setsDockingProbeLedOn(self, serial, rules):
+        rule = rules.getRule( 'DockingProbe' )
 
         rule( True )
         
-        assert self.serial.getLastWrite() == 'LED DockingProbe on\n'
+        assert serial.getLastWrite() == 'LED DockingProbe on\n'
         
-    def test_DockingProbeOff_setsDockingProbeLedOff(self):
-        rule = self.rules.getRule( 'DockingProbe' )
+    def test_DockingProbeOff_setsDockingProbeLedOff(self, serial, rules):
+        rule = rules.getRule( 'DockingProbe' )
 
         rule( False )
         
-        assert self.serial.getLastWrite() == 'LED DockingProbe off\n'
+        assert serial.getLastWrite() == 'LED DockingProbe off\n'
         
-    def test_DockingProbeOn_playsDockingProbeExtend(self):
-        rule = self.rules.getRule( 'DockingProbe' )
+    def test_DockingProbeOn_playsDockingProbeExtend(self, audio, rules):
+        rule = rules.getRule( 'DockingProbe' )
 
         rule( True )
         
-        assert self.audio.lastFn == 'setPlayState'
+        assert audio.isPlaying( 'dockingProbeRetract' ) == True
