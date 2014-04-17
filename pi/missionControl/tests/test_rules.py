@@ -1,62 +1,8 @@
-from time import time, sleep
-from missionControl.rules import CautionWarning, Abort, EventRecord, Rules, LatchedLED
-from missionControl.audio import StubbedAudio
+from time import sleep
+import pytest
+from missionControl.rules import Abort, EventRecord, Rules, LatchedLED
+from missionControl.audio import Audio, StubbedAudio
 from missionControl.arduino import StubbedArduinoSerial, ArduinoMatrixDriver
-
-class TestCautionWarning:
-    def test_defaultState_isInactive(self):
-        cw = CautionWarning(None, None)
-        
-        assert cw.state == 'inactive'
-
-    def test_alertState_isActive(self):
-        cw = CautionWarning( StubbedAudio(), ArduinoMatrixDriver( StubbedArduinoSerial() ) )
-    
-        cw.alert()
-        
-        assert cw.state == 'active'
-
-    def test_alert_playsCaution(self):
-        audio = StubbedAudio()
-        cw = CautionWarning( audio, ArduinoMatrixDriver( StubbedArduinoSerial() ) )
-    
-        cw.alert()
-        
-        assert audio.lastFn == 'playCaution'
-
-    def test_alert_enablesCautionLed(self):
-        serial = StubbedArduinoSerial()
-        cw = CautionWarning( StubbedAudio(), ArduinoMatrixDriver( serial ) )
-    
-        cw.alert()
-        
-        assert serial.getLastWrite() == 'LED caution on\n'
-
-    def test_clearState_isInactive(self):
-        cw = CautionWarning( StubbedAudio(), ArduinoMatrixDriver( StubbedArduinoSerial() ) )
-    
-        cw.alert()
-        cw.clear()
-        
-        assert cw.state == 'inactive'
-
-    def test_clear_stopsCaution(self):
-        audio = StubbedAudio()
-        cw = CautionWarning( audio, ArduinoMatrixDriver( StubbedArduinoSerial() ) )
-    
-        cw.alert()
-        cw.clear()
-        
-        assert audio.lastFn == 'stopCaution'
-
-    def test_clear_disablesCautionLed(self):
-        serial = StubbedArduinoSerial()
-        cw = CautionWarning( StubbedAudio(), ArduinoMatrixDriver( serial ) )
-    
-        cw.alert()
-        cw.clear()
-        
-        assert serial.getLastWrite() == 'LED caution off\n'
 
 class TestAbort:
         
@@ -250,11 +196,3 @@ class TestRules:
         rule( True )
         
         assert self.audio.lastFn == 'setPlayState'
-        
-    #def test_DockingProbeOff_setsDockingProbeLedOff(self):
-        #rule = self.rules.getRule( 'DockingProbe' )
-#
-        #rule( False )
-        #
-        #assert self.serial.getLastWrite() == 'LED DockingProbe off\n'
-        

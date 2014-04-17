@@ -8,10 +8,9 @@ class CautionWarning:
         self.state = 'inactive'
 
     def alert(self):
-        if self.state == 'inactive':
-            self.state = 'active'
-            self.audio.playCaution()
-            self.matrixDriver.ledOn( 'caution' )
+        self.state = 'active'
+        self.audio.playCaution()
+        self.matrixDriver.ledOn( 'caution' )
 
     def clear(self):
         self.state = 'inactive'
