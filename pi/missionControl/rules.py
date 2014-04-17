@@ -43,17 +43,17 @@ class Abort:
     def abort(self, doAbort = True):
         if doAbort and self.armed:
             if self.mode == 1:
-                self.audio.play('abortPad')
+                self.audio.play( 'abortPad' )
             elif self.mode == 2:
-                self.audio.play('abortI')
+                self.audio.play( 'abortI' )
             elif self.mode == 3:
-                self.audio.play('abortII')
+                self.audio.play( 'abortII' )
             elif self.mode == 4:
-                self.audio.play('abortIII')
+                self.audio.play( 'abortIII' )
             elif self.mode == 5:
-                self.audio.play('abortSIVB')
+                self.audio.play( 'abortSIVB' )
             elif self.mode == 6:
-                self.audio.play('somethingElse')
+                self.audio.play( 'somethingElse' )
 
             # shutdown sequence "sudo halt"
 

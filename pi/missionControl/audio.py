@@ -1,18 +1,6 @@
 import pygame.mixer
 from time import sleep
 
-class DummySound(pygame.mixer.Sound):
-
-    def __init__(self, sound):
-        self.sound = sound
-        self.isPlayed = False
-
-    def play(self, *args, **keyargs):
-        self.isPlayed = True
-
-    def stop(self, *args, **keyargs):
-        pass
-
 class Audio:
 
     def play(self, sound):
@@ -72,7 +60,7 @@ class Audio:
         self.__esChannel      = pygame.mixer.Channel( 1 )
 
         # Should replace this with white noise or blank audio
-        self.defaultSound  = pygame.mixer.Sound( 'audio.rocket.wav' ),
+        self.defaultSound  = pygame.mixer.Sound( 'audio/rocket.wav' )
 
         self.sounds = {
             # CONTROL
