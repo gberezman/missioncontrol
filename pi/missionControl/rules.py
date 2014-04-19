@@ -149,20 +149,20 @@ class Rules:
             # CONTROL Switches
             'DockingProbe'    : lambda isExtending: matrixDriver.setLed( 'DockingProbe', isExtending ) \
                                                     or matrixDriver.setLed( 'DockingTarget', isExtending ) \
-                                                    or audio.togglePlay( 'dockingProbeRetract', not isExtending ) \
-                                                    or audio.togglePlay( 'dockingProbeExtend', isExtending ),
+                                                    or audio.togglePlay( 'DockingProbeRetract', not isExtending ) \
+                                                    or audio.togglePlay( 'DockingProbeExtend', isExtending ),
 
             # Game condition: Show GlycolTempLow to get user to run glycol pump and clear warning
-            'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'glycolPump', isOn ) \
-                                             or audio.togglePlay( 'glycolPump', isOn, continuous = True ),
+            'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'GlycolPump', isOn ) \
+                                             or audio.togglePlay( 'GlycolPump', isOn, continuous = True ),
 
             'SCEPower'        : lambda isOn: matrixDriver.setLed('SCEPower', isOn ),
 
             'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
-                                             or ( audio.play('wasteDump') if isOn else self.noAction() ),
+                                             or ( audio.play('WasteDump') if isOn else self.noAction() ),
 
-            #'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
-                                             #or audio.togglePlay( 'fan', isOn, continuous = True ),
+            'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
+                                             or audio.togglePlay( 'CabinFan', isOn, continuous = True ),
 
             #'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
                                              #or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),

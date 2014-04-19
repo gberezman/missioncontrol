@@ -55,7 +55,7 @@ class TestRules:
         rule( False )
         rule( True )
 
-        assert audio.isPlaying( 'dockingProbeExtend' )
+        assert audio.isPlaying( 'DockingProbeExtend' )
 
     def test_DockingProbeOff_playsDockingProbeRetract(self, audio, rules):
         rule = rules.getRule( 'DockingProbe' )
@@ -63,7 +63,7 @@ class TestRules:
         rule( True )
         rule( False )
 
-        assert audio.isPlaying( 'dockingProbeRetract' )
+        assert audio.isPlaying( 'DockingProbeRetract' )
 
     def test_DockingProbeOn_stopsDockingProbeRetract(self, audio, rules):
         rule = rules.getRule( 'DockingProbe' )
@@ -71,7 +71,7 @@ class TestRules:
         rule( False )
         rule( True )
 
-        assert not audio.isPlaying( 'dockingProbeRetract' )
+        assert not audio.isPlaying( 'DockingProbeRetract' )
 
     def test_DockingProbeOff_playsDockingProbeExtend(self, audio, rules):
         rule = rules.getRule( 'DockingProbe' )
@@ -79,21 +79,21 @@ class TestRules:
         rule( True )
         rule( False )
 
-        assert not audio.isPlaying( 'dockingProbeExtend' )
+        assert not audio.isPlaying( 'DockingProbeExtend' )
 
     def test_GlycolPumpOn_setsGlycolPumpLedOn(self, serial, rules):
         rule = rules.getRule( 'GlycolPump' )
 
         rule( True )
 
-        assert serial.hasSent( 'LED glycolPump on\n' )
+        assert serial.hasSent( 'LED GlycolPump on\n' )
 
     def test_GlycolPumpOn_playsGlycolPump(self, audio, rules):
         rule = rules.getRule( 'GlycolPump' )
 
         rule( True )
 
-        assert audio.isPlaying( 'glycolPump' )
+        assert audio.isPlaying( 'GlycolPump' )
 
     def test_GlycolPumpOff_stopsGlycolPump(self, audio, rules):
         rule = rules.getRule( 'GlycolPump' )
@@ -101,7 +101,7 @@ class TestRules:
         rule( True )
         rule( False )
 
-        assert not audio.isPlaying( 'glycolPump' )
+        assert not audio.isPlaying( 'GlycolPump' )
 
     def test_GlycolPumpOn_setsGlycolPumpLedOn(self, serial, rules):
         rule = rules.getRule( 'GlycolPump' )
@@ -109,7 +109,7 @@ class TestRules:
         rule( True )
         rule( False )
 
-        assert serial.hasSent( 'LED glycolPump off\n' )
+        assert serial.hasSent( 'LED GlycolPump off\n' )
 
     def test_SCEPowerOn_setsSCEPowerLedOn(self, serial, rules):
         rule = rules.getRule( 'SCEPower' )
@@ -144,7 +144,7 @@ class TestRules:
 
         rule( True )
 
-        assert audio.isPlaying( 'wasteDump' )
+        assert audio.isPlaying( 'WasteDump' )
 
     def test_WasteDumpOff_doesNotStopWasteDumpClip(self, audio, rules):
         rule = rules.getRule( 'WasteDump' )
@@ -152,4 +152,33 @@ class TestRules:
         rule( True )
         rule( False )
 
-        assert audio.isPlaying( 'wasteDump' )
+        assert audio.isPlaying( 'WasteDump' )
+
+    def test_CabinFanOn_setsCabinFanLedOn(self, serial, rules):
+        rule = rules.getRule( 'CabinFan' )
+        
+        rule( True )
+
+        assert serial.hasSent( 'LED CabinFan on\n' )
+
+    def test_CabinFanOff_setsCabinFanLedOff(self, serial, rules):
+        rule = rules.getRule( 'CabinFan' )
+        
+        rule( False )
+
+        assert serial.hasSent( 'LED CabinFan off\n' )
+
+    def test_CabinFanOn_playsCabinFan(self, audio, rules):
+        rule = rules.getRule( 'CabinFan' )
+        
+        rule( True )
+
+        assert audio.isPlaying( 'CabinFan' )
+
+    def test_CabinFanOff_stopsCabinFan(self, audio, rules):
+        rule = rules.getRule( 'CabinFan' )
+        
+        rule( True )
+        rule( False )
+
+        assert not audio.isPlaying( 'CabinFan' )

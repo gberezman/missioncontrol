@@ -26,7 +26,6 @@ class Audio:
             pass
 
     def togglePlay(self, clip, isOn, dedicatedChannel = None, continuous = False ):
-        print "toggling {} to {}".format( clip, isOn )
         if isOn:
             self.play( clip, dedicatedChannel, continuous )
         else:
@@ -57,11 +56,11 @@ class Audio:
 
         self.__sounds = {
             # CONTROL
-            'dockingProbeRetract' : pygame.mixer.Sound( 'audio/DockingProbeRetract.wav' ),
-            'dockingProbeExtend'  : pygame.mixer.Sound( 'audio/DockingProbeExtend.wav' ),
-            'glycolPump'          : pygame.mixer.Sound( 'audio/glycolPump.wav' ),
-            'wasteDump'           : pygame.mixer.Sound( 'audio/wasteDump.wav' ),
-            'fan'                 : pygame.mixer.Sound( 'audio/cabinFan.wav' ),
+            'DockingProbeRetract' : pygame.mixer.Sound( 'audio/DockingProbeRetract.wav' ),
+            'DockingProbeExtend'  : pygame.mixer.Sound( 'audio/DockingProbeExtend.wav' ),
+            'GlycolPump'          : pygame.mixer.Sound( 'audio/glycolPump.wav' ),
+            'WasteDump'           : pygame.mixer.Sound( 'audio/wasteDump.wav' ),
+            'CabinFan'            : pygame.mixer.Sound( 'audio/cabinFan.wav' ),
             'H2OFlow'             : pygame.mixer.Sound( 'audio/H2OFlow.wav' ),
 
             # ABORT
@@ -70,10 +69,10 @@ class Audio:
             # 'abortII'
             # 'abortIII'
             # 'abortSIVB'
-            'abortIV'             : pygame.mixer.Sound( 'audio/cantdo.wav' ),
+            'AbortIV'             : pygame.mixer.Sound( 'audio/cantdo.wav' ),
 
             # BOOSTER 
-            'spsThruster'         : pygame.mixer.Sound( 'audio/rocket.wav' ), # continuous
+            'SpsThruster'         : pygame.mixer.Sound( 'audio/rocket.wav' ), # continuous
             #'teiThruster'         : DummySound(), # continuous
             #'tliThruster'         : DummySound(), # continuous
             #'sicThruster'         : DummySound(), # continuous
@@ -84,11 +83,11 @@ class Audio:
             #'miiiThruster'        : DummySound(), # continuous
 
             # C&WS
-            'caution'             : pygame.mixer.Sound( 'audio/caution.wav' ),
+            'Caution'             : pygame.mixer.Sound( 'audio/caution.wav' ),
 
             # CAPCOM
-            'quindarin'           : pygame.mixer.Sound( 'audio/quindar-in.wav' ),
-            'quindarout'          : pygame.mixer.Sound( 'audio/quindar-out.wav' ),
+            'Quindarin'           : pygame.mixer.Sound( 'audio/quindar-in.wav' ),
+            'Quindarout'          : pygame.mixer.Sound( 'audio/quindar-out.wav' ),
 
             # EVENT SEQUENCE
             'ES1'                 : pygame.mixer.Sound( 'audio/ES1.wav' ),
@@ -103,13 +102,13 @@ class Audio:
             #'ES10'                : DummySound(),
 
             # CRYOGENICS
-            'o2fan'               : pygame.mixer.Sound( 'audio/o2fan.wav' ), # continuous
-            'h2fan'               : pygame.mixer.Sound( 'audio/h2fan.wav' ), # continuous
+            'O2fan'               : pygame.mixer.Sound( 'audio/o2fan.wav' ), # continuous
+            'H2fan'               : pygame.mixer.Sound( 'audio/h2fan.wav' ), # continuous
             #'pumps'               : DummySound(), # continuous
             #'heat'                : DummySound(), # continuous
 
             # PYROTECHNICS
-            'csmDeploy'           : pygame.mixer.Sound( 'audio/csmDeploy.wav' )
+            'CsmDeploy'           : pygame.mixer.Sound( 'audio/csmDeploy.wav' )
         }
 
 if __name__ == '__main__':
@@ -125,12 +124,12 @@ if __name__ == '__main__':
         audio.stop( sound )
 
     print "playing continuously for 2 seconds"
-    audio.playContinuously( 'spsThruster' )
+    audio.play( 'SpsThruster', continuous = True )
     sleep( 2 )
-    audio.stop( 'spsThruster' )
+    audio.stop( 'SpsThruster' )
 
     print "playing caution for 2 seconds"
-    audio.playCaution()
+    audio.play( 'caution', dedicatedChannel = audio.cautionChannel, continuous = True )
     sleep( 2 )
     audio.stopCaution()
 
