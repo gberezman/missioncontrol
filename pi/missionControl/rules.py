@@ -158,8 +158,8 @@ class Rules:
 
             'SCEPower'        : lambda isOn: matrixDriver.setLed('SCEPower', isOn ),
 
-            #'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
-                                             #or ( audio.play('wasteDump') if isOn else self.noAction() ),
+            'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
+                                             or ( audio.play('wasteDump') if isOn else self.noAction() ),
 
             #'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
                                              #or audio.togglePlay( 'fan', isOn, continuous = True ),

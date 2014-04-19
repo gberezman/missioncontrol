@@ -124,3 +124,32 @@ class TestRules:
         rule( False )
 
         assert serial.hasSent( 'LED SCEPower off\n' )
+
+    def test_WasteDumpOn_setsWasteDumpLedOn(self, serial, rules):
+        rule = rules.getRule( 'WasteDump' )
+
+        rule( True )
+
+        assert serial.hasSent( 'LED WasteDump on\n' )
+
+    def test_WasteDumpOff_setsWasteDumpLedOff(self, serial, rules):
+        rule = rules.getRule( 'WasteDump' )
+
+        rule( False )
+
+        assert serial.hasSent( 'LED WasteDump off\n' )
+
+    def test_WasteDumpOn_playsWasteDumpClip(self, audio, rules):
+        rule = rules.getRule( 'WasteDump' )
+
+        rule( True )
+
+        assert audio.isPlaying( 'wasteDump' )
+
+    def test_WasteDumpOff_doesNotStopWasteDumpClip(self, audio, rules):
+        rule = rules.getRule( 'WasteDump' )
+
+        rule( True )
+        rule( False )
+
+        assert audio.isPlaying( 'wasteDump' )
