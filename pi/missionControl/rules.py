@@ -164,8 +164,8 @@ class Rules:
             'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
                                              or audio.togglePlay( 'CabinFan', isOn, continuous = True ),
 
-            #'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
-                                             #or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
+            'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
+                                             or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
 
             #'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
 #

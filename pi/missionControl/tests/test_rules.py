@@ -182,3 +182,32 @@ class TestRules:
         rule( False )
 
         assert not audio.isPlaying( 'CabinFan' )
+
+    def test_H2OFlowOn_setsH2OFlowLedOn(self, serial, rules):
+        rule = rules.getRule( 'H2OFlow' )
+
+        rule( True )
+
+        assert serial.hasSent( 'LED H2OFlow on\n' )
+
+    def test_H2OFlowOff_setsH2OFlowLedOff(self, serial, rules):
+        rule = rules.getRule( 'H2OFlow' )
+
+        rule( False )
+
+        assert serial.hasSent( 'LED H2OFlow off\n' )
+
+    def test_H2OFlowOn_playsH2OFlow(self, audio, rules):
+        rule = rules.getRule( 'H2OFlow' )
+
+        rule( True )
+
+        assert audio.isPlaying( 'H2OFlow' )
+
+    def test_H2OFlowOff_stopsH2OFlow(self, audio, rules):
+        rule = rules.getRule( 'H2OFlow' )
+
+        rule( True )
+        rule( False )
+
+        assert not audio.isPlaying( 'H2OFlow' )
