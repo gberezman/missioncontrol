@@ -48,3 +48,35 @@ class TestRules:
         rule( False )
         
         assert serial.hasSent( 'LED DockingProbe off\n' )
+
+    def test_DockingProbeOn_playsDockingProbeExtend(self, audio, rules):
+        rule = rules.getRule( 'DockingProbe' )
+
+        rule( False )
+        rule( True )
+
+        assert audio.isPlaying( 'dockingProbeExtend' )
+
+    def test_DockingProbeOff_playsDockingProbeRetract(self, audio, rules):
+        rule = rules.getRule( 'DockingProbe' )
+
+        rule( True )
+        rule( False )
+
+        assert audio.isPlaying( 'dockingProbeRetract' )
+
+    def test_DockingProbeOn_stopsDockingProbeRetract(self, audio, rules):
+        rule = rules.getRule( 'DockingProbe' )
+
+        rule( False )
+        rule( True )
+
+        assert not audio.isPlaying( 'dockingProbeRetract' )
+
+    def test_DockingProbeOff_playsDockingProbeExtend(self, audio, rules):
+        rule = rules.getRule( 'DockingProbe' )
+
+        rule( True )
+        rule( False )
+
+        assert not audio.isPlaying( 'dockingProbeExtend' )
