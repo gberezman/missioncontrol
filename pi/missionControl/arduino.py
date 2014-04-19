@@ -21,20 +21,20 @@ class ArduinoSerial:
 
 class StubbedArduinoSerial:
     def __init__(self):
-        self.readResponse = None
-        self.lastWrite = None
+        self.__readResponse = None
+        self.__lastWrite = None
 
     def setReadResponse(self, readResponse):
-        self.readResponse = readResponse
+        self.__readResponse = readResponse
 
     def getLastWrite(self):
-        return self.lastWrite
+        return self.__lastWrite
 
     def read(self): 
-        return self.readResponse
+        return self.__readResponse
 
     def write(self, message):
-        self.lastWrite = message
+        self.__lastWrite = message
 
 class ArduinoMatrixDriver:
     
