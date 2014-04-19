@@ -158,60 +158,60 @@ class Rules:
 
             'SCEPower'        : lambda isOn: matrixDriver.setLed('SCEPower', isOn ),
 
-            'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
-                                             or ( audio.play('wasteDump') if isOn else self.noAction() ),
+            #'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
+                                             #or ( audio.play('wasteDump') if isOn else self.noAction() ),
 
-            'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
-                                             or audio.togglePlay( 'fan', isOn, continuous = True ),
+            #'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
+                                             #or audio.togglePlay( 'fan', isOn, continuous = True ),
 
-            'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
-                                             or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
+            #'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
+                                             #or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
 
-            'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
-
-            'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
+            #'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
+#
+            #'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
 
             # ABORT
-            'ArmAbort'        : lambda armed: self.abort.setArm( armed ),
-            'Abort'           : lambda pressed: self.abort.abort() if pressed else self.noAction(),
+            #'ArmAbort'        : lambda armed: self.abort.setArm( armed ),
+            #'Abort'           : lambda pressed: self.abort.abort() if pressed else self.noAction(),
 
             # BOOSTER Switches
             # Service propulsion system
-            'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'spsThruster', isOn, continuous = True ) \
-                                             or self.SPSPresses.record( isOn ),
+            #'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'spsThruster', isOn, continuous = True ) \
+                                             #or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
-            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
+            #'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
 
             # Trans-Lunar injection (puts on path towards moon)
-            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
+            #'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
             
             # Saturn, first stage
-            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
+            #'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
 
             # Saturn, second stage
-            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
+            #'S-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
 
             # Saturn V, third stage
-            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
+            #'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'miThruster', isOn, continuous = True ),
+            #'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'miThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
+            #'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
+            #'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             #or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
 
             # C&WS Switches
             # square wave alternating between 750 and 2000cps changing 2.5 times per second
@@ -223,48 +223,48 @@ class Rules:
             # 'Ack' # no lights, audio and master alarm only, probably should be illuminated
 
             # CAPCOM Switches
-            'PTT'             : lambda isOn: audio.togglePlay( 'quindarin', isOn ) \
-                                             or audio.togglePlay( 'quindarout', not isOn ),
+            #'PTT'             : lambda isOn: audio.togglePlay( 'quindarin', isOn ) \
+                                             #or audio.togglePlay( 'quindarout', not isOn ),
 
             # EVENT SEQUENCE Switches
-            'ES1'             : lambda isOn: audio.play( audio.ES1, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
-            'ES2'             : lambda isOn: audio.play( audio.ES2, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES2' ) if isOn else self.noAction(),
-            'ES3'             : lambda isOn: audio.play( audio.ES3, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES3' ) if isOn else self.noAction(),
-            'ES4'             : lambda isOn: audio.play( audio.ES4, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES4' ) if isOn else self.noAction(),
-            'ES5'             : lambda isOn: audio.play( audio.ES5, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES5' ) if isOn else self.noAction(),
-            'ES6'             : lambda isOn: audio.play( audio.ES6, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES6' ) if isOn else self.noAction(),
-            'ES7'             : lambda isOn: audio.play( audio.ES7, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES7' ) if isOn else self.noAction(),
-            'ES8'             : lambda isOn: audio.play( audio.ES8, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES8' ) if isOn else self.noAction(),
-            'ES9'             : lambda isOn: audio.play( audio.ES9, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES9' ) if isOn else self.noAction(),
-            'ES10'            : lambda isOn: audio.play( audio.ES10, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES10' ) if isOn else self.noAction(),
+            #'ES1'             : lambda isOn: audio.play( audio.ES1, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
+            #'ES2'             : lambda isOn: audio.play( audio.ES2, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES2' ) if isOn else self.noAction(),
+            #'ES3'             : lambda isOn: audio.play( audio.ES3, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES3' ) if isOn else self.noAction(),
+            #'ES4'             : lambda isOn: audio.play( audio.ES4, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES4' ) if isOn else self.noAction(),
+            #'ES5'             : lambda isOn: audio.play( audio.ES5, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES5' ) if isOn else self.noAction(),
+            #'ES6'             : lambda isOn: audio.play( audio.ES6, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES6' ) if isOn else self.noAction(),
+            #'ES7'             : lambda isOn: audio.play( audio.ES7, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES7' ) if isOn else self.noAction(),
+            #'ES8'             : lambda isOn: audio.play( audio.ES8, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES8' ) if isOn else self.noAction(),
+            #'ES9'             : lambda isOn: audio.play( audio.ES9, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES9' ) if isOn else self.noAction(),
+            #'ES10'            : lambda isOn: audio.play( audio.ES10, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES10' ) if isOn else self.noAction(),
 
             # CRYOGENICS Switches
 
-            'O2Fan'           : lambda isOn: audio.togglePlay( 'o2fan', isOn, continuous = True ),
-            'H2Fan'           : lambda isOn: audio.togglePlay( 'h2fan', isOn, continuous = True ),
-            'Pumps'           : lambda isOn: audio.togglePlay( 'pumps', isOn, continuous = True ),
-            'Heat'            : lambda isOn: audio.togglePlay( 'heat', isOn, continuous = True ),
+            #'O2Fan'           : lambda isOn: audio.togglePlay( 'o2fan', isOn, continuous = True ),
+            #'H2Fan'           : lambda isOn: audio.togglePlay( 'h2fan', isOn, continuous = True ),
+            #'Pumps'           : lambda isOn: audio.togglePlay( 'pumps', isOn, continuous = True ),
+            #'Heat'            : lambda isOn: audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches
-            'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),
+            #'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),
 
             # manually deploy the CM main parachutes.
-            'MainDeploy'      : lambda isOn: audio.play('mainDeploy') or matrixDriver.LedOn('MainChute') if isOn else self.noAction(),
+            #'MainDeploy'      : lambda isOn: audio.play('mainDeploy') or matrixDriver.LedOn('MainChute') if isOn else self.noAction(),
 
             # Manually separate the CSM from the launch vehicle during an abort or in normal operation.
-            'CSM/LVDeploy'    : lambda isOn: audio.play('CSM/LVDeploy') if isOn else self.noAction(),
+            #'CSM/LVDeploy'    : lambda isOn: audio.play('CSM/LVDeploy') if isOn else self.noAction(),
 
             # Separate for reentry
-            'SM/CMDeploy'     : lambda isOn: audio.play('SM/CMDeploy') if isOn else self.noAction(),
+            #'SM/CMDeploy'     : lambda isOn: audio.play('SM/CMDeploy') if isOn else self.noAction(),
 
             # Deploy the Launch Escape System Canard Parachutes
-            'CanardDeploy'    : lambda isOn: audio.play('CanardDeploy') if isOn else self.noAction(),
+            #'CanardDeploy'    : lambda isOn: audio.play('CanardDeploy') if isOn else self.noAction(),
 
             # Push-switch to jettison CM apex cover if automatic system fails during an abort or earth landing after a normal mission. 
-            'ApexCoverJettsn' : lambda isOn: audio.play('ApexCoverJettsn') or matrixDriver.LedOn('Hatch') if isOn else self.noAction(),
+            #'ApexCoverJettsn' : lambda isOn: audio.play('ApexCoverJettsn') or matrixDriver.LedOn('Hatch') if isOn else self.noAction(),
 
             # Manually operates the Launch Escape System, either to jettison the LES tower or to fire the motor in the event of an LES abort.  In the former case, the explosive bolts connecting the LES tower to the CSM must fire first.
-            'LesMotorFire'    : lambda isOn: audio.play('LesMotorFire') if isOn else self.noAction()
+            #'LesMotorFire'    : lambda isOn: audio.play('LesMotorFire') if isOn else self.noAction()
         }
 
 # Overuse of SPS engine:

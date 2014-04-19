@@ -111,3 +111,16 @@ class TestRules:
 
         assert serial.hasSent( 'LED glycolPump off\n' )
 
+    def test_SCEPowerOn_setsSCEPowerLedOn(self, serial, rules):
+        rule = rules.getRule( 'SCEPower' )
+
+        rule( True )
+
+        assert serial.hasSent( 'LED SCEPower on\n' )
+
+    def test_SCEPowerOff_setsSCEPowerLedOff(self, serial, rules):
+        rule = rules.getRule( 'SCEPower' )
+
+        rule( False )
+
+        assert serial.hasSent( 'LED SCEPower off\n' )
