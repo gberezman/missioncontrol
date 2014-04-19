@@ -34,7 +34,7 @@ class TestCautionWarning:
     def test_alert_playsCaution(self, audio, cautionWarning):
         cautionWarning.alert()
         
-        assert audio.isCautionPlaying() == True
+        assert audio.isPlaying( 'caution' ) == True
 
     def test_alert_enablesCautionLed(self, serial, cautionWarning):
         cautionWarning.alert()
@@ -51,7 +51,7 @@ class TestCautionWarning:
         cautionWarning.alert()
         cautionWarning.clear()
 
-        assert audio.isCautionPlaying() == False
+        assert audio.isPlaying( 'caution' ) == False
 
     def test_clear_disablesCautionLed(self, serial, cautionWarning):
         cautionWarning.alert()

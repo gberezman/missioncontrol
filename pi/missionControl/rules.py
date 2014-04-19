@@ -9,12 +9,12 @@ class CautionWarning:
 
     def alert(self):
         self.state = 'active'
-        self.audio.playCaution()
+        self.audio.play( 'caution', dedicatedChannel = self.audio.cautionChannel, continuous = True )
         self.matrixDriver.ledOn( 'caution' )
 
     def clear(self):
         self.state = 'inactive'
-        self.audio.stopCaution()
+        self.audio.stop( 'caution' )
         self.matrixDriver.ledOff( 'caution' )
 
 class Abort:
@@ -26,22 +26,18 @@ class Abort:
         self.armed = False
         self.mode = 1
 
-    def arm(self, isOn = True):
-        if isOn:
-            self.armed = True
+    def setArm(self, armed = True):
+        self.armed = armed
+        if self.armed:
             self.matrixDriver.ledOn( 'Abort' ),
         else:
-            self.disarm()
-
-    def disarm(self):
-        self.armed = False
-        self.matrixDriver.ledOff( 'Abort' ),
+            self.matrixDriver.ledOff( 'Abort' ),
 
     def setMode(self, mode):
         self.mode = mode
 
-    def abort(self, doAbort = True):
-        if doAbort and self.armed:
+    def abort(self):
+        if self.armed:
             if self.mode == 1:
                 self.audio.play( 'abortPad' )
             elif self.mode == 2:
@@ -53,7 +49,7 @@ class Abort:
             elif self.mode == 5:
                 self.audio.play( 'abortSIVB' )
             elif self.mode == 6:
-                self.audio.play( 'somethingElse' )
+                self.audio.play( 'abortIV' )
 
             # shutdown sequence "sudo halt"
 
@@ -151,32 +147,33 @@ class Rules:
                 # AntYaw changes the the width of the green section
 
             # CONTROL Switches
-            'DockingProbe'    : lambda isOn: matrixDriver.setLed( 'DockingProbe', isOn ) \
-                                             or audio.togglePlay( 'dockingProbeRetract', not isOn ) \
-                                             or audio.togglePlay( 'dockingProbeExtend', isOn ),
+            'DockingProbe'    : lambda isExtending: matrixDriver.setLed( 'DockingProbe', isExtending ) \
+                                                    or matrixDriver.setLed( 'DockingTarget', isExtending ) \
+                                                    or audio.togglePlay( 'dockingProbeRetract', not isExtending ) \
+                                                    or audio.togglePlay( 'dockingProbeExtend', isExtending ),
 
+            # Game condition: Show GlycolTempLow to get user to run glycol pump and clear warning
             'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'glycolPump', isOn ) \
                                              or audio.togglePlay( 'glycolPump', isOn, continuous = True ),
 
             'SCEPower'        : lambda isOn: matrixDriver.setLed('SCEPower', isOn ),
 
             'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
-                                             or ( audio.play('waste') if isOn else self.noAction() ),
+                                             or ( audio.play('wasteDump') if isOn else self.noAction() ),
 
             'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
                                              or audio.togglePlay( 'fan', isOn, continuous = True ),
 
-            'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow' ) \
+            'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
                                              or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
 
-            'IntLights'       : lambda isOn: matrixDriver.setLed('IntLights', isOn ),
+            'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
 
-            'SuitComp'        : lambda isOn: matrixDriver.setLed('SuitComp', isOn ),
+            'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
 
             # ABORT
-            'ArmAbort'        : lambda isOn: self.abort.arm( isOn ),
-
-            'Abort'           : lambda isOn: self.abort( isOn ),
+            'ArmAbort'        : lambda armed: self.abort.setArm( armed ),
+            'Abort'           : lambda pressed: self.abort.abort() if pressed else self.noAction(),
 
             # BOOSTER Switches
             # Service propulsion system
@@ -204,12 +201,15 @@ class Rules:
             'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
                                              or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
 
+            # Maneuvering thruster (ullage)
             'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
                                              or audio.togglePlay( 'miThruster', isOn, continuous = True ),
 
+            # Maneuvering thruster (ullage)
             'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
                                              or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
 
+            # Maneuvering thruster (ullage)
             'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
                                              or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
 
@@ -227,16 +227,16 @@ class Rules:
                                              or audio.togglePlay( 'quindarout', not isOn ),
 
             # EVENT SEQUENCE Switches
-            'ES1'             : lambda isOn: audio.playEventSequence( audio.ES1 ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
-            'ES2'             : lambda isOn: audio.playEventSequence( audio.ES2 ) or matrixDriver.LedOn( 'ES2' ) if isOn else self.noAction(),
-            'ES3'             : lambda isOn: audio.playEventSequence( audio.ES3 ) or matrixDriver.LedOn( 'ES3' ) if isOn else self.noAction(),
-            'ES4'             : lambda isOn: audio.playEventSequence( audio.ES4 ) or matrixDriver.LedOn( 'ES4' ) if isOn else self.noAction(),
-            'ES5'             : lambda isOn: audio.playEventSequence( audio.ES5 ) or matrixDriver.LedOn( 'ES5' ) if isOn else self.noAction(),
-            'ES6'             : lambda isOn: audio.playEventSequence( audio.ES6 ) or matrixDriver.LedOn( 'ES6' ) if isOn else self.noAction(),
-            'ES7'             : lambda isOn: audio.playEventSequence( audio.ES7 ) or matrixDriver.LedOn( 'ES7' ) if isOn else self.noAction(),
-            'ES8'             : lambda isOn: audio.playEventSequence( audio.ES8 ) or matrixDriver.LedOn( 'ES8' ) if isOn else self.noAction(),
-            'ES9'             : lambda isOn: audio.playEventSequence( audio.ES9 ) or matrixDriver.LedOn( 'ES9' ) if isOn else self.noAction(),
-            'ES10'            : lambda isOn: audio.playEventSequence( audio.ES10 ) or matrixDriver.LedOn( 'ES10' ) if isOn else self.noAction(),
+            'ES1'             : lambda isOn: audio.play( audio.ES1, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
+            'ES2'             : lambda isOn: audio.play( audio.ES2, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES2' ) if isOn else self.noAction(),
+            'ES3'             : lambda isOn: audio.play( audio.ES3, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES3' ) if isOn else self.noAction(),
+            'ES4'             : lambda isOn: audio.play( audio.ES4, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES4' ) if isOn else self.noAction(),
+            'ES5'             : lambda isOn: audio.play( audio.ES5, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES5' ) if isOn else self.noAction(),
+            'ES6'             : lambda isOn: audio.play( audio.ES6, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES6' ) if isOn else self.noAction(),
+            'ES7'             : lambda isOn: audio.play( audio.ES7, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES7' ) if isOn else self.noAction(),
+            'ES8'             : lambda isOn: audio.play( audio.ES8, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES8' ) if isOn else self.noAction(),
+            'ES9'             : lambda isOn: audio.play( audio.ES9, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES9' ) if isOn else self.noAction(),
+            'ES10'            : lambda isOn: audio.play( audio.ES10, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES10' ) if isOn else self.noAction(),
 
             # CRYOGENICS Switches
 
@@ -325,3 +325,48 @@ class Rules:
 # CW # Alarm tone inoperative
 # UplinkActivity # data transmission to ship
 # GlycolTempLow # glycol (water) temp low
+
+if __name__ == '__main__':
+
+    from arduino import StubbedArduinoSerial, ArduinoMatrixDriver
+    from audio import Audio
+    from time import sleep
+
+    rules = Rules( Audio(), ArduinoMatrixDriver( StubbedArduinoSerial() ) )
+
+    print "Abort IV"
+    rules.getRule( 'AbortMode' )(6)
+    rules.getRule( 'ArmAbort' )( armed = True )
+    rules.getRule( 'Abort' )( pressed = True )
+    sleep(2)
+
+    print "H2O Flow on"
+    rule = rules.getRule( 'H2OFlow' )
+    rule( isOn = True )
+    sleep(2)
+    print "H2O Flow off"
+    rule( isOn = False )
+
+    print "Waste dump on"
+    rule = rules.getRule( 'WasteDump' )
+    rule( isOn = True )
+    print "Waste dump off"
+    rule( isOn = False )
+    sleep(3)
+
+    rule = rules.getRule( 'DockingProbe' )
+    print( "Extend docking probe" )
+    rule( isExtending = True )
+    sleep(3)
+    print( "Retract docking probe" )
+    rule( isExtending = False )
+    sleep(8)
+
+    print "Glycol pump on"
+    rule = rules.getRule( 'GlycolPump' )
+    rule( isOn = True )
+    sleep(2)
+    print "Glycol pump off"
+    rule( isOn = False )
+
+

@@ -30,33 +30,28 @@ class TestAbort:
         assert abort.armed == False
 
     def test_arm_EnablesAbortLed(self, serial, abort):
-        abort.arm()
+        abort.setArm()
 
         assert serial.getLastWrite() == 'LED Abort on\n'
 
     def test_disarm_DisablesAbortLed(self, serial, abort):
-        abort.arm()
+        abort.setArm()
 
-        abort.disarm()
+        abort.setArm( armed = False )
 
         assert serial.getLastWrite() == 'LED Abort off\n'
 
     def test_abort_playsAudio_ifArmed(self, audio, abort):
-        abort.arm() 
+        abort.setArm() 
 
         abort.abort() 
 
         assert audio.isPlaying( 'abortPad' )
 
-    def test_abort_doesNotPlayAudio_ifNotArmed(self, audio, abort):
-        abort.disarm()
-
-        assert not audio.isPlaying( 'abortPad' )
-
     def test_armed_setExplicitlyOff_disarms(self, serial, abort):
-        abort.arm()
+        abort.setArm()
 
-        abort.arm(isOn = False)
+        abort.setArm( armed  = False )
 
         assert serial.getLastWrite() == 'LED Abort off\n'
 

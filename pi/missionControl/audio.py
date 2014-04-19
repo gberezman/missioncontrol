@@ -1,48 +1,45 @@
 import pygame.mixer
-from time import sleep
 
 class Audio:
 
-    def play(self, clip):
-        self.getSound( clip ).play()
+    def play(self, clip, dedicatedChannel = None, continuous = False):
+        loops = -1 if continuous else 0
+        sound = self.getSound( clip )
 
-    def playContinuously(self, clip):
-        self.getSound( clip ).play( loops = -1 )
+        self.stop( sound )
+
+        if dedicatedChannel:
+            dedicatedChannel.stop()
+            dedicatedChannel.play( sound, loops = loops )
+        else:
+            sound.play( loops = loops )
+
+        if self.playingClips.count( clip ) == 0:
+            self.playingClips.append( clip )
 
     def stop(self, clip):
         self.getSound( clip ).stop()
 
-    def playEventSequence(self, clip):
-        self.stopES()
-        self.__esChannel.play( self.getSound( clip ) )
+        try:
+            self.playingClips.remove( clip )
+        except ValueError:
+            pass
 
-    def stopEventSequence(self):
-        self.__esChannel.stop()
-
-    def playCaution(self, clip = 'caution'):
-        self.stopCaution()
-        self.__cautionChannel.play( self.getSound( clip ), loops = -1 )
-
-    def stopCaution(self):
-        self.__cautionChannel.stop()
-
-    def isCautionPlaying(self):
-        return self.__cautionChannel.get_busy()
-
-    def togglePlay(self, clip, isOn, continuous = False):
+    def togglePlay(self, clip, isOn, dedicatedChannel = None, continuous = False ):
+        print "toggling {} to {}".format( clip, isOn )
         if isOn:
-            if continuous:
-                self.playContinuously( clip )
-            else:
-                self.play( clip )
+            self.play( clip, dedicatedChannel, continuous )
         else:
             self.stop( clip )
 
     def isPlaying(self, clip):
-        return self.getSound( clip ).get_num_channels() > 0
+        return self.playingClips.count( clip ) > 0
+
+    def getSoundLabels(self):
+        return self.__sounds.keys()
 
     def getSound(self, clip):
-        return self.sounds.setdefault( clip, self.defaultSound )
+        return self.__sounds.setdefault( clip,  pygame.mixer.Sound( 'audio/silence.wav' ) )
 
     def stopAll(self):
         pygame.mixer.stop()
@@ -50,34 +47,30 @@ class Audio:
     def __init__(self):
 
         pygame.mixer.quit()
-        pygame.mixer.init()
+        pygame.mixer.init( frequency = 48000 )
         pygame.mixer.set_reserved( 2 )
 
-        self.__cautionChannel = pygame.mixer.Channel( 0 )
-        self.__esChannel      = pygame.mixer.Channel( 1 )
+        self.cautionChannel       = pygame.mixer.Channel( 0 )
+        self.eventSequenceChannel = pygame.mixer.Channel( 1 )
 
-        # Should replace this with white noise or blank audio
-        self.defaultSound  = pygame.mixer.Sound( 'audio/rocket.wav' )
+        self.playingClips = []
 
-        self.sounds = {
+        self.__sounds = {
             # CONTROL
-            #'dockingProbeRetract' : DummySound(),
-            #'dockingProbeExtend'  : DummySound(),
-            #'glycolPump'          : DummySound(), # continuous
-            #'SCEPower'            : DummySound(),
-            #'waste'               : DummySound(),
+            'dockingProbeRetract' : pygame.mixer.Sound( 'audio/DockingProbeRetract.wav' ),
+            'dockingProbeExtend'  : pygame.mixer.Sound( 'audio/DockingProbeExtend.wav' ),
+            'glycolPump'          : pygame.mixer.Sound( 'audio/glycolPump.wav' ),
+            'wasteDump'           : pygame.mixer.Sound( 'audio/wasteDump.wav' ),
             'fan'                 : pygame.mixer.Sound( 'audio/cabinFan.wav' ),
-            #'H2OFlow'             : DummySound(), # continuous
-            #'intLights'           : DummySound(), # continuous
-            #'suitComp'            : DummySound(), # continuous
+            'H2OFlow'             : pygame.mixer.Sound( 'audio/H2OFlow.wav' ),
 
             # ABORT
-            #'abortPad'            : DummySound(),
-            #'abortI'              : DummySound(),
-            #'abortII'             : DummySound(),
-            #'abortII'             : DummySound(),
-            #'abortSIVB'           : DummySound(),
-            #'abortSomething'      : DummySound(),
+            # 'abortPad'
+            # 'abortI'
+            # 'abortII'
+            # 'abortIII'
+            # 'abortSIVB'
+            'abortIV'             : pygame.mixer.Sound( 'audio/cantdo.wav' ),
 
             # BOOSTER 
             'spsThruster'         : pygame.mixer.Sound( 'audio/rocket.wav' ), # continuous
@@ -121,9 +114,11 @@ class Audio:
 
 if __name__ == '__main__':
 
+    from time import sleep
+
     audio = Audio()
 
-    for sound in audio.sounds:
+    for sound in audio.getSoundLabels():
         print "playing {} for at most 1 second".format( sound )
         audio.play( sound )
         sleep( 1 )
@@ -140,9 +135,9 @@ if __name__ == '__main__':
     audio.stopCaution()
 
     print "playing an event sequence for 2 seconds"
-    audio.playES( 'ES1' )
+    audio.play( 'ES1', dedicatedChannel = audio.eventSequenceChannel )
     sleep( 2 )
-    audio.stopES()
+    audio.stop( 'ES1' )
 
     print "playing dummy sound (should be no audio or error)"
     audio.play( 'missing' )

@@ -40,18 +40,11 @@ class TestRules:
 
         rule( True )
         
-        assert serial.getLastWrite() == 'LED DockingProbe on\n'
+        assert serial.hasSent( 'LED DockingProbe on\n' )
         
     def test_DockingProbeOff_setsDockingProbeLedOff(self, serial, rules):
         rule = rules.getRule( 'DockingProbe' )
 
         rule( False )
         
-        assert serial.getLastWrite() == 'LED DockingProbe off\n'
-        
-    def test_DockingProbeOn_playsDockingProbeExtend(self, audio, rules):
-        rule = rules.getRule( 'DockingProbe' )
-
-        rule( True )
-        
-        assert audio.isPlaying( 'dockingProbeRetract' ) == True
+        assert serial.hasSent( 'LED DockingProbe off\n' )

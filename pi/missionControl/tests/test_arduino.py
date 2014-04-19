@@ -30,6 +30,26 @@ class TestStubbedArduinoSerial:
 
         assert last == 'test'
 
+    def test_lastWrite_returnsNoneIfNoMessages(self):
+        serial = StubbedArduinoSerial()
+
+        last = serial.getLastWrite()
+
+        assert last is None
+
+
+    def test_hasSent(self):
+        serial = StubbedArduinoSerial()
+        serial.write( 'test' )
+
+        assert serial.hasSent( 'test' )
+
+    def test_hasSent_returnsFalseIfMessageNotSent(self):
+        serial = StubbedArduinoSerial()
+        serial.write( 'test' )
+
+        assert not serial.hasSent( 'test 2' )
+
 class TestArduinoMatrixDriver:
 
     def test_setMeter(self):
