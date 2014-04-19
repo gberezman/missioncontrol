@@ -23,6 +23,7 @@ class StubbedArduinoSerial:
     def __init__(self):
         self.__readResponse = None
         self.__lastWrite = None
+        self.__sentMessages = []
 
     def setReadResponse(self, readResponse):
         self.__readResponse = readResponse
@@ -35,6 +36,10 @@ class StubbedArduinoSerial:
 
     def write(self, message):
         self.__lastWrite = message
+        self.__sentMessages.append( message )
+
+    def hasSent(self, message):
+        return self.__sentMessages.count( message ) > 0
 
 class ArduinoMatrixDriver:
     
