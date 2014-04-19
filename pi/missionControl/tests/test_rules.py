@@ -80,3 +80,34 @@ class TestRules:
         rule( False )
 
         assert not audio.isPlaying( 'dockingProbeExtend' )
+
+    def test_GlycolPumpOn_setsGlycolPumpLedOn(self, serial, rules):
+        rule = rules.getRule( 'GlycolPump' )
+
+        rule( True )
+
+        assert serial.hasSent( 'LED glycolPump on\n' )
+
+    def test_GlycolPumpOn_playsGlycolPump(self, audio, rules):
+        rule = rules.getRule( 'GlycolPump' )
+
+        rule( True )
+
+        assert audio.isPlaying( 'glycolPump' )
+
+    def test_GlycolPumpOff_stopsGlycolPump(self, audio, rules):
+        rule = rules.getRule( 'GlycolPump' )
+
+        rule( True )
+        rule( False )
+
+        assert not audio.isPlaying( 'glycolPump' )
+
+    def test_GlycolPumpOn_setsGlycolPumpLedOn(self, serial, rules):
+        rule = rules.getRule( 'GlycolPump' )
+
+        rule( True )
+        rule( False )
+
+        assert serial.hasSent( 'LED glycolPump off\n' )
+
