@@ -167,7 +167,7 @@ class Rules:
             'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
                                              or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
 
-            #'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
+            'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
 #
             #'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
 

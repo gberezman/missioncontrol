@@ -211,3 +211,17 @@ class TestRules:
         rule( False )
 
         assert not audio.isPlaying( 'H2OFlow' )
+
+    def test_IntLightsOn_setsntLightsLedOn(self, serial, rules):
+        rule = rules.getRule( 'IntLights' )
+        
+        rule( True )
+
+        assert serial.hasSent( 'LED IntLights on\n' )
+
+    def test_IntLightsOn_setsntLightsLedOn(self, serial, rules):
+        rule = rules.getRule( 'IntLights' )
+        
+        rule( False )
+
+        assert serial.hasSent( 'LED IntLights off\n' )
