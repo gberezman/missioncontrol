@@ -212,16 +212,30 @@ class TestRules:
 
         assert not audio.isPlaying( 'H2OFlow' )
 
-    def test_IntLightsOn_setsntLightsLedOn(self, serial, rules):
+    def test_IntLightsOn_setsIntLightsLedOn(self, serial, rules):
         rule = rules.getRule( 'IntLights' )
         
         rule( True )
 
         assert serial.hasSent( 'LED IntLights on\n' )
 
-    def test_IntLightsOn_setsntLightsLedOn(self, serial, rules):
+    def test_IntLightsOn_setsIntLightsLedOn(self, serial, rules):
         rule = rules.getRule( 'IntLights' )
         
         rule( False )
 
         assert serial.hasSent( 'LED IntLights off\n' )
+
+    def test_SuitCompOn_setsSuitCompLedOn(self, serial, rules):
+        rule = rules.getRule( 'SuitComp' )
+        
+        rule( True )
+
+        assert serial.hasSent( 'LED SuitComp on\n' )
+
+    def test_SuitCompOn_setSuitCompLedOn(self, serial, rules):
+        rule = rules.getRule( 'SuitComp' )
+        
+        rule( False )
+
+        assert serial.hasSent( 'LED SuitComp off\n' )

@@ -155,21 +155,15 @@ class Rules:
             # Game condition: Show GlycolTempLow to get user to run glycol pump and clear warning
             'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'GlycolPump', isOn ) \
                                              or audio.togglePlay( 'GlycolPump', isOn, continuous = True ),
-
             'SCEPower'        : lambda isOn: matrixDriver.setLed('SCEPower', isOn ),
-
             'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
                                              or ( audio.play('WasteDump') if isOn else self.noAction() ),
-
             'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
                                              or audio.togglePlay( 'CabinFan', isOn, continuous = True ),
-
             'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
                                              or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
-
             'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
-#
-            #'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
+            'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
 
             # ABORT
             #'ArmAbort'        : lambda armed: self.abort.setArm( armed ),
