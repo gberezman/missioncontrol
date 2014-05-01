@@ -131,7 +131,7 @@ if __name__ == '__main__':
     print "playing caution for 2 seconds"
     audio.play( 'caution', dedicatedChannel = audio.cautionChannel, continuous = True )
     sleep( 2 )
-    audio.stopCaution()
+    audio.stop( 'caution' )
 
     print "playing an event sequence for 2 seconds"
     audio.play( 'ES1', dedicatedChannel = audio.eventSequenceChannel )
