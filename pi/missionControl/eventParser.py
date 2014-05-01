@@ -12,7 +12,7 @@ class EventParser:
 
         if eventType == 'S':
             eventValue = self.__toBoolean( eventValue )
-        else:
+        elif eventType == 'P':
             eventValue = self.__toInt( eventValue )
 
         return eventId, eventValue
