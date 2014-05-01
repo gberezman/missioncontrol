@@ -12,78 +12,80 @@ extern Adafruit_LEDBackpack matrixE;
 
 LED LEDS[] = {
   // PANEL1
-  // LED( "1",            &matrixB, 0, 0 ),
-  // LED( "2",            &matrixB, 0, 1 ),
-  // LED( "3",            &matrixB, 0, 2 ),
-  // LED( "4",            &matrixB, 0, 3 ),
-  // LED( "5",            &matrixB, 0, 4 ),
-  // LED( "6",            &matrixB, 0, 5 ),
-  // LED( "7",            &matrixB, 0, 6 ),
-  // LED( "8",            &matrixB, 0, 7 ),
-  // LED( "9",            &matrixB, 0, 8 ),
-  // LED( "10",           &matrixB, 0, 9 ),
-  // LED( "11",           &matrixB, 0, 10 ),
-  // LED( "12",           &matrixB, 0, 11 ),
-  // LED( "13",           &matrixB, 0, 12 ),
-  // LED( "14",           &matrixB, 0, 13 ),
-  // LED( "15",           &matrixB, 0, 14 ),
-  // LED( "16",           &matrixB, 0, 15 ),
-  // LED( "17",           &matrixB, 1, 0 ),
-  // LED( "18",           &matrixB, 1, 1 ),
-
-  // CONTROL
-  // LED( "CabinFan",     &matrixB, 3, 0 ),
-  // LED( "H2OFlow",      &matrixB, 3, 1 ),
-  // LED( "Lights",       &matrixB, 3, 2 ),
-  // LED( "SuitComp",     &matrixB, 3, 3 ),
-  // LED( "DockingProbe", &matrixB, 3, 4 ),
-  // LED( "GlycolPump",   &matrixB, 3, 5 ),
-  // LED( "SCEPower",     &matrixB, 3, 6 ),
-  // LED( "WasteDump",    &matrixB, 3, 7 ),
-
-  // PANEL2
-  // LED( "1",            &matrixD, 4, 8 ),
-  // LED( "2",            &matrixD, 4, 9 ),
-  // LED( "3",            &matrixD, 4, 10 ),
-  // LED( "4",            &matrixD, 4, 11 ),
-  // LED( "5",            &matrixD, 4, 12 ),
-  // LED( "6",            &matrixD, 4, 13 ),
-  // LED( "7",            &matrixD, 4, 14 ),
-  // LED( "8",            &matrixD, 4, 15 ),
-  // LED( "9",            &matrixD, 5, 8 ),
-  // LED( "10",           &matrixD, 5, 9 ),
-  // LED( "11",           &matrixD, 5, 10 ),
-  // LED( "12",           &matrixD, 5, 11 ),
-  // LED( "13",           &matrixD, 5, 12 ),
-  // LED( "14",           &matrixD, 5, 13 ),
-  // LED( "15",           &matrixD, 5, 14 ),
-  // LED( "16",           &matrixD, 5, 15 ),
-  // LED( "17",           &matrixD, 6, 8 ),
-  // LED( "18",           &matrixD, 6, 9 ),
-    
-  // CRYOGENICS
-  // LED( "O2Fan",        &matrixD, 7, 0 ),
-  // LED( "H2Fan",        &matrixD, 7, 1 ),
-  // LED( "Pumps",        &matrixD, 7, 2 ),
-  // LED( "Heat",         &matrixD, 7, 3 ),
-
-  // EVENT SEQUENCE
-  // LED( "ES1",          &matrixE, 6, 0 ),
-  // LED( "ES2",          &matrixE, 6, 1 ),
-  // LED( "ES3",          &matrixE, 6, 2 ),
-  // LED( "ES4",          &matrixE, 6, 3 ),
-  // LED( "ES5",          &matrixE, 6, 4 ),
-  // LED( "ES6",          &matrixE, 6, 5 ),
-  // LED( "ES7",          &matrixE, 6, 6 ),
-  // LED( "ES8",          &matrixE, 6, 7 ),
-  // LED( "ES9",          &matrixE, 6, 8 ),
-  // LED( "ES10",         &matrixE, 6, 9 ),
-
-  // C&WS
-  // LED( "MasterAlarm",  &matrixE, 7, 0 ),
+  LED( "DrogueChute",     &matrixA, 0, 0 ),
+  LED( "MainChute",       &matrixA, 0, 1 ),
+  LED( "SPSPress",        &matrixA, 0, 2 ),
+  LED( "ACBus1Overload",  &matrixA, 0, 3 ),
+  LED( "Ullage",          &matrixA, 1, 0 ),
+  LED( "Hatch",           &matrixA, 1, 1 ),
+  LED( "ACBus1",          &matrixA, 1, 2 ),
+  LED( "SPSRoughEco",     &matrixA, 1, 3 ),
+  LED( "Thrust",          &matrixA, 2, 0 ),
+  LED( "DockingTarget",   &matrixA, 2, 1 ),
+  LED( "ACBus2",          &matrixA, 2, 2 ),
+  LED( "CW",              &matrixA, 2, 3 ),
+  LED( "FCBusDisscnct",   &matrixA, 3, 0 ),
+  LED( "O2FlowHi",        &matrixA, 3, 1 ),
+  LED( "SuitComp",        &matrixA, 3, 2 ),
+  LED( "SPSFlngTempHi",   &matrixA, 4, 0 ),
+  LED( "CrewAlert",       &matrixA, 4, 1 ),
+  LED( "ACBus2Overload",  &matrixA, 4, 2 ),
 
   // ABORT
-  // LED( "abortSwitch",  &matrixE, 7, 1 )
+  LED( "ArmAbort",        &matrixA, 0, 4 )
+  LED( "Abort",           &matrixA, 1, 4 )
+
+  // EVENT SEQUENCE
+  LED( "ES1",             &matrixA, 0, 5 ),
+  LED( "ES2",             &matrixA, 1, 5 ),
+  LED( "ES3",             &matrixA, 2, 5 ),
+  LED( "ES4",             &matrixA, 3, 5 ),
+  LED( "ES5",             &matrixA, 4, 5 ),
+  LED( "ES6",             &matrixA, 0, 6 ),
+  LED( "ES7",             &matrixA, 1, 6 ),
+  LED( "ES8",             &matrixA, 2, 6 ),
+  LED( "ES9",             &matrixA, 3, 6 ),
+  LED( "ES10",            &matrixA, 4, 6 ),
+
+  // CRYOGENICS
+  // LED( "O2Fan",           &matrixB, 0, 9 ),
+  // LED( "H2Fan",           &matrixB, 1, 9 ),
+  // LED( "Pumps",           &matrixB, 2, 9 ),
+  // LED( "Heat",            &matrixB, 3, 9 ),
+
+  // C&WS
+  // LED( "MasterAlarm",     &matrixB, 0, 10 ),
+  // LED( "Ack",             &matrixB, 1, 10 ),
+
+  // PANEL2
+  // LED( "BMagTemp1",      &matrixB, 0, 11 ),
+  // LED( "PitchGmbl1",     &matrixB, 0, 12 ),
+  // LED( "PitchGmbl2",     &matrixB, 0, 13 ),
+  // LED( "GlycolTempLow",  &matrixB, 0, 14 ),
+  // LED( "SMRCSA",         &matrixB, 0, 15 ),
+  // LED( "BMagTemp2",      &matrixB, 1, 11 ),
+  // LED( "YawGmbl1",       &matrixB, 1, 12 ),
+  // LED( "YawGmbl2",       &matrixB, 1, 13 ),
+  // LED( "CMRCS1",         &matrixB, 1, 14 ),
+  // LED( "SMRCSB",         &matrixB, 1, 15 ),
+  // LED( "CO2PPHi",        &matrixB, 2, 11 ),
+  // LED( "HGAntScanLimit", &matrixB, 2, 12 ),
+  // LED( "CryoPress",      &matrixB, 2, 13 ),
+  // LED( "CMRCS2",         &matrixB, 2, 14 ),
+  // LED( "SMRCSC",         &matrixB, 2, 15 ),
+  // LED( "SMRCSB",         &matrixB, 3, 11 ),
+  // LED( "UplinkActivity", &matrixB, 3, 12 ),
+  // LED( "GimbalLock",     &matrixB, 3, 13 ),
+    
+  // CONTROL
+  // LED( "DockingProbe", &matrixD, 6, 8 ),
+  // LED( "GlycolPump",   &matrixD, 6, 9 ),
+  // LED( "SCEPower",     &matrixD, 6, 10 ),
+  // LED( "WasteDump",    &matrixD, 6, 11 ),
+  // LED( "CabinFan",     &matrixD, 7, 9 ),
+  // LED( "H2OFlow",      &matrixD, 7, 10 ),
+  // LED( "Lights",       &matrixD, 7, 11 ),
+  // LED( "SuitComp",     &matrixD, 7, 12 ),
 };
 
 #endif
