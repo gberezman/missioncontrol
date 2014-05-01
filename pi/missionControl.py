@@ -1,27 +1,41 @@
-from port import Port
-from time import sleep
-from rules import Rules
-from command import CommandFactory
 import threading
+from time import sleep
+from missionControl.arduino import ArduinoSerial, ArduinoMatrixDriver
+from missionControl.rules import Rules
+from missionControl.audio import Audio
+from missionControl.eventParser import EventParser
 
-port = Port(CommandFactory(), timeout = .5)
-rules = Rules()
+class Mission( threading.Thread ):
 
-def eventLoop():
+    def __init__(self, audio, serial):
+        self.audio  = audio
+        self.serial = serial
+        super(Mission, self).__init__()
 
-    print "Starting event loop"
+    def run(self):
 
-    while True:
-        try:
-            command = port.readCommand()
-            if not command:
-                sleep( .1 )
-                continue
+        matrixDriver = ArduinoMatrixDriver( self.serial )
 
-            command.fire(port, rules)
+        rules = Rules( self.audio, matrixDriver )
+        eventParser = EventParser()
 
-        except KeyboardInterrupt:
-            exit()
+        print "Starting event loop"
 
-mainThread = threading.Thread( target = eventLoop )
-mainThread.start()
+        while True:
+            try:
+                rules.applyTemporalRules()
+
+                data = self.serial.read()
+                (eventId, eventValue) = eventParser.getEventTuple( data )
+
+                rule = rules.getRule( eventId )
+                rule( eventValue )
+                
+            except KeyboardInterrupt:
+                exit()
+
+if __name__ == '__main__':
+
+    mainThread = Mission( Audio(), ArduinoSerial( timeout = .5 ) )
+    # mainThread = Mission( Audio(), StubbedArduinoSerial() )
+    mainThread.start()
