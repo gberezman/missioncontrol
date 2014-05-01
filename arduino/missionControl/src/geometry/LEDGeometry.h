@@ -32,8 +32,8 @@ LED LEDS[] = {
   LED( "ACBus2Overload",  &matrixA, 4, 2 ),
 
   // ABORT
-  LED( "ArmAbort",        &matrixA, 0, 4 )
-  LED( "Abort",           &matrixA, 1, 4 )
+  LED( "ArmAbort",        &matrixA, 0, 4 ),
+  LED( "Abort",           &matrixA, 1, 4 ),
 
   // EVENT SEQUENCE
   LED( "ES1",             &matrixA, 0, 5 ),
@@ -45,7 +45,7 @@ LED LEDS[] = {
   LED( "ES7",             &matrixA, 1, 6 ),
   LED( "ES8",             &matrixA, 2, 6 ),
   LED( "ES9",             &matrixA, 3, 6 ),
-  LED( "ES10",            &matrixA, 4, 6 ),
+  LED( "ES10",            &matrixA, 4, 6 )
 
   // CRYOGENICS
   // LED( "O2Fan",           &matrixB, 0, 9 ),
@@ -85,7 +85,7 @@ LED LEDS[] = {
   // LED( "CabinFan",     &matrixD, 7, 9 ),
   // LED( "H2OFlow",      &matrixD, 7, 10 ),
   // LED( "Lights",       &matrixD, 7, 11 ),
-  // LED( "SuitComp",     &matrixD, 7, 12 ),
+  // LED( "SuitComp",     &matrixD, 7, 12 )
 };
 
 #endif
