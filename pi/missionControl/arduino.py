@@ -12,7 +12,8 @@ class ArduinoSerial:
 
     def read(self):
         result = self.port.readline()
-        print "From arduino: {}".format( result )
+        if result:
+            print "From arduino: {}".format( result )
         return result
 
     def write(self, message):
