@@ -10,12 +10,12 @@ class CautionWarning:
     def alert(self):
         self.state = 'active'
         self.audio.play( 'caution', dedicatedChannel = self.audio.cautionChannel, continuous = True )
-        self.matrixDriver.ledOn( 'caution' )
+        self.matrixDriver.ledOn( 'MasterAlarm' )
 
     def clear(self):
         self.state = 'inactive'
         self.audio.stop( 'caution' )
-        self.matrixDriver.ledOff( 'caution' )
+        self.matrixDriver.ledOff( 'MasterAlarm' )
 
 class Abort:
 
@@ -108,7 +108,10 @@ class Rules:
             self.matrixDriver.ledOff('SPSPress')
 
     def getRule(self, name):
-        return self.__rules.get(name, lambda value: self.noAction())
+        if name:
+            return self.__rules.get(name, lambda value: self.noAction())
+        else:
+            return lambda value: self.noAction()
 
     def __init__(self, audio, matrixDriver):
         self.matrixDriver = matrixDriver
@@ -116,6 +119,7 @@ class Rules:
 
         self.abort = Abort(audio, matrixDriver)
         self.thrustStatus = LatchedLED(matrixDriver, 'Thrust')
+        self.ullageStatus = LatchedLED(matrixDriver, 'Ullage')
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
 
@@ -171,40 +175,43 @@ class Rules:
 
             # BOOSTER Switches
             # Service propulsion system
-            #'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             #or audio.togglePlay( 'spsThruster', isOn, continuous = True ) \
-                                             #or self.SPSPresses.record( isOn ),
+            'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'spsThruster', isOn, continuous = True ),
+                                             # or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
-            #'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) ,
                                              #or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
 
             # Trans-Lunar injection (puts on path towards moon)
-            #'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ),
                                              #or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
             
             # Saturn, first stage
-            #'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ) \
+            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ),
                                              #or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
 
             # Saturn, second stage
-            #'S-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ),
                                              #or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
 
             # Saturn V, third stage
-            #'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
+            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ),
                                              #or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            #'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
+            'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                            or self.ullageStatus.on( isOn ),
                                              #or audio.togglePlay( 'miThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            #'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+            'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                            or self.ullageStatus.on( isOn ),
                                              #or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            #'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
+            'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
+                                            or self.ullageStatus.on( isOn ),
                                              #or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
 
             # C&WS Switches

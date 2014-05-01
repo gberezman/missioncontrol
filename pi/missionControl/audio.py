@@ -38,7 +38,7 @@ class Audio:
         return self.__sounds.keys()
 
     def getSound(self, clip):
-        return self.__sounds.setdefault( clip,  pygame.mixer.Sound( 'audio/silence.wav' ) )
+        return self.__sounds.setdefault( clip,  pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/silence.wav' ) )
 
     def stopAll(self):
         pygame.mixer.stop()
@@ -56,12 +56,12 @@ class Audio:
 
         self.__sounds = {
             # CONTROL
-            'DockingProbeRetract' : pygame.mixer.Sound( 'audio/DockingProbeRetract.wav' ),
-            'DockingProbeExtend'  : pygame.mixer.Sound( 'audio/DockingProbeExtend.wav' ),
-            'GlycolPump'          : pygame.mixer.Sound( 'audio/glycolPump.wav' ),
-            'WasteDump'           : pygame.mixer.Sound( 'audio/wasteDump.wav' ),
-            'CabinFan'            : pygame.mixer.Sound( 'audio/cabinFan.wav' ),
-            'H2OFlow'             : pygame.mixer.Sound( 'audio/H2OFlow.wav' ),
+            'DockingProbeRetract' : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/DockingProbeRetract.wav' ),
+            'DockingProbeExtend'  : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/DockingProbeExtend.wav' ),
+            'GlycolPump'          : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/glycolPump.wav' ),
+            'WasteDump'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/wasteDump.wav' ),
+            'CabinFan'            : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/cabinFan.wav' ),
+            'H2OFlow'             : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/H2OFlow.wav' ),
 
             # ABORT
             # 'abortPad'
@@ -69,10 +69,10 @@ class Audio:
             # 'abortII'
             # 'abortIII'
             # 'abortSIVB'
-            'AbortIV'             : pygame.mixer.Sound( 'audio/cantdo.wav' ),
+            'AbortIV'             : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/cantdo.wav' ),
 
             # BOOSTER 
-            'SpsThruster'         : pygame.mixer.Sound( 'audio/rocket.wav' ), # continuous
+            'spsThruster'         : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/rocket.wav' ), # continuous
             #'teiThruster'         : DummySound(), # continuous
             #'tliThruster'         : DummySound(), # continuous
             #'sicThruster'         : DummySound(), # continuous
@@ -83,15 +83,15 @@ class Audio:
             #'miiiThruster'        : DummySound(), # continuous
 
             # C&WS
-            'Caution'             : pygame.mixer.Sound( 'audio/caution.wav' ),
+            'Caution'             : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/caution.wav' ),
 
             # CAPCOM
-            'Quindarin'           : pygame.mixer.Sound( 'audio/quindar-in.wav' ),
-            'Quindarout'          : pygame.mixer.Sound( 'audio/quindar-out.wav' ),
+            'Quindarin'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/quindar-in.wav' ),
+            'Quindarout'          : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/quindar-out.wav' ),
 
             # EVENT SEQUENCE
-            'ES1'                 : pygame.mixer.Sound( 'audio/ES1.wav' ),
-            'ES2'                 : pygame.mixer.Sound( 'audio/ES2.wav' ),
+            'ES1'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES1.wav' ),
+            'ES2'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES2.wav' ),
             #'ES3'                 : DummySound(),
             #'ES4'                 : DummySound(),
             #'ES5'                 : DummySound(),
@@ -102,13 +102,13 @@ class Audio:
             #'ES10'                : DummySound(),
 
             # CRYOGENICS
-            'O2fan'               : pygame.mixer.Sound( 'audio/o2fan.wav' ), # continuous
-            'H2fan'               : pygame.mixer.Sound( 'audio/h2fan.wav' ), # continuous
+            'O2fan'               : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/o2fan.wav' ), # continuous
+            'H2fan'               : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/h2fan.wav' ), # continuous
             #'pumps'               : DummySound(), # continuous
             #'heat'                : DummySound(), # continuous
 
             # PYROTECHNICS
-            'CsmDeploy'           : pygame.mixer.Sound( 'audio/csmDeploy.wav' )
+            'CsmDeploy'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/csmDeploy.wav' )
         }
 
 if __name__ == '__main__':
@@ -120,13 +120,18 @@ if __name__ == '__main__':
     for sound in audio.getSoundLabels():
         print "playing {} for at most 1 second".format( sound )
         audio.play( sound )
-        sleep( 1 )
+        sleep( 0.5 )
         audio.stop( sound )
 
-    print "playing continuously for 2 seconds"
-    audio.play( 'SpsThruster', continuous = True )
+    print "using toggle for 2 seconds"
+    audio.togglePlay( 'spsThruster', True, continuous = True )
     sleep( 2 )
-    audio.stop( 'SpsThruster' )
+    audio.togglePlay( 'spsThruster', False )
+
+    print "playing continuously for 2 seconds"
+    audio.play( 'spsThruster', continuous = True )
+    sleep( 2 )
+    audio.stop( 'spsThruster' )
 
     print "playing caution for 2 seconds"
     audio.play( 'caution', dedicatedChannel = audio.cautionChannel, continuous = True )
