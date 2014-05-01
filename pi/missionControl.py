@@ -23,7 +23,7 @@ class Mission( threading.Thread ):
 
         while True:
             try:
-                rules.applyTemporalRules()
+                # rules.applyTemporalRules()
 
                 data = self.serial.read()
                 (eventId, eventValue) = eventParser.getEventTuple( data )
