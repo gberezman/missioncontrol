@@ -60,7 +60,7 @@ class Audio:
             'DockingProbeExtend'  : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/DockingProbeExtend.wav' ),
             'GlycolPump'          : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/glycolPump.wav' ),
             'WasteDump'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/wasteDump.wav' ),
-            'CabinFan'            : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/cabinFan.wav' ),
+            'CabinFan'            : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/CabinFan.ogg' ),
             'H2OFlow'             : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/H2OFlow.wav' ),
 
             # ABORT
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     for sound in audio.getSoundLabels():
         print "playing {} for at most 1 second".format( sound )
         audio.play( sound )
-        sleep( 0.5 )
+        sleep( 1 )
         audio.stop( sound )
 
     print "using toggle for 2 seconds"
@@ -134,9 +134,9 @@ if __name__ == '__main__':
     audio.stop( 'spsThruster' )
 
     print "playing caution for 2 seconds"
-    audio.play( 'caution', dedicatedChannel = audio.cautionChannel, continuous = True )
+    audio.play( 'Caution', dedicatedChannel = audio.cautionChannel, continuous = True )
     sleep( 2 )
-    audio.stop( 'caution' )
+    audio.stop( 'Caution' )
 
     print "playing an event sequence for 2 seconds"
     audio.play( 'ES1', dedicatedChannel = audio.eventSequenceChannel )
