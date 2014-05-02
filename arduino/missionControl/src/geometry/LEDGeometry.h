@@ -38,16 +38,16 @@ LED LEDS[] = {
   LED( "Heat",            &matrixA, 3, 9 ),
 
   // EVENT SEQUENCE
-  LED( "ES1",             &matrixA, 0, 5 ),
-  LED( "ES2",             &matrixA, 1, 5 ),
-  LED( "ES3",             &matrixA, 2, 5 ),
-  LED( "ES4",             &matrixA, 3, 5 ),
-  LED( "ES5",             &matrixA, 4, 5 ),
-  LED( "ES6",             &matrixA, 0, 6 ),
-  LED( "ES7",             &matrixA, 1, 6 ),
-  LED( "ES8",             &matrixA, 2, 6 ),
-  LED( "ES9",             &matrixA, 3, 6 ),
-  LED( "ES10",            &matrixA, 4, 6 )
+  LED( "ES1",             &matrixA, 0, 4 ),
+  LED( "ES2",             &matrixA, 1, 4 ),
+  LED( "ES3",             &matrixA, 2, 4 ),
+  LED( "ES4",             &matrixA, 3, 4 ),
+  LED( "ES5",             &matrixA, 4, 4 ),
+  LED( "ES6",             &matrixA, 0, 5 ),
+  LED( "ES7",             &matrixA, 1, 5 ),
+  LED( "ES8",             &matrixA, 2, 5 ),
+  LED( "ES9",             &matrixA, 3, 5 ),
+  LED( "ES10",            &matrixA, 4, 5 )
 
   // ABORT
   // LED( "ArmAbort",        &matrixB, 0, 9 ),
