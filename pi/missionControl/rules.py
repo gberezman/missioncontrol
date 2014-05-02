@@ -180,39 +180,39 @@ class Rules:
                                              # or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
-            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) ,
-                                             #or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
+            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
 
             # Trans-Lunar injection (puts on path towards moon)
-            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
+            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
             
             # Saturn, first stage
-            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
+            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
 
             # Saturn, second stage
-            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
+            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
 
             # Saturn V, third stage
-            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
+            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
             'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                            or self.ullageStatus.on( isOn ),
-                                             #or audio.togglePlay( 'miThruster', isOn, continuous = True ),
+                                             or self.ullageStatus.on( isOn ) \
+                                             or audio.togglePlay( 'miThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
             'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
-                                            or self.ullageStatus.on( isOn ),
-                                             #or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
+                                             or self.ullageStatus.on( isOn ) \
+                                             or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
             'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
-                                            or self.ullageStatus.on( isOn ),
-                                             #or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
+                                             or self.ullageStatus.on( isOn ) \
+                                             or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
 
             # C&WS Switches
             # square wave alternating between 750 and 2000cps changing 2.5 times per second
@@ -241,10 +241,14 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            'O2Fan'           : lambda isOn: audio.togglePlay( 'o2fan', isOn, continuous = True ),
-            'H2Fan'           : lambda isOn: audio.togglePlay( 'h2fan', isOn, continuous = True ),
-            'Pumps'           : lambda isOn: audio.togglePlay( 'pumps', isOn, continuous = True ),
-            'Heat'            : lambda isOn: audio.togglePlay( 'heat', isOn, continuous = True ),
+            'O2Fan'           : lambda isOn: self.matrixDriver.setLed('O2Fan', isOn) \
+                                             or audio.togglePlay( 'o2fan', isOn, continuous = True ),
+            'H2Fan'           : lambda isOn: self.matrixDriver.setLed('H2Fan', isOn) \
+                                             or audio.togglePlay( 'h2fan', isOn, continuous = True ),
+            'Pumps'           : lambda isOn: self.matrixDriver.setLed('Pumps', isOn) \
+                                             or audio.togglePlay( 'pumps', isOn, continuous = True ),
+            'Heat'            : lambda isOn: self.matrixDriver.setLed('Heat', isOn) \
+                                             or audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches
             #'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),
