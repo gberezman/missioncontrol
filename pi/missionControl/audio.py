@@ -102,8 +102,8 @@ class Audio:
             #'ES10'                : DummySound(),
 
             # CRYOGENICS
-            'O2fan'               : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/o2fan.wav' ), # continuous
-            'H2fan'               : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/h2fan.wav' ), # continuous
+            'o2fan'               : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/o2fan.wav' ),
+            'h2fan'               : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/h2fan.wav' ),
             #'pumps'               : DummySound(), # continuous
             #'heat'                : DummySound(), # continuous
 

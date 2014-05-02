@@ -241,10 +241,10 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            #'O2Fan'           : lambda isOn: audio.togglePlay( 'o2fan', isOn, continuous = True ),
-            #'H2Fan'           : lambda isOn: audio.togglePlay( 'h2fan', isOn, continuous = True ),
-            #'Pumps'           : lambda isOn: audio.togglePlay( 'pumps', isOn, continuous = True ),
-            #'Heat'            : lambda isOn: audio.togglePlay( 'heat', isOn, continuous = True ),
+            'O2Fan'           : lambda isOn: audio.togglePlay( 'o2fan', isOn, continuous = True ),
+            'H2Fan'           : lambda isOn: audio.togglePlay( 'h2fan', isOn, continuous = True ),
+            'Pumps'           : lambda isOn: audio.togglePlay( 'pumps', isOn, continuous = True ),
+            'Heat'            : lambda isOn: audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches
             #'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),
