@@ -47,15 +47,15 @@ LED LEDS[] = {
   LED( "ES7",             &matrixA, 1, 5 ),
   LED( "ES8",             &matrixA, 2, 5 ),
   LED( "ES9",             &matrixA, 3, 5 ),
-  LED( "ES10",            &matrixA, 4, 5 )
+  LED( "ES10",            &matrixA, 4, 5 ),
 
   // ABORT
-  // LED( "ArmAbort",        &matrixB, 0, 9 ),
-  // LED( "Abort",           &matrixB, 1, 9 ),
+  // LED( "ArmAbort",        &matrixA, 0, 10 ),
+  LED( "Abort",           &matrixA, 1, 8 ),
 
   // C&WS
-  // LED( "MasterAlarm",     &matrixB, 0, 10 ),
-  // LED( "Ack",             &matrixB, 1, 10 ),
+  LED( "MasterAlarm",     &matrixA, 0, 10 ),
+  LED( "Ack",             &matrixA, 1, 10 )
 
   // PANEL2
   // LED( "BMagTemp1",      &matrixB, 0, 11 ),

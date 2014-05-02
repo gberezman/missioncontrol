@@ -176,15 +176,18 @@ class Rules:
             # BOOSTER Switches
             # Service propulsion system
             'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or matrixDriver.setLed( 'MasterAlarm', isOn ) \
                                              or audio.togglePlay( 'spsThruster', isOn, continuous = True ),
                                              # or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
             'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or matrixDriver.setLed( 'Abort', isOn ) \
                                              or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
 
             # Trans-Lunar injection (puts on path towards moon)
             'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or matrixDriver.setLed( 'Ack', isOn ) \
                                              or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
             
             # Saturn, first stage
@@ -241,13 +244,13 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            'O2Fan'           : lambda isOn: self.matrixDriver.setLed('O2Fan', isOn) \
+            'O2Fan'           : lambda isOn: matrixDriver.setLed('O2Fan', isOn) \
                                              or audio.togglePlay( 'o2fan', isOn, continuous = True ),
-            'H2Fan'           : lambda isOn: self.matrixDriver.setLed('H2Fan', isOn) \
+            'H2Fan'           : lambda isOn: matrixDriver.setLed('H2Fan', isOn) \
                                              or audio.togglePlay( 'h2fan', isOn, continuous = True ),
-            'Pumps'           : lambda isOn: self.matrixDriver.setLed('Pumps', isOn) \
+            'Pumps'           : lambda isOn: matrixDriver.setLed('Pumps', isOn) \
                                              or audio.togglePlay( 'pumps', isOn, continuous = True ),
-            'Heat'            : lambda isOn: self.matrixDriver.setLed('Heat', isOn) \
+            'Heat'            : lambda isOn: matrixDriver.setLed('Heat', isOn) \
                                              or audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches
