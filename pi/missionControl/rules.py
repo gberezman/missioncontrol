@@ -176,18 +176,15 @@ class Rules:
             # BOOSTER Switches
             # Service propulsion system
             'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or matrixDriver.setLed( 'MasterAlarm', isOn ) \
                                              or audio.togglePlay( 'spsThruster', isOn, continuous = True ),
                                              # or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
             'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or matrixDriver.setLed( 'Abort', isOn ) \
                                              or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
 
             # Trans-Lunar injection (puts on path towards moon)
             'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or matrixDriver.setLed( 'Ack', isOn ) \
                                              or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
             
             # Saturn, first stage
