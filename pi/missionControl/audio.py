@@ -111,10 +111,10 @@ class Audio:
             'CsmDeploy'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/csmDeploy.wav' )
         }
 
-        self.__sounds['o2fan'].set_volume( 0.2 )
-        self.__sounds['h2fan'].set_volume( 0.05 )
-        self.__sounds['pumps'].set_volume( 0.5 )
-        self.__sounds['heat'].set_volume( 0.3 )
+        # self.__sounds['o2fan'].set_volume( 0.2 )
+        # self.__sounds['h2fan'].set_volume( 0.05 )
+        # self.__sounds['pumps'].set_volume( 0.5 )
+        # self.__sounds['heat'].set_volume( 0.3 )
 
 if __name__ == '__main__':
 
