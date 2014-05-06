@@ -7,6 +7,7 @@ class LEDDigits {
   public:
     LEDDigit* findLEDDigit( char* label );
     void clear( void );
+    void test( void );
 };
 
 #endif

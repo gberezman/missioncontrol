@@ -35,13 +35,15 @@ void setup() {
   initializeMatrices();
   expanders.initialize();
 
-  digits.clear();
+  digits.test();
   leds.test();
-  // delay( 2000 );
-  // leds.clear();
+  delay( 1000 );
+
+  digits.clear();
+  leds.clear();
 
   serialCommand.addCommand("Meter", setMeter);
-  serialCommand.addCommand("LED", setLED);
+  serialCommand.addCommand("LED",   setLED);
   serialCommand.addCommand("Digit", setDigit);
 }
 

@@ -14,3 +14,7 @@ LEDDigit* LEDDigits::findLEDDigit( char* label ) {
   return NULL;
 }
 
+void LEDDigits::test( void ) {
+  for( int i = 0; i < sizeof( DIGITS ) / sizeof( LEDDigit ); i++ )
+    DIGITS[i].setDigit( 8 );
+}
