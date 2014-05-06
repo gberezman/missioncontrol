@@ -16,4 +16,6 @@ LED* LEDs::findLED( char* label ) {
   for( int i = 0; i < sizeof( LEDS ) / sizeof( LED ); i++ )
     if( strcmp( label, LEDS[i].getLabel() ) == 0 )
         return &LEDS[i];
+
+  return NULL;
 }

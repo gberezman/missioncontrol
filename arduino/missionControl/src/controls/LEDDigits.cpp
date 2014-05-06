@@ -10,5 +10,7 @@ LEDDigit* LEDDigits::findLEDDigit( char* label ) {
   for( int i = 0; i < sizeof( DIGITS ) / sizeof( LEDDigit ); i++ )
     if( strcmp( label, DIGITS[i].getLabel() ) == 0 )
         return &DIGITS[i];
+
+  return NULL;
 }
 
