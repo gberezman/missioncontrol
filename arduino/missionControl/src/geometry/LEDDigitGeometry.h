@@ -21,28 +21,21 @@ LED IHR0[] = {
     LED( "point",        &matrixB, 3, 6 )
 };
 
-LEDDigit DIGITS[] = {
-  // ATTITUDE
-  // LEDDigit( "Pitch0", &matrixA, 0, 0 ),
-  // LEDDigit( "Pitch1", &matrixA, 1, 0 ),
-  // LEDDigit( "Pitch2", &matrixA, 2, 0 ),
-  // LEDDigit( "Yaw0",   &matrixA, 0, 8 ),
-  // LEDDigit( "Yaw1",   &matrixA, 1, 8 ),
-  // LEDDigit( "Yaw2",   &matrixA, 2, 8 ),
-  // LEDDigit( "Roll0",  &matrixA, 3, 0 ),
-  // LEDDigit( "Roll1",  &matrixA, 4, 0 ),
-  // LEDDigit( "Roll2",  &matrixA, 5, 0 ),
+LED IHR1[] = {
+    LED( "top right",    &matrixB, 6, 7 ),
+    LED( "bottom right", &matrixB, 2, 7 ),
+    LED( "bottom",       &matrixB, 4, 7 ),
+    LED( "bottom left",  &matrixB, 7, 7 ),
+    LED( "top left",     &matrixB, 0, 7 ),
+    LED( "top",          &matrixB, 5, 7 ),
+    LED( "middle",       &matrixB, 1, 7 ),
+    LED( "point",        &matrixB, 3, 7 )
+};
 
+LEDDigit DIGITS[] = {
   // SURGEON
-  LEDDigit( "IHR0", IHR0 )
-  // LEDDigit( "IHR1", &matrixD, 2, 0 ),
-  // LEDDigit( "IHR2", &matrixD, 3, 0 ),
-  // LEDDigit( "AHR0", &matrixD, 1, 8 ),
-  // LEDDigit( "AHR1", &matrixD, 2, 8 ),
-  // LEDDigit( "AHR2", &matrixD, 3, 8 ),
-  // LEDDigit( "ABR0", &matrixD, 4, 0 ),
-  // LEDDigit( "ABR1", &matrixD, 5, 0 ),
-  // LEDDigit( "ABR2", &matrixD, 6, 0 )
+  LEDDigit( "IHR0", IHR0 ),
+  LEDDigit( "IHR1", IHR1 ),
 };
 
 // MissionClock (?)
