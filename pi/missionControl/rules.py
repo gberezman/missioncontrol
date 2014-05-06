@@ -90,6 +90,40 @@ class LatchedLED:
         if self.buttonCount <= 0:
             self.matrixDriver.ledOff(self.led)
 
+class ThreeDigitControl:
+    
+    def __init__(self, controlPrefix, frequency_s = 2, lower = 150, upper = 350 ):
+        self.updateTime = 0
+        self.value = random.randint( lower, upper )
+        self.frequency_s = frequency_s
+        self.lower = lower
+        self.upper = upper
+
+        self.digit1 = controlPrefix + "0"
+        self.digit2 = controlPrefix + "1"
+        self.digit3 = controlPrefix + "2"
+
+    def update(self, matrixDriver):
+        now = time()
+        if now - self.updateTime > self.frequency_s:
+            self.adjustTime()
+            self.write( matrixDriver )
+            self.updateTime = time()
+
+    def adjustTime(self):
+        self.value += random.randint( -20, 20 )
+        if self.value < self.lower:
+            self.value = self.lower + 20
+        elif self.value > self.upper:
+            self.value = self.upper - 20
+
+    def write(self, matrixDriver):
+        str_value = str( self.value )
+
+        matrixDriver.setDigit( self.digit1, str_value[0] )
+        matrixDriver.setDigit( self.digit2, str_value[1] )
+        matrixDriver.setDigit( self.digit3, str_value[2] )
+
 class Rules:
    
     def noAction(self, *args):
@@ -110,19 +144,7 @@ class Rules:
         # else:
         #     self.matrixDriver.ledOff('SPSPress')
 
-        if now - self.IHRUpdateTime > 2:
-            self.IHRUpdateTime = time()
-
-            self.IHR += random.randint( -10, 10 )
-            if self.IHR < 100:
-                self.IHR = 105
-            elif self.IHR > 350:
-                self.IHR = 345
-
-            IHR_str = str( self.IHR )
-            self.matrixDriver.setDigit( "IHR0", IHR_str[0] )
-            self.matrixDriver.setDigit( "IHR1", IHR_str[1] )
-            #self.matrixDriver.setDigit( "IHR1", IHR_str[2] )
+        self.IHR.update( self.matrixDriver )
 
     def getRule(self, name):
         if name:
@@ -140,8 +162,7 @@ class Rules:
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
 
-        self.IHRUpdateTime = time()
-        self.IHR = random.randint( 220, 280 )
+        self.IHR = ThreeDigitControl( "IHR" )
 
         self.__rules = {
             # CAPCOM Potentiometers
