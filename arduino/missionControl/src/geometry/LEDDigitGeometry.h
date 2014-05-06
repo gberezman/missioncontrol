@@ -32,10 +32,22 @@ LED IHR1[] = {
     LED( "point",        &matrixB, 3, 7 )
 };
 
+LED IHR2[] = {
+    LED( "top right",    &matrixB, 5, 8 ),
+    LED( "bottom right", &matrixB, 2, 8 ),
+    LED( "bottom",       &matrixB, 4, 8 ),
+    LED( "bottom left",  &matrixB, 7, 8 ),
+    LED( "top left",     &matrixB, 0, 8 ),
+    LED( "top",          &matrixB, 6, 8 ),
+    LED( "middle",       &matrixB, 1, 8 ),
+    LED( "point",        &matrixB, 3, 8 )
+};
+
 LEDDigit DIGITS[] = {
   // SURGEON
   LEDDigit( "IHR0", IHR0 ),
   LEDDigit( "IHR1", IHR1 ),
+  LEDDigit( "IHR2", IHR2 )
 };
 
 // MissionClock (?)
