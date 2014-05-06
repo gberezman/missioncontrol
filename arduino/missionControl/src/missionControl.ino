@@ -15,7 +15,8 @@ Adafruit_LEDBackpack matrixD;
 Adafruit_LEDBackpack matrixE;
 
 Adafruit_LEDBackpack* matrices[] = {
-    &matrixA
+    &matrixA, 
+    &matrixB
 };
 
 Expanders expanders;
@@ -35,7 +36,9 @@ void setup() {
   expanders.initialize();
 
   digits.clear();
-  leds.clear();
+  leds.test();
+  // delay( 2000 );
+  // leds.clear();
 
   serialCommand.addCommand("Meter", setMeter);
   serialCommand.addCommand("LED", setLED);

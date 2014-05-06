@@ -51,31 +51,31 @@ LED LEDS[] = {
 
   // ABORT
   // LED( "ArmAbort",        &matrixA, 0, 10 ),
-  LED( "Abort",           &matrixA, 1, 8 ),
+  // LED( "Abort",           &matrixA, 1, 8 ),
 
   // C&WS
-  LED( "MasterAlarm",     &matrixA, 0, 10 ),
-  LED( "Ack",             &matrixA, 1, 10 )
+  // LED( "MasterAlarm",     &matrixA, 0, 10 ),
+  // LED( "Ack",             &matrixA, 1, 10 )
 
   // PANEL2
-  // LED( "BMagTemp1",      &matrixB, 0, 11 ),
-  // LED( "PitchGmbl1",     &matrixB, 0, 12 ),
-  // LED( "PitchGmbl2",     &matrixB, 0, 13 ),
-  // LED( "GlycolTempLow",  &matrixB, 0, 14 ),
-  // LED( "SMRCSA",         &matrixB, 0, 15 ),
-  // LED( "BMagTemp2",      &matrixB, 1, 11 ),
-  // LED( "YawGmbl1",       &matrixB, 1, 12 ),
-  // LED( "YawGmbl2",       &matrixB, 1, 13 ),
-  // LED( "CMRCS1",         &matrixB, 1, 14 ),
-  // LED( "SMRCSB",         &matrixB, 1, 15 ),
-  // LED( "CO2PPHi",        &matrixB, 2, 11 ),
-  // LED( "HGAntScanLimit", &matrixB, 2, 12 ),
-  // LED( "CryoPress",      &matrixB, 2, 13 ),
-  // LED( "CMRCS2",         &matrixB, 2, 14 ),
-  // LED( "SMRCSC",         &matrixB, 2, 15 ),
-  // LED( "SMRCSB",         &matrixB, 3, 11 ),
-  // LED( "UplinkActivity", &matrixB, 3, 12 ),
-  // LED( "GimbalLock",     &matrixB, 3, 13 ),
+  LED( "BMagTemp1",      &matrixB, 0, 11 ),
+  LED( "PitchGmbl1",     &matrixB, 0, 12 ),
+  LED( "PitchGmbl2",     &matrixB, 0, 13 ),
+  LED( "GlycolTempLow",  &matrixB, 0, 14 ),
+  LED( "SMRCSA",         &matrixB, 0, 15 ),
+  LED( "BMagTemp2",      &matrixB, 1, 11 ),
+  LED( "YawGmbl1",       &matrixB, 1, 12 ),
+  LED( "YawGmbl2",       &matrixB, 1, 13 ),
+  LED( "CMRCS1",         &matrixB, 1, 14 ),
+  LED( "SMRCSB",         &matrixB, 1, 15 ),
+  LED( "CO2PPHi",        &matrixB, 2, 11 ),
+  LED( "HGAntScanLimit", &matrixB, 2, 12 ),
+  LED( "CryoPress",      &matrixB, 2, 13 ),
+  LED( "CMRCS2",         &matrixB, 2, 14 ),
+  LED( "SMRCSC",         &matrixB, 2, 15 ),
+  LED( "SMRCSB",         &matrixB, 3, 11 ),
+  LED( "UplinkActivity", &matrixB, 3, 12 ),
+  LED( "GimbalLock",     &matrixB, 3, 13 )
     
   // CONTROL
   // LED( "DockingProbe", &matrixD, 6, 8 ),
