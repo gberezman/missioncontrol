@@ -50,6 +50,9 @@ class ArduinoMatrixDriver:
     def setMeter(self, meterId, meterValue):
         self.serial.write( "Meter {} {}\n".format( meterId, meterValue ) ) 
 
+    def setDigit(self, digitId, digitValue):
+        self.serial.write( "Digit {} {}\n".format( digitId, digitValue ) )
+
     def ledOn(self, ledId):
         self.serial.write( "LED {} on\n".format( ledId ) )
 

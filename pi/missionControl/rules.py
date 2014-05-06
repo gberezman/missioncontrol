@@ -1,4 +1,5 @@
 from time import sleep,time
+import random
 
 class CautionWarning:
 
@@ -95,17 +96,33 @@ class Rules:
         sleep( 0.05 )
 
     def applyTemporalRules(self):
-        if self.SPSPresses.hitsInTheLastNSeconds(2) > 5:
-            self.matrixDriver.LedOn('SPSPress')
-            self.cw.alert()
-        else:
-            self.matrixDriver.ledOff('SPSPress')
+        now = time()
 
-        if self.SPSPresses.hitsInTheLastNSeconds(4) > 5:
-            self.matrixDriver.LedOn('SPSFlngTempHi')
-            self.cw.alert()
-        else:
-            self.matrixDriver.ledOff('SPSPress')
+        #if self.SPSPresses.hitsInTheLastNSeconds(2) > 5:
+        #    self.matrixDriver.LedOn('SPSPress')
+        #    self.cw.alert()
+        #else:
+        #    self.matrixDriver.ledOff('SPSPress')
+ 
+        # if self.SPSPresses.hitsInTheLastNSeconds(4) > 5:
+        #     self.matrixDriver.LedOn('SPSFlngTempHi')
+        #     self.cw.alert()
+        # else:
+        #     self.matrixDriver.ledOff('SPSPress')
+
+        if now - self.IHRUpdateTime > 2:
+            self.IHRUpdateTime = time()
+
+            self.IHR += random.randint( -10, 10 )
+            if self.IHR < 100:
+                self.IHR = 105
+            elif self.IHR > 350:
+                self.IHR = 345
+
+            IHR_str = str( self.IHR )
+            self.matrixDriver.setDigit( "IHR0", IHR_str[0] )
+            self.matrixDriver.setDigit( "IHR1", IHR_str[1] )
+            #self.matrixDriver.setDigit( "IHR1", IHR_str[2] )
 
     def getRule(self, name):
         if name:
@@ -122,6 +139,9 @@ class Rules:
         self.ullageStatus = LatchedLED(matrixDriver, 'Ullage')
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
+
+        self.IHRUpdateTime = time()
+        self.IHR = random.randint( 220, 280 )
 
         self.__rules = {
             # CAPCOM Potentiometers
