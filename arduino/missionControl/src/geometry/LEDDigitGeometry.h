@@ -10,6 +10,17 @@ extern Adafruit_LEDBackpack matrixC;
 extern Adafruit_LEDBackpack matrixD;
 extern Adafruit_LEDBackpack matrixE;
 
+LED IHR0[] = {
+    LED( "top right",    &matrixB, 6, 6 ),
+    LED( "bottom right", &matrixB, 2, 6 ),
+    LED( "bottom",       &matrixB, 4, 6 ),
+    LED( "bottom left",  &matrixB, 7, 6 ),
+    LED( "top left",     &matrixB, 0, 6 ),
+    LED( "top",          &matrixB, 5, 6 ),
+    LED( "middle",       &matrixB, 1, 6 ),
+    LED( "point",        &matrixB, 3, 6 )
+};
+
 LEDDigit DIGITS[] = {
   // ATTITUDE
   // LEDDigit( "Pitch0", &matrixA, 0, 0 ),
@@ -23,7 +34,7 @@ LEDDigit DIGITS[] = {
   // LEDDigit( "Roll2",  &matrixA, 5, 0 ),
 
   // SURGEON
-  // LEDDigit( "IHR0", &matrixD, 1, 0 ),
+  LEDDigit( "IHR0", IHR0 )
   // LEDDigit( "IHR1", &matrixD, 2, 0 ),
   // LEDDigit( "IHR2", &matrixD, 3, 0 ),
   // LEDDigit( "AHR0", &matrixD, 1, 8 ),

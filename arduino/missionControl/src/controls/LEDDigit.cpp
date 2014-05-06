@@ -1,11 +1,9 @@
-#include <Wire.h>
 #include "LEDDigit.h"
+#include <Arduino.h>"
 
-LEDDigit::LEDDigit(char* _label, Adafruit_LEDBackpack* _matrix, uint8_t _cathode, uint8_t _baseAnode) {
-    cathode   = _cathode;
-    baseAnode = _baseAnode;
-    matrix    = _matrix;
-    label     = _label;
+LEDDigit::LEDDigit(char* _label, LED _ledArray[8]) {
+    label    = _label;
+    ledArray = _ledArray;
 }
 
 char* LEDDigit::getLabel(void) {
@@ -13,7 +11,15 @@ char* LEDDigit::getLabel(void) {
 }
 
 void LEDDigit::setDigit(uint8_t value) {
+    for( int segment = 0; segment < 8; segment++ ) {
+        if( numbers[value][segment] ) 
+            ledArray[segment].on();
+        else 
+            ledArray[segment].off();
+    }
 }
 
 void LEDDigit::clear(void) {
+    for( int i = 0; i < 8; i++ )
+        ledArray[i].off();
 }
