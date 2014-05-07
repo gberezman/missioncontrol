@@ -164,8 +164,10 @@ class Rules:
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
 
-        self.IHR = ThreeDigitControl( "IHR" )
-        self.AHR = ThreeDigitControl( "AHR" )
+        self.IHR = ThreeDigitControl( "IHR", frequency_s = 3 )
+        sleep( .5 )
+        self.AHR = ThreeDigitControl( "AHR", frequency_s = 5 )
+        sleep( .5 )
         self.ABR = ThreeDigitControl( "ABR" )
 
         self.__rules = {
