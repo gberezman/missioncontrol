@@ -42,9 +42,9 @@ void setup() {
   digits.clear();
   leds.clear();
 
-  serialCommand.addCommand("Meter", setMeter);
-  serialCommand.addCommand("LED",   setLED);
-  serialCommand.addCommand("Digit", setDigit);
+  serialCommand.addCommand("M", setMeter);
+  serialCommand.addCommand("L",   setLED);
+  serialCommand.addCommand("D", setDigit);
 }
 
 void initializeMatrices() {
