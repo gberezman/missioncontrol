@@ -1,6 +1,8 @@
-from time import sleep
+from time import sleep,time
 import serial
 from parser import Parser
+
+current_milli_time = lambda: int(round(time() * 1000))
 
 class ArduinoSerial:
 

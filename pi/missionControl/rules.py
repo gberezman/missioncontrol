@@ -113,9 +113,9 @@ class ThreeDigitControl:
     def adjustTime(self):
         self.value += random.randint( -20, 20 )
         if self.value < self.lower:
-            self.value = self.lower + 20
+            self.value = self.lower
         elif self.value > self.upper:
-            self.value = self.upper - 20
+            self.value = self.upper
 
     def write(self, matrixDriver):
         str_value = str( self.value )
@@ -145,6 +145,8 @@ class Rules:
         #     self.matrixDriver.ledOff('SPSPress')
 
         self.IHR.update( self.matrixDriver )
+        self.AHR.update( self.matrixDriver )
+        self.ABR.update( self.matrixDriver )
 
     def getRule(self, name):
         if name:
@@ -163,6 +165,8 @@ class Rules:
         self.cw = CautionWarning(audio, matrixDriver)
 
         self.IHR = ThreeDigitControl( "IHR" )
+        self.AHR = ThreeDigitControl( "AHR" )
+        self.ABR = ThreeDigitControl( "ABR" )
 
         self.__rules = {
             # CAPCOM Potentiometers

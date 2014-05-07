@@ -1,5 +1,6 @@
 #include "LEDDigits.h"
 #include "../geometry/LEDDigitGeometry.h"
+#include <Arduino.h>
 
 void LEDDigits::clear( void ) {
     for( int i = 0; i < sizeof( DIGITS ) / sizeof( LEDDigit ); i++ )
@@ -15,6 +16,10 @@ LEDDigit* LEDDigits::findLEDDigit( char* label ) {
 }
 
 void LEDDigits::test( void ) {
-  for( int i = 0; i < sizeof( DIGITS ) / sizeof( LEDDigit ); i++ )
-    DIGITS[i].setDigit( 8 );
+  for( int number = 0; number < 10; number++ ) {
+    for( int i = 0; i < sizeof( DIGITS ) / sizeof( LEDDigit ); i++ ) {
+        DIGITS[i].setDigit( number );
+    }
+    delay(50);
+  }
 }
