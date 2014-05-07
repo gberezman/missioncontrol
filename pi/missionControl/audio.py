@@ -47,6 +47,7 @@ class Audio:
 
         pygame.mixer.quit()
         pygame.mixer.init( frequency = 48000 )
+        pygame.mixer.set_num_channels( 16 )
         pygame.mixer.set_reserved( 2 )
 
         self.cautionChannel       = pygame.mixer.Channel( 0 )
