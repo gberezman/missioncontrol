@@ -92,16 +92,13 @@ class LatchedLED:
 
 class ThreeDigitControl:
     
-    def __init__(self, controlPrefix, frequency_s = 2, lower = 150, upper = 350 ):
+    def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350 ):
         self.updateTime = 0
         self.value = random.randint( lower, upper )
         self.frequency_s = frequency_s
         self.lower = lower
         self.upper = upper
-
-        self.digit1 = controlPrefix + "0"
-        self.digit2 = controlPrefix + "1"
-        self.digit3 = controlPrefix + "2"
+        self.numberLabel = numberLabel
 
     def update(self, matrixDriver):
         now = time()
@@ -118,11 +115,7 @@ class ThreeDigitControl:
             self.value = self.upper
 
     def write(self, matrixDriver):
-        str_value = str( self.value )
-
-        matrixDriver.setDigit( self.digit1, str_value[0] )
-        matrixDriver.setDigit( self.digit2, str_value[1] )
-        matrixDriver.setDigit( self.digit3, str_value[2] )
+        matrixDriver.setNumber( self.numberLabel, self.value )
 
 class Rules:
    
@@ -164,11 +157,14 @@ class Rules:
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
 
-        self.IHR = ThreeDigitControl( "IHR", frequency_s = 3 )
-        sleep( .5 )
-        self.AHR = ThreeDigitControl( "AHR", frequency_s = 5 )
-        sleep( .5 )
-        self.ABR = ThreeDigitControl( "ABR" )
+        self.IHR = ThreeDigitControl( "IHR" )
+        self.IHR.update( self.matrixDriver )
+
+        self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
+        self.AHR.update( self.matrixDriver )
+
+        self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
+        self.ABR.update( self.matrixDriver )
 
         self.__rules = {
             # CAPCOM Potentiometers

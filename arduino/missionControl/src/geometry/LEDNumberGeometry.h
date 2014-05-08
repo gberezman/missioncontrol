@@ -109,17 +109,28 @@ LED ABR2[] = {
     LED( "point",        &matrixB, 3, 2 )
 };
 
-LEDDigit DIGITS[] = {
-  // SURGEON
+LEDDigit IHR[] = {
   LEDDigit( "IHR0", IHR0 ),
   LEDDigit( "IHR1", IHR1 ),
-  LEDDigit( "IHR2", IHR2 ),
+  LEDDigit( "IHR2", IHR2 )
+};
+
+LEDDigit AHR[] = {
   LEDDigit( "AHR0", AHR0 ),
   LEDDigit( "AHR1", AHR1 ),
-  LEDDigit( "AHR2", AHR2 ),
+  LEDDigit( "AHR2", AHR2 )
+};
+
+LEDDigit ABR[] = {
   LEDDigit( "ABR0", ABR0 ),
   LEDDigit( "ABR1", ABR1 ),
   LEDDigit( "ABR2", ABR2 )
+};
+
+LEDNumber NUMBERS[] = {
+  LEDNumber( "ABR", ABR ),
+  LEDNumber( "AHR", AHR ),
+  LEDNumber( "IHR", IHR )
 };
 
 // MissionClock (?)

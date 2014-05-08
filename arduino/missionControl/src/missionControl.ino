@@ -6,7 +6,7 @@
 #include "controls/Potentiometers.h"
 #include "controls/LEDs.h"
 #include "controls/LEDMeters.h"
-#include "controls/LEDDigits.h"
+#include "controls/LEDNumbers.h"
 
 Adafruit_LEDBackpack matrixA;
 Adafruit_LEDBackpack matrixB;
@@ -23,7 +23,7 @@ Expanders expanders;
 Potentiometers pots;
 LEDs leds;
 LEDMeters meters;
-LEDDigits digits;
+LEDNumbers numbers;
 
 SerialCommand serialCommand;
 
@@ -35,16 +35,17 @@ void setup() {
   initializeMatrices();
   expanders.initialize();
 
-  digits.test();
   leds.test();
+  numbers.test();
+
   delay( 1000 );
 
-  digits.clear();
+  numbers.clear();
   leds.clear();
 
   serialCommand.addCommand("M", setMeter);
-  serialCommand.addCommand("L",   setLED);
-  serialCommand.addCommand("D", setDigit);
+  serialCommand.addCommand("L", setLED);
+  serialCommand.addCommand("N", setNumber);
 }
 
 void initializeMatrices() {
@@ -91,22 +92,22 @@ void setLED() {
   if( ledLabel != NULL && value != NULL ) {
     LED* led = leds.findLED( ledLabel );
     if( led != NULL ) {
-      bool isOn = strcmp( value, "on" ) == 0;
+      bool isOn = strcmp( value, "1" ) == 0;
       led->set( isOn );
     }
   }
 }
 
-void setDigit() {
-  char* digitLabel = serialCommand.next();
+void setNumber() {
+  char* label = serialCommand.next();
   char* value = serialCommand.next();
 
-  if( digitLabel != NULL && value != NULL )
-      setDigit( digitLabel, atoi( value ) );
+  if( label != NULL && value != NULL )
+      setNumber( label, value );
 }
 
-void setDigit( char* digitLabel, int digit ) {
-  LEDDigit* led = digits.findLEDDigit( digitLabel );
-  if( led != NULL )
-      led->setDigit( digit );
+void setNumber( char* label, char* value ) {
+  LEDNumber* number = numbers.findLEDNumber( label );
+  if( number != NULL )
+      number->set( value );
 }
