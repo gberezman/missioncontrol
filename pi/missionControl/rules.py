@@ -92,12 +92,13 @@ class LatchedLED:
 
 class ThreeDigitControl:
     
-    def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350 ):
+    def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350, range = 20 ):
         self.updateTime = 0
         self.value = random.randint( lower, upper )
         self.frequency_s = frequency_s
         self.lower = lower
         self.upper = upper
+        self.range = range
         self.numberLabel = numberLabel
 
     def update(self, matrixDriver):
@@ -108,7 +109,7 @@ class ThreeDigitControl:
             self.updateTime = time()
 
     def adjustTime(self):
-        self.value += random.randint( -20, 20 )
+        self.value += random.randint( - self.range, self.range )
         if self.value < self.lower:
             self.value = self.lower
         elif self.value > self.upper:
@@ -140,6 +141,9 @@ class Rules:
         self.IHR.update( self.matrixDriver )
         self.AHR.update( self.matrixDriver )
         self.ABR.update( self.matrixDriver )
+        self.Pitch.update( self.matrixDriver )
+        self.Yaw.update( self.matrixDriver )
+        self.Roll.update( self.matrixDriver )
 
     def getRule(self, name):
         if name:
@@ -158,13 +162,22 @@ class Rules:
         self.cw = CautionWarning(audio, matrixDriver)
 
         self.IHR = ThreeDigitControl( "IHR" )
-        self.IHR.update( self.matrixDriver )
+        self.IHR.update( matrixDriver )
 
         self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
-        self.AHR.update( self.matrixDriver )
+        self.AHR.update( matrixDriver )
 
         self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
-        self.ABR.update( self.matrixDriver )
+        self.ABR.update( matrixDriver )
+
+        self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
+        self.Pitch.update( matrixDriver )
+
+        self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
+        self.Yaw.update( matrixDriver )
+
+        self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
+        self.Roll.update( matrixDriver )
 
         self.__rules = {
             # CAPCOM Potentiometers

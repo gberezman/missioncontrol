@@ -109,6 +109,105 @@ LED ABR2[] = {
     LED( "point",        &matrixB, 3, 2 )
 };
 
+LED Pitch0[] = {
+    LED( "top right",    &matrixA, 7, 6 ),
+    LED( "bottom right", &matrixA, 3, 6 ),
+    LED( "bottom",       &matrixA, 1, 6 ),
+    LED( "bottom left",  &matrixA, 2, 6 ),
+    LED( "top left",     &matrixA, 6, 6 ),
+    LED( "top",          &matrixA, 5, 6 ),
+    LED( "middle",       &matrixA, 0, 6 ),
+    LED( "point",        &matrixA, 4, 6 )
+};
+
+LED Pitch1[] = {
+    LED( "top right",    &matrixA, 7, 7 ),
+    LED( "bottom right", &matrixA, 3, 7 ),
+    LED( "bottom",       &matrixA, 1, 7 ),
+    LED( "bottom left",  &matrixA, 2, 7 ),
+    LED( "top left",     &matrixA, 6, 7 ),
+    LED( "top",          &matrixA, 5, 7 ),
+    LED( "middle",       &matrixA, 0, 7 ),
+    LED( "point",        &matrixA, 4, 7 )
+};
+
+LED Pitch2[] = {
+    LED( "top right",    &matrixA, 7, 8 ),
+    LED( "bottom right", &matrixA, 3, 8 ),
+    LED( "bottom",       &matrixA, 1, 8 ),
+    LED( "bottom left",  &matrixA, 2, 8 ),
+    LED( "top left",     &matrixA, 6, 8 ),
+    LED( "top",          &matrixA, 5, 8 ),
+    LED( "middle",       &matrixA, 0, 8 ),
+    LED( "point",        &matrixA, 4, 8 )
+};
+
+LED Yaw0[] = {
+    LED( "top right",    &matrixA, 7, 10 ),
+    LED( "bottom right", &matrixA, 3, 10 ),
+    LED( "bottom",       &matrixA, 1, 10 ),
+    LED( "bottom left",  &matrixA, 2, 10 ),
+    LED( "top left",     &matrixA, 6, 10 ),
+    LED( "top",          &matrixA, 5, 10 ),
+    LED( "middle",       &matrixA, 0, 10 ),
+    LED( "point",        &matrixA, 4, 10 )
+};
+
+LED Yaw1[] = {
+    LED( "top right",    &matrixA, 7, 11 ),
+    LED( "bottom right", &matrixA, 3, 11 ),
+    LED( "bottom",       &matrixA, 1, 11 ),
+    LED( "bottom left",  &matrixA, 2, 11 ),
+    LED( "top left",     &matrixA, 6, 11 ),
+    LED( "top",          &matrixA, 5, 11 ),
+    LED( "middle",       &matrixA, 0, 11 ),
+    LED( "point",        &matrixA, 4, 11 )
+};
+
+LED Yaw2[] = {
+    LED( "top right",    &matrixA, 7, 12 ),
+    LED( "bottom right", &matrixA, 3, 12 ),
+    LED( "bottom",       &matrixA, 1, 12 ),
+    LED( "bottom left",  &matrixA, 2, 12 ),
+    LED( "top left",     &matrixA, 6, 12 ),
+    LED( "top",          &matrixA, 5, 12 ),
+    LED( "middle",       &matrixA, 0, 12 ),
+    LED( "point",        &matrixA, 4, 12 )
+};
+
+LED Roll0[] = {
+    LED( "top right",    &matrixA, 7, 13 ),
+    LED( "bottom right", &matrixA, 3, 13 ),
+    LED( "bottom",       &matrixA, 1, 13 ),
+    LED( "bottom left",  &matrixA, 2, 13 ),
+    LED( "top left",     &matrixA, 6, 13 ),
+    LED( "top",          &matrixA, 5, 13 ),
+    LED( "middle",       &matrixA, 0, 13 ),
+    LED( "point",        &matrixA, 4, 13 )
+};
+
+LED Roll1[] = {
+    LED( "top right",    &matrixA, 7, 14 ),
+    LED( "bottom right", &matrixA, 3, 14 ),
+    LED( "bottom",       &matrixA, 1, 14 ),
+    LED( "bottom left",  &matrixA, 2, 14 ),
+    LED( "top left",     &matrixA, 6, 14 ),
+    LED( "top",          &matrixA, 5, 14 ),
+    LED( "middle",       &matrixA, 0, 14 ),
+    LED( "point",        &matrixA, 4, 14 )
+};
+
+LED Roll2[] = {
+    LED( "top right",    &matrixA, 7, 15 ),
+    LED( "bottom right", &matrixA, 3, 15 ),
+    LED( "bottom",       &matrixA, 1, 15 ),
+    LED( "bottom left",  &matrixA, 2, 15 ),
+    LED( "top left",     &matrixA, 6, 15 ),
+    LED( "top",          &matrixA, 5, 15 ),
+    LED( "middle",       &matrixA, 0, 15 ),
+    LED( "point",        &matrixA, 4, 15 )
+};
+
 LEDDigit IHR[] = {
   LEDDigit( "IHR0", IHR0 ),
   LEDDigit( "IHR1", IHR1 ),
@@ -127,10 +226,31 @@ LEDDigit ABR[] = {
   LEDDigit( "ABR2", ABR2 )
 };
 
+LEDDigit Pitch[] = {
+  LEDDigit( "Pitch0", Pitch0 ),
+  LEDDigit( "Pitch1", Pitch1 ),
+  LEDDigit( "Pitch2", Pitch2 )
+};
+
+LEDDigit Yaw[] = {
+  LEDDigit( "Yaw0", Yaw0 ),
+  LEDDigit( "Yaw1", Yaw1 ),
+  LEDDigit( "Yaw2", Yaw2 )
+};
+
+LEDDigit Roll[] = {
+  LEDDigit( "Roll0", Roll0 ),
+  LEDDigit( "Roll1", Roll1 ),
+  LEDDigit( "Roll2", Roll2 )
+};
+
 LEDNumber NUMBERS[] = {
   LEDNumber( "ABR", ABR ),
   LEDNumber( "AHR", AHR ),
-  LEDNumber( "IHR", IHR )
+  LEDNumber( "IHR", IHR ),
+  LEDNumber( "Pitch", Pitch ),
+  LEDNumber( "Yaw", Yaw ),
+  LEDNumber( "Roll", Roll )
 };
 
 // MissionClock (?)
