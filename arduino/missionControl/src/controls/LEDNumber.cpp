@@ -18,16 +18,17 @@ void LEDNumber::set( char* value ) {
 }
 
 int LEDNumber::getDigit( char* value, int index ) {
-    if( index >= strlen( value ) )
+    int shift = 3 - strlen( value );
+    if( index < shift ) 
         return 0;
 
-    return charToDigit( value[index] );
+    return charToDigit( value[index - shift] );
 }
 
 int LEDNumber::charToDigit( char digitChar ) {
     int digit = digitChar - '0';
 
-    if( digit < 0 || digit > 10 )
+    if( digit < 0 || digit > 9 )
         digit = 0;
 
     return digit;
