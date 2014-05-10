@@ -110,10 +110,8 @@ class ThreeDigitControl:
 
     def adjustTime(self):
         self.value += random.randint( - self.range, self.range )
-        if self.value < self.lower:
-            self.value = self.lower
-        elif self.value > self.upper:
-            self.value = self.upper
+        self.value = min( self.value, self.upper )
+        self.value = max( self.value, self.lower )
 
     def write(self, matrixDriver):
         matrixDriver.setNumber( self.numberLabel, self.value )
