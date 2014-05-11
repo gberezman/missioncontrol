@@ -5,6 +5,7 @@
 
 class LEDs {
   public:
+    void test( void );
     void clear( void );
     LED* findLED( char* label );
 };

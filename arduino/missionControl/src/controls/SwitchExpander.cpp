@@ -71,7 +71,7 @@ void SwitchExpander::sendStateToSerial( uint8_t pin ) {
   Serial.print( getPinId(pin) );
 
   if( wasPinTurnedOn( pin ) )
-    Serial.print( " True\n" );
+    Serial.print( " 1\n" );
   else if ( wasPinTurnedOff( pin ) )
-    Serial.print( " False\n" );
+    Serial.print( " 0\n" );
 }

@@ -1,4 +1,5 @@
 from time import sleep,time
+import random
 
 class CautionWarning:
 
@@ -89,23 +90,58 @@ class LatchedLED:
         if self.buttonCount <= 0:
             self.matrixDriver.ledOff(self.led)
 
+class ThreeDigitControl:
+    
+    def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350, range = 20 ):
+        self.updateTime = 0
+        self.value = random.randint( lower, upper )
+        self.frequency_s = frequency_s
+        self.lower = lower
+        self.upper = upper
+        self.range = range
+        self.numberLabel = numberLabel
+
+    def update(self, matrixDriver):
+        now = time()
+        if now - self.updateTime > self.frequency_s:
+            self.adjustTime()
+            self.write( matrixDriver )
+            self.updateTime = time()
+
+    def adjustTime(self):
+        self.value += random.randint( - self.range, self.range )
+        self.value = min( self.value, self.upper )
+        self.value = max( self.value, self.lower )
+
+    def write(self, matrixDriver):
+        matrixDriver.setNumber( self.numberLabel, self.value )
+
 class Rules:
    
     def noAction(self, *args):
         sleep( 0.05 )
 
     def applyTemporalRules(self):
-        if self.SPSPresses.hitsInTheLastNSeconds(2) > 5:
-            self.matrixDriver.LedOn('SPSPress')
-            self.cw.alert()
-        else:
-            self.matrixDriver.ledOff('SPSPress')
+        now = time()
 
-        if self.SPSPresses.hitsInTheLastNSeconds(4) > 5:
-            self.matrixDriver.LedOn('SPSFlngTempHi')
-            self.cw.alert()
-        else:
-            self.matrixDriver.ledOff('SPSPress')
+        #if self.SPSPresses.hitsInTheLastNSeconds(2) > 5:
+        #    self.matrixDriver.LedOn('SPSPress')
+        #    self.cw.alert()
+        #else:
+        #    self.matrixDriver.ledOff('SPSPress')
+ 
+        # if self.SPSPresses.hitsInTheLastNSeconds(4) > 5:
+        #     self.matrixDriver.LedOn('SPSFlngTempHi')
+        #     self.cw.alert()
+        # else:
+        #     self.matrixDriver.ledOff('SPSPress')
+
+        self.IHR.update( self.matrixDriver )
+        self.AHR.update( self.matrixDriver )
+        self.ABR.update( self.matrixDriver )
+        self.Pitch.update( self.matrixDriver )
+        self.Yaw.update( self.matrixDriver )
+        self.Roll.update( self.matrixDriver )
 
     def getRule(self, name):
         if name:
@@ -122,6 +158,24 @@ class Rules:
         self.ullageStatus = LatchedLED(matrixDriver, 'Ullage')
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
+
+        self.IHR = ThreeDigitControl( "IHR" )
+        self.IHR.update( matrixDriver )
+
+        self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
+        self.AHR.update( matrixDriver )
+
+        self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
+        self.ABR.update( matrixDriver )
+
+        self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
+        self.Pitch.update( matrixDriver )
+
+        self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
+        self.Yaw.update( matrixDriver )
+
+        self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
+        self.Roll.update( matrixDriver )
 
         self.__rules = {
             # CAPCOM Potentiometers
@@ -159,7 +213,7 @@ class Rules:
             # Game condition: Show GlycolTempLow to get user to run glycol pump and clear warning
             'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'GlycolPump', isOn ) \
                                              or audio.togglePlay( 'GlycolPump', isOn, continuous = True ),
-            'SCEPower'        : lambda isOn: matrixDriver.setLed('SCEPower', isOn ),
+            'SCEPower'        : lambda isOn: matrixDriver.setLed( 'SCEPower', isOn ),
             'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
                                              or ( audio.play('WasteDump') if isOn else self.noAction() ),
             'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
@@ -180,39 +234,39 @@ class Rules:
                                              # or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
-            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) ,
-                                             #or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
+            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
 
             # Trans-Lunar injection (puts on path towards moon)
-            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
+            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
             
             # Saturn, first stage
-            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
+            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
 
             # Saturn, second stage
-            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
+            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
 
             # Saturn V, third stage
-            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ),
-                                             #or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
+            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
+                                             or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
             'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                            or self.ullageStatus.on( isOn ),
-                                             #or audio.togglePlay( 'miThruster', isOn, continuous = True ),
+                                             or self.ullageStatus.on( isOn ) \
+                                             or audio.togglePlay( 'miThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
             'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
-                                            or self.ullageStatus.on( isOn ),
-                                             #or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
+                                             or self.ullageStatus.on( isOn ) \
+                                             or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
             'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
-                                            or self.ullageStatus.on( isOn ),
-                                             #or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
+                                             or self.ullageStatus.on( isOn ) \
+                                             or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
 
             # C&WS Switches
             # square wave alternating between 750 and 2000cps changing 2.5 times per second
@@ -241,10 +295,14 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            #'O2Fan'           : lambda isOn: audio.togglePlay( 'o2fan', isOn, continuous = True ),
-            #'H2Fan'           : lambda isOn: audio.togglePlay( 'h2fan', isOn, continuous = True ),
-            #'Pumps'           : lambda isOn: audio.togglePlay( 'pumps', isOn, continuous = True ),
-            #'Heat'            : lambda isOn: audio.togglePlay( 'heat', isOn, continuous = True ),
+            'O2Fan'           : lambda isOn: matrixDriver.setLed('O2Fan', isOn) \
+                                             or audio.togglePlay( 'o2fan', isOn, continuous = True ),
+            'H2Fan'           : lambda isOn: matrixDriver.setLed('H2Fan', isOn) \
+                                             or audio.togglePlay( 'h2fan', isOn, continuous = True ),
+            'Pumps'           : lambda isOn: matrixDriver.setLed('Pumps', isOn) \
+                                             or audio.togglePlay( 'pumps', isOn, continuous = True ),
+            'Heat'            : lambda isOn: matrixDriver.setLed('Heat', isOn) \
+                                             or audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches
             #'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),

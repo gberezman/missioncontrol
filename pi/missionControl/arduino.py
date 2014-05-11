@@ -1,6 +1,8 @@
-from time import sleep
+from time import sleep,time
 import serial
 from parser import Parser
+
+current_milli_time = lambda: int(round(time() * 1000))
 
 class ArduinoSerial:
 
@@ -47,14 +49,17 @@ class ArduinoMatrixDriver:
     def __init__(self, serial):
         self.serial = serial
 
-    def setMeter(self, meterId, meterValue):
-        self.serial.write( "Meter {} {}\n".format( meterId, meterValue ) ) 
+    def setMeter(self, meterId, value):
+        self.serial.write( "M {} {}\n".format( meterId, value ) ) 
+
+    def setNumber(self, numberId, value):
+        self.serial.write( "N {} {}\n".format( numberId, value ) )
 
     def ledOn(self, ledId):
-        self.serial.write( "LED {} on\n".format( ledId ) )
+        self.serial.write( "L {} 1\n".format( ledId ) )
 
     def ledOff(self, ledId):
-        self.serial.write( "LED {} off\n".format( ledId ) )
+        self.serial.write( "L {} 0\n".format( ledId ) )
 
     def setLed(self, ledId, state):
         if state:
