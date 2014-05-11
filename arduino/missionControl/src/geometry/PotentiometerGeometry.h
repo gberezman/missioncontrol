@@ -5,7 +5,7 @@
 
 Potentiometer POTENTIOMETERS[] = { 
   // CAPCOM
-  Potentiometer( "Speaker",    A0 ),
+  // Potentiometer( "Speaker",    A0 ),
   // Potentiometer( "Headset",    A1 ),
 
   // ABORT
