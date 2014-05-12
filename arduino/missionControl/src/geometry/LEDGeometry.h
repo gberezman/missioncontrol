@@ -26,7 +26,7 @@ LED LEDS[] = {
   LED( "CW",              &matrixA, 2, 3 ),
   LED( "FCBusDisscnct",   &matrixA, 3, 0 ),
   LED( "O2FlowHi",        &matrixA, 3, 1 ),
-  LED( "SuitComp",        &matrixA, 3, 2 ),
+  LED( "SuitCompAlarm",   &matrixA, 3, 2 ),
   LED( "SPSFlngTempHi",   &matrixA, 4, 0 ),
   LED( "CrewAlert",       &matrixA, 4, 1 ),
   LED( "ACBus2Overload",  &matrixA, 4, 2 ),
@@ -75,17 +75,17 @@ LED LEDS[] = {
   LED( "SMRCSC",         &matrixB, 2, 15 ),
   LED( "SMRCSB",         &matrixB, 3, 11 ),
   LED( "UplinkActivity", &matrixB, 3, 12 ),
-  LED( "GimbalLock",     &matrixB, 3, 13 )
+  LED( "GimbalLock",     &matrixB, 3, 13 ),
     
   // CONTROL
-  // LED( "DockingProbe", &matrixD, 6, 8 ),
-  // LED( "GlycolPump",   &matrixD, 6, 9 ),
-  // LED( "SCEPower",     &matrixD, 6, 10 ),
-  // LED( "WasteDump",    &matrixD, 6, 11 ),
-  // LED( "CabinFan",     &matrixD, 7, 9 ),
-  // LED( "H2OFlow",      &matrixD, 7, 10 ),
-  // LED( "Lights",       &matrixD, 7, 11 ),
-  // LED( "SuitComp",     &matrixD, 7, 12 )
+  LED( "CabinFan",       &matrixD, 6, 8 ),
+  LED( "H2OFlow",        &matrixD, 6, 9 ),
+  LED( "Lights",         &matrixD, 6, 10 ),
+  LED( "SuitComp",       &matrixD, 6, 11 ),
+  LED( "DockingProbe",   &matrixD, 7, 8 ),
+  LED( "GlycolPump",     &matrixD, 7, 9 ),
+  LED( "SCEPower",       &matrixD, 7, 10 ),
+  LED( "WasteDump",      &matrixD, 7, 11 )
 };
 
 #endif

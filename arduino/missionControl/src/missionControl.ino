@@ -16,7 +16,9 @@ Adafruit_LEDBackpack matrixE;
 
 Adafruit_LEDBackpack* matrices[] = {
     &matrixA, 
-    &matrixB
+    &matrixB,
+    &matrixC,
+    &matrixD
 };
 
 Expanders expanders;
