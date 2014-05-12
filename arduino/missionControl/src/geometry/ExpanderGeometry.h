@@ -94,8 +94,8 @@ char* exp3Switches[16] = {
 };
 
 SwitchExpander SWITCH_EXPANDERS[] = {
-  SwitchExpander( 0, exp0Switches )
-  // SwitchExpander( 1, exp1Switches ),
+  SwitchExpander( 0, exp0Switches ),
+  SwitchExpander( 1, exp1Switches )
   // SwitchExpander( 2, exp2Switches ),
   // SwitchExpander( 3, exp3Switches ),
 };

@@ -109,6 +109,7 @@ class Audio:
             'heat'                : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/heat.wav' ),
 
             # PYROTECHNICS
+            'MainDeploy'          : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/MainDeploy.wav' ),
             'CsmDeploy'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/csmDeploy.wav' )
         }
 

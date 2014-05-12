@@ -90,6 +90,19 @@ class LatchedLED:
         if self.buttonCount <= 0:
             self.matrixDriver.ledOff(self.led)
 
+class Pyrotechnics:
+
+    def __init__(self, led, clip):
+        self.led = led;
+        self.clip = clip
+        self.fired = False
+
+    def fire(self, isOn, matrixDriver, audio):
+        #if isOn and not self.fired:
+        matrixDriver.setLed( self.led, isOn )
+        if isOn:
+            audio.play( self.clip )
+
 class ThreeDigitControl:
     
     def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350, range = 20 ):
@@ -177,6 +190,9 @@ class Rules:
         self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
         self.Roll.update( matrixDriver )
 
+        self.mainDeploy = Pyrotechnics( 'MainChute', 'MainDeploy' )
+        self.csmDeploy = Pyrotechnics( 'SMRCSA', 'CsmDeploy' )
+
         self.__rules = {
             # CAPCOM Potentiometers
             # 'Speaker'    # Adjust speaker volume
@@ -205,23 +221,23 @@ class Rules:
                 # AntYaw changes the the width of the green section
 
             # CONTROL Switches
-            'DockingProbe'    : lambda isExtending: matrixDriver.setLed( 'DockingProbe', isExtending ) \
-                                                    or matrixDriver.setLed( 'DockingTarget', isExtending ) \
-                                                    or audio.togglePlay( 'DockingProbeRetract', not isExtending ) \
-                                                    or audio.togglePlay( 'DockingProbeExtend', isExtending ),
+            # 'DockingProbe'    : lambda isExtending: matrixDriver.setLed( 'DockingProbe', isExtending ) \
+                                                    #or matrixDriver.setLed( 'DockingTarget', isExtending ) \
+                                                    #or audio.togglePlay( 'DockingProbeRetract', not isExtending ) \
+                                                    #or audio.togglePlay( 'DockingProbeExtend', isExtending ),
 
             # Game condition: Show GlycolTempLow to get user to run glycol pump and clear warning
-            'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'GlycolPump', isOn ) \
-                                             or audio.togglePlay( 'GlycolPump', isOn, continuous = True ),
-            'SCEPower'        : lambda isOn: matrixDriver.setLed( 'SCEPower', isOn ),
-            'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
-                                             or ( audio.play('WasteDump') if isOn else self.noAction() ),
-            'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
-                                             or audio.togglePlay( 'CabinFan', isOn, continuous = True ),
-            'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
-                                             or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
-            'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
-            'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
+            #'GlycolPump'      : lambda isOn: matrixDriver.setLed( 'GlycolPump', isOn ) \
+                                             #or audio.togglePlay( 'GlycolPump', isOn, continuous = True ),
+            #'SCEPower'        : lambda isOn: matrixDriver.setLed( 'SCEPower', isOn ),
+            #'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
+                                             #or ( audio.play('WasteDump') if isOn else self.noAction() ),
+            #'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
+                                             #or audio.togglePlay( 'CabinFan', isOn, continuous = True ),
+            #'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
+                                             #or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
+            #'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
+            #'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
 
             # ABORT
             #'ArmAbort'        : lambda armed: self.abort.setArm( armed ),
@@ -295,7 +311,7 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            'O2Fan'           : lambda isOn: matrixDriver.setLed('O2Fan', isOn) \
+            'O2Fan'           : lambda isOn: matrixDriver.setLed( 'O2Fan', isOn ) \
                                              or audio.togglePlay( 'o2fan', isOn, continuous = True ),
             'H2Fan'           : lambda isOn: matrixDriver.setLed('H2Fan', isOn) \
                                              or audio.togglePlay( 'h2fan', isOn, continuous = True ),
@@ -305,19 +321,21 @@ class Rules:
                                              or audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches
+            # manually deploy the CM main parachutes.
+            'MainDeploy'       : lambda isOn: self.mainDeploy.fire( isOn, matrixDriver, audio ),
+
             #'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),
 
-            # manually deploy the CM main parachutes.
-            #'MainDeploy'      : lambda isOn: audio.play('mainDeploy') or matrixDriver.LedOn('MainChute') if isOn else self.noAction(),
 
             # Manually separate the CSM from the launch vehicle during an abort or in normal operation.
-            #'CSM/LVDeploy'    : lambda isOn: audio.play('CSM/LVDeploy') if isOn else self.noAction(),
+            'CSM/LVDeploy'    : lambda isOn: self.csmDeploy.fire( isOn, matrixDriver, audio )
+
+            # Deploy the Launch Escape System Canard Parachutes
+            #'CanardDeploy'    : lambda isOn: audio.play('CanardDeploy') if isOn else self.noAction(),
 
             # Separate for reentry
             #'SM/CMDeploy'     : lambda isOn: audio.play('SM/CMDeploy') if isOn else self.noAction(),
 
-            # Deploy the Launch Escape System Canard Parachutes
-            #'CanardDeploy'    : lambda isOn: audio.play('CanardDeploy') if isOn else self.noAction(),
 
             # Push-switch to jettison CM apex cover if automatic system fails during an abort or earth landing after a normal mission. 
             #'ApexCoverJettsn' : lambda isOn: audio.play('ApexCoverJettsn') or matrixDriver.LedOn('Hatch') if isOn else self.noAction(),
