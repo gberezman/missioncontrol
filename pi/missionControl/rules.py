@@ -190,8 +190,13 @@ class Rules:
         self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
         self.Roll.update( matrixDriver )
 
-        self.mainDeploy = Pyrotechnics( 'MainChute', 'MainDeploy' )
-        self.csmDeploy = Pyrotechnics( 'SMRCSA', 'CsmDeploy' )
+        self.mainDeploy      = Pyrotechnics( 'MainChute', 'MainDeploy' )
+        self.drogueDeploy    = Pyrotechnics( 'DrogueChute', 'DrogueDeploy' )
+        self.csmDeploy       = Pyrotechnics( 'SMRCSA', 'CsmDeploy' )
+        self.canardDeploy    = Pyrotechnics( '', 'CanardDeploy' )
+        self.smDeploy        = Pyrotechnics( 'SMRCSB', 'SmDeploy' )
+        self.apexCoverJettsn = Pyrotechnics( 'Hatch', 'ApexCoverJettsn' )
+        self.lesMotorFire    = Pyrotechnics( 'CMRCS1', 'LesMotorFire' )
 
         self.__rules = {
             # CAPCOM Potentiometers
@@ -324,24 +329,23 @@ class Rules:
             # manually deploy the CM main parachutes.
             'MainDeploy'       : lambda isOn: self.mainDeploy.fire( isOn, matrixDriver, audio ),
 
-            #'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),
-
+            # Parachute to slow ship down
+            'DrogueDeploy'     : lambda isOn: self.drogueDeploy.fire( isOn, matrixDriver, audio ),
 
             # Manually separate the CSM from the launch vehicle during an abort or in normal operation.
-            'CSM/LVDeploy'    : lambda isOn: self.csmDeploy.fire( isOn, matrixDriver, audio )
+            'CSM/LVDeploy'    : lambda isOn: self.csmDeploy.fire( isOn, matrixDriver, audio ),
 
             # Deploy the Launch Escape System Canard Parachutes
-            #'CanardDeploy'    : lambda isOn: audio.play('CanardDeploy') if isOn else self.noAction(),
+            'CanardDeploy'    : lambda isOn: self.canardDeploy.fire( isOn, matrixDriver, audio ),
 
             # Separate for reentry
-            #'SM/CMDeploy'     : lambda isOn: audio.play('SM/CMDeploy') if isOn else self.noAction(),
-
+            'SM/CMDeploy'     : lambda isOn: self.smDeploy.fire( isOn, matrixDriver, audio ),
 
             # Push-switch to jettison CM apex cover if automatic system fails during an abort or earth landing after a normal mission. 
-            #'ApexCoverJettsn' : lambda isOn: audio.play('ApexCoverJettsn') or matrixDriver.LedOn('Hatch') if isOn else self.noAction(),
+            'ApexCoverJettsn' : lambda isOn: self.apexCoverJettsn.fire( isOn, matrixDriver, audio ),
 
             # Manually operates the Launch Escape System, either to jettison the LES tower or to fire the motor in the event of an LES abort.  In the former case, the explosive bolts connecting the LES tower to the CSM must fire first.
-            #'LesMotorFire'    : lambda isOn: audio.play('LesMotorFire') if isOn else self.noAction()
+            'LesMotorFire'    : lambda isOn: self.lesMotorFire.fire( isOn, matrixDriver, audio )
         }
 
 # Overuse of SPS engine:
