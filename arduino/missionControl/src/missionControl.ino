@@ -42,8 +42,8 @@ void setup() {
 
   delay( 1000 );
 
-  numbers.clear();
-  leds.clear();
+  // numbers.clear();
+  // leds.clear();
 
   serialCommand.addCommand("M", setMeter);
   serialCommand.addCommand("L", setLED);
@@ -57,6 +57,7 @@ void initializeMatrices() {
 
 void initializeLEDMatrix(Adafruit_LEDBackpack* matrix, uint8_t address) {
   matrix->begin( address );
+  matrix->setBrightness( 8 );
   matrix->clear();  
   matrix->writeDisplay();
 }
