@@ -22,6 +22,6 @@ void LEDNumbers::test( void ) {
         for( int i = 0; i < sizeof( NUMBERS ) / sizeof( LEDNumber ); i++ ) {
             NUMBERS[i].set( buffer );
         }
-        delay( 200 );
+        delay( 100 );
     }
 }
