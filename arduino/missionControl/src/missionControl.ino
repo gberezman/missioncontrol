@@ -39,11 +39,13 @@ void setup() {
 
   leds.test();
   numbers.test();
+  meters.test();
 
   delay( 1000 );
 
-  // numbers.clear();
-  // leds.clear();
+  leds.clear();
+  numbers.clear();
+  meters.clear();
 
   serialCommand.addCommand("M", setMeter);
   serialCommand.addCommand("L", setLED);
@@ -77,7 +79,6 @@ void loop() {
 void setMeter() {
   char* meterLabel = serialCommand.next();
   char* value = serialCommand.next();
-
   if( meterLabel != NULL && value != NULL )
     setMeter( meterLabel, atoi( value ) );
 }
