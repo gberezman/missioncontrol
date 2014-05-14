@@ -6,6 +6,8 @@
 class LEDMeters {
   public:
     LEDMeter* findLEDMeter( char* label );
+    void test( void );
+    void clear( void );
 };
 
 #endif
