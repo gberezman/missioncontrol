@@ -226,7 +226,7 @@ class Rules:
                 # AntYaw changes the the width of the green section
 
             # CONTROL Switches
-             'DockingProbe'    : lambda isExtending: matrixDriver.setLed( 'DockingProbe', isExtending ) \
+            'DockingProbe'    : lambda isExtending: matrixDriver.setLed( 'DockingProbe', isExtending ) \
                                                     or matrixDriver.setLed( 'DockingTarget', isExtending ) \
                                                     or audio.togglePlay( 'DockingProbeRetract', not isExtending ) \
                                                     or audio.togglePlay( 'DockingProbeExtend', isExtending ),

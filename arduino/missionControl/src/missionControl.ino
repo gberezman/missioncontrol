@@ -79,6 +79,7 @@ void loop() {
 void setMeter() {
   char* meterLabel = serialCommand.next();
   char* value = serialCommand.next();
+
   if( meterLabel != NULL && value != NULL )
     setMeter( meterLabel, atoi( value ) );
 }

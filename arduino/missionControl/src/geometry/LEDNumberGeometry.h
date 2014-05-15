@@ -253,6 +253,4 @@ LEDNumber NUMBERS[] = {
   LEDNumber( "Roll", Roll )
 };
 
-// MissionClock (?)
-
 #endif
