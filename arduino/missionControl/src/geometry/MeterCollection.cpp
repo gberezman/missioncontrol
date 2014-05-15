@@ -1,8 +1,4 @@
-#ifndef LEDMETER_GEOMETRY_H
-#define LEDMETER_GEOMETRY_H
-
-#include "../controls/LEDMeter.h"
-#include "../controls/Adafruit_LEDBackpack.h"
+#include "MeterCollection.h"
 
 extern Adafruit_LEDBackpack matrixA;
 extern Adafruit_LEDBackpack matrixB;
@@ -10,7 +6,7 @@ extern Adafruit_LEDBackpack matrixC;
 extern Adafruit_LEDBackpack matrixD;
 extern Adafruit_LEDBackpack matrixE;
 
-LEDMeter METERS[] = { 
+LEDMeter MeterCollection::METERS[] = { 
   // CRYOGENICS
   LEDMeter( "H2Pressure", &matrixC, 0, 0, TWELVE_BAR_MIDRANGE_COLORS ),
   LEDMeter( "O2Qty",      &matrixC, 0, 8, TWELVE_BAR_QTY_COLORS ),
@@ -28,4 +24,23 @@ LEDMeter METERS[] = {
   // LEDMeter( "O2Flow",     &matrixE, 3, 8, TWELVE_BAR_MIDRANGE_COLORS ),
 };
 
-#endif
+LEDMeter* MeterCollection::getMeter( char* label ) {
+  for( int i = 0; i < sizeof( METERS ) / sizeof( LEDMeter ); i++ )
+    if( strcmp( label, METERS[i].getLabel() ) == 0 )
+        return &METERS[i];
+
+  return NULL;
+}
+
+void MeterCollection::testAll( void ) {
+  for( int bars = 0; bars < 13; bars++ ) {
+    for( int i = 0; i < sizeof( METERS ) / sizeof( LEDMeter ); i++ )
+        METERS[i].setBars(bars);
+    delay( 100 );
+  }
+}
+
+void MeterCollection::clearAll( void ) {
+  for( int i = 0; i < sizeof( METERS ) / sizeof( LEDMeter ); i++ )
+    METERS[i].setBars(0);
+}
