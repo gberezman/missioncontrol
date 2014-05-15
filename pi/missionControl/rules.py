@@ -251,11 +251,9 @@ class Rules:
         self.O2FanState = SwitchState( False )
         self.H2FanState = SwitchState( False )
 
-        #self.O2Pressure = FluctuatingMeter( "O2Pressure", initialValue = random.randint( 7, 9 ), frequency_s = 4 )
-        self.O2Pressure = FluctuatingMeter( "O2Pressure", initialValue = 1, frequency_s = 1 )
+        self.O2Pressure = FluctuatingMeter( "O2Pressure", initialValue = random.randint( 7, 9 ), frequency_s = 4 )
         self.O2Pressure.write( matrixDriver )
-        #self.H2Pressure = FluctuatingMeter( "H2Pressure", initialValue = random.randint( 7, 9 ) )
-        self.H2Pressure = FluctuatingMeter( "H2Pressure", initialValue = 1, frequency_s = 1 )
+        self.H2Pressure = FluctuatingMeter( "H2Pressure", initialValue = random.randint( 7, 9 ) )
         self.H2Pressure.write( matrixDriver )
 
         self.O2Qty      = DecayingMeter( "O2Qty" )
