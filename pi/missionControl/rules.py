@@ -149,12 +149,15 @@ class Rules:
         # else:
         #     self.matrixDriver.ledOff('SPSPress')
 
-        self.IHR.update( self.matrixDriver )
-        self.AHR.update( self.matrixDriver )
-        self.ABR.update( self.matrixDriver )
-        self.Pitch.update( self.matrixDriver )
-        self.Yaw.update( self.matrixDriver )
-        self.Roll.update( self.matrixDriver )
+        self.matrixDriver.setMeter( "H2Qty", 12 )
+        self.matrixDriver.setMeter( "O2Pressure", 10 )
+
+        #self.IHR.update( self.matrixDriver )
+        #self.AHR.update( self.matrixDriver )
+        #self.ABR.update( self.matrixDriver )
+        #self.Pitch.update( self.matrixDriver )
+        #self.Yaw.update( self.matrixDriver )
+        #self.Roll.update( self.matrixDriver )
 
     def getRule(self, name):
         if name:
@@ -172,23 +175,23 @@ class Rules:
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
 
-        self.IHR = ThreeDigitControl( "IHR" )
-        self.IHR.update( matrixDriver )
+        #self.IHR = ThreeDigitControl( "IHR" )
+        #self.IHR.update( matrixDriver )
 
-        self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
-        self.AHR.update( matrixDriver )
+        #self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
+        #self.AHR.update( matrixDriver )
 
-        self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
-        self.ABR.update( matrixDriver )
+        #self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
+        #self.ABR.update( matrixDriver )
 
-        self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
-        self.Pitch.update( matrixDriver )
+        #self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
+        #self.Pitch.update( matrixDriver )
 
-        self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
-        self.Yaw.update( matrixDriver )
+        #self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
+        #self.Yaw.update( matrixDriver )
 
-        self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
-        self.Roll.update( matrixDriver )
+        #self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
+        #self.Roll.update( matrixDriver )
 
         self.mainDeploy      = Pyrotechnics( 'MainChute', 'MainDeploy' )
         self.drogueDeploy    = Pyrotechnics( 'DrogueChute', 'DrogueDeploy' )

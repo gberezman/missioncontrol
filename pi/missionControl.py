@@ -34,8 +34,11 @@ class Mission( threading.Thread ):
             except KeyboardInterrupt:
                 exit()
 
+def waitForStart( delay ):
+    sleep( delay )
+
 if __name__ == '__main__':
 
     mainThread = Mission( Audio(), ArduinoSerial( timeout = .5 ) )
-    # mainThread = Mission( Audio(), StubbedArduinoSerial() )
+    waitForStart( 5 )
     mainThread.start()
