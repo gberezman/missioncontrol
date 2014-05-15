@@ -139,6 +139,7 @@ class FluctuatingMeter:
             self.value = random.randint( 4, 6 )
         elif isOn and self.value > 9:
             self.value = random.randint( 6, 9 )
+        self.write( matrixDriver )
 
 class DecayingMeter:
 
