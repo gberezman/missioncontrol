@@ -4,10 +4,9 @@
 
 #include "controls/Expanders.h"
 #include "controls/Potentiometers.h"
-// #include "controls/LEDs.h"
 #include "geometry/LEDCollection.h"
 #include "controls/LEDMeters.h"
-#include "controls/LEDNumbers.h"
+#include "geometry/NumberCollection.h"
 
 Adafruit_LEDBackpack matrixA;
 Adafruit_LEDBackpack matrixB;
@@ -26,7 +25,7 @@ Expanders expanders;
 Potentiometers pots;
 LEDCollection leds;
 LEDMeters meters;
-LEDNumbers numbers;
+NumberCollection numbers;
 
 SerialCommand serialCommand;
 
@@ -39,13 +38,13 @@ void setup() {
   expanders.initialize();
 
   leds.enableAll();
-  numbers.test();
+  numbers.testAll();
   meters.test();
 
   delay( 1000 );
 
   leds.disableAll();
-  numbers.clear();
+  numbers.clearAll();
   meters.clear();
 
   serialCommand.addCommand("M", setMeter);
@@ -113,7 +112,7 @@ void setNumber() {
 }
 
 void setNumber( char* label, char* value ) {
-  LEDNumber* number = numbers.findLEDNumber( label );
+  LEDNumber* number = numbers.getNumber( label );
   if( number != NULL )
       number->set( value );
 }
