@@ -1,6 +1,15 @@
 from time import sleep,time
 import random
 
+class SwitchState:
+
+    def __init__(self, switch, isOn = False):
+        self.switch = switch
+        self.isOn = isOn
+
+    def setState(self, isOn):
+        self.isOn = isOn
+
 class CautionWarning:
 
     def __init__(self, audio, matrixDriver):
@@ -103,6 +112,52 @@ class Pyrotechnics:
         if isOn:
             audio.play( self.clip )
 
+class FluctuatingMeter:
+
+    def __init__(self, meter, initialValue = 12, frequency_s = 3):
+        self.meter = meter
+        self.value = initialValue
+        self.frequency_s = frequency_s
+        self.lastUpdate = time()
+
+    def update(self, matrixDriver, isFanOn):
+        now = time()
+        if now - self.lastUpdate > self.frequency_s:
+            if ( not isFanOn ) or ( random.randint( 1, 10 ) > 4 ):
+                self.value += random.randint(-1, 1)
+                self.value = max( self.value, 1 )
+                self.value = min( self.value, 12 )
+
+            self.write( matrixDriver )
+            self.lastUpdate = now
+
+    def write(self, matrixDriver):
+        matrixDriver.setMeter( self.meter, self.value )
+
+    def normalize(self, isOn, matrixDriver):
+        if isOn and self.value < 4:
+            self.value = random.randint( 4, 6 )
+        elif isOn and self.value > 9:
+            self.value = random.randint( 6, 9 )
+
+class DecayingMeter:
+
+    def __init__(self, meter, initialValue = 12, decayRate_s = 120):
+        self.meter = meter
+        self.value = initialValue
+        self.decayRate_s = decayRate_s
+        self.lastUpdate = time()
+
+    def decay(self, matrixDriver):
+        now = time()
+        if now - self.lastUpdate > self.decayRate_s:
+            self.value = max( self.value - 1, 1 )
+            self.write( matrixDriver )
+            self.lastUpdate = now
+
+    def write(self, matrixDriver):
+        matrixDriver.setMeter( self.meter, self.value )
+
 class ThreeDigitControl:
     
     def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350, range = 20 ):
@@ -149,15 +204,18 @@ class Rules:
         # else:
         #     self.matrixDriver.ledOff('SPSPress')
 
-        self.matrixDriver.setMeter( "H2Qty", 12 )
-        self.matrixDriver.setMeter( "O2Pressure", 10 )
+        self.IHR.update( self.matrixDriver )
+        self.AHR.update( self.matrixDriver )
+        self.ABR.update( self.matrixDriver )
+        self.Pitch.update( self.matrixDriver )
+        self.Yaw.update( self.matrixDriver )
+        self.Roll.update( self.matrixDriver )
 
-        #self.IHR.update( self.matrixDriver )
-        #self.AHR.update( self.matrixDriver )
-        #self.ABR.update( self.matrixDriver )
-        #self.Pitch.update( self.matrixDriver )
-        #self.Yaw.update( self.matrixDriver )
-        #self.Roll.update( self.matrixDriver )
+        self.O2Pressure.update( self.matrixDriver, self.O2FanState.isOn )
+        self.H2Pressure.update( self.matrixDriver, self.H2FanState.isOn )
+
+        self.O2Qty.decay( self.matrixDriver )
+        self.H2Qty.decay( self.matrixDriver )
 
     def getRule(self, name):
         if name:
@@ -175,23 +233,12 @@ class Rules:
         self.SPSPresses = EventRecord()
         self.cw = CautionWarning(audio, matrixDriver)
 
-        #self.IHR = ThreeDigitControl( "IHR" )
-        #self.IHR.update( matrixDriver )
-
-        #self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
-        #self.AHR.update( matrixDriver )
-
-        #self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
-        #self.ABR.update( matrixDriver )
-
-        #self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
-        #self.Pitch.update( matrixDriver )
-
-        #self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
-        #self.Yaw.update( matrixDriver )
-
-        #self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
-        #self.Roll.update( matrixDriver )
+        self.IHR = ThreeDigitControl( "IHR" )
+        self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
+        self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
+        self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
+        self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
+        self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
 
         self.mainDeploy      = Pyrotechnics( 'MainChute', 'MainDeploy' )
         self.drogueDeploy    = Pyrotechnics( 'DrogueChute', 'DrogueDeploy' )
@@ -200,6 +247,21 @@ class Rules:
         self.smDeploy        = Pyrotechnics( 'SMRCSB', 'SmDeploy' )
         self.apexCoverJettsn = Pyrotechnics( 'Hatch', 'ApexCoverJettsn' )
         self.lesMotorFire    = Pyrotechnics( 'CMRCS1', 'LesMotorFire' )
+
+        self.O2FanState = SwitchState( False )
+        self.H2FanState = SwitchState( False )
+
+        #self.O2Pressure = FluctuatingMeter( "O2Pressure", initialValue = random.randint( 7, 9 ), frequency_s = 4 )
+        self.O2Pressure = FluctuatingMeter( "O2Pressure", initialValue = 1, frequency_s = 1 )
+        self.O2Pressure.write( matrixDriver )
+        #self.H2Pressure = FluctuatingMeter( "H2Pressure", initialValue = random.randint( 7, 9 ) )
+        self.H2Pressure = FluctuatingMeter( "H2Pressure", initialValue = 1, frequency_s = 1 )
+        self.H2Pressure.write( matrixDriver )
+
+        self.O2Qty      = DecayingMeter( "O2Qty" )
+        self.O2Qty.write( matrixDriver )
+        self.H2Qty      = DecayingMeter( "H2Qty", decayRate_s = 180 )
+        self.H2Qty.write( matrixDriver )
 
         self.__rules = {
             # CAPCOM Potentiometers
@@ -319,13 +381,17 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            'O2Fan'           : lambda isOn: matrixDriver.setLed( 'O2Fan', isOn ) \
+            'O2Fan'           : lambda isOn: self.O2FanState.setState( isOn ) \
+                                             or matrixDriver.setLed( 'O2Fan', isOn ) \
+                                             or self.O2Pressure.normalize( isOn, matrixDriver ) \
                                              or audio.togglePlay( 'o2fan', isOn, continuous = True ),
-            'H2Fan'           : lambda isOn: matrixDriver.setLed('H2Fan', isOn) \
+            'H2Fan'           : lambda isOn: self.H2FanState.setState( isOn ) \
+                                             or matrixDriver.setLed('H2Fan', isOn ) \
+                                             or self.H2Pressure.normalize( isOn, matrixDriver ) \
                                              or audio.togglePlay( 'h2fan', isOn, continuous = True ),
-            'Pumps'           : lambda isOn: matrixDriver.setLed('Pumps', isOn) \
+            'Pumps'           : lambda isOn: matrixDriver.setLed('Pumps', isOn ) \
                                              or audio.togglePlay( 'pumps', isOn, continuous = True ),
-            'Heat'            : lambda isOn: matrixDriver.setLed('Heat', isOn) \
+            'Heat'            : lambda isOn: matrixDriver.setLed('Heat', isOn ) \
                                              or audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches

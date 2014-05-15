@@ -52,7 +52,7 @@ static uint16_t ALL_GREEN[] = {
   BAR_LED_GREEN
 };
 
-static uint16_t TWELVE_BAR_DIAL_COLORS[] = {
+static uint16_t TWELVE_BAR_MIDRANGE_COLORS[] = {
   BAR_LED_RED,
   BAR_LED_YELLOW,
   BAR_LED_YELLOW,
@@ -67,7 +67,7 @@ static uint16_t TWELVE_BAR_DIAL_COLORS[] = {
   BAR_LED_RED
 };
 
-static uint16_t TWELVE_BAR_METER_COLORS[] = {
+static uint16_t TWELVE_BAR_QTY_COLORS[] = {
   BAR_LED_RED,
   BAR_LED_RED,
   BAR_LED_YELLOW,
