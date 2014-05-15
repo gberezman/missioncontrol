@@ -12,10 +12,10 @@ extern Adafruit_LEDBackpack matrixE;
 
 LEDMeter METERS[] = { 
   // CRYOGENICS
-  LEDMeter( "O2Pressure", &matrixC, 0, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "H2Pressure", &matrixC, 0, 8, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "O2Qty",      &matrixC, 3, 0, TWELVE_BAR_DIAL_COLORS ),
-  LEDMeter( "H2Qty",      &matrixC, 3, 8, TWELVE_BAR_DIAL_COLORS )
+  LEDMeter( "O2Pressure", &matrixC, 0, 0, TWELVE_BAR_METER_COLORS ),
+  LEDMeter( "H2Pressure", &matrixC, 0, 8, TWELVE_BAR_METER_COLORS ),
+  LEDMeter( "O2Qty",      &matrixC, 3, 0, TWELVE_BAR_METER_COLORS ),
+  LEDMeter( "H2Qty",      &matrixC, 3, 8, TWELVE_BAR_METER_COLORS )
 
   // INCO
   // LEDMeter( "Signal1",    &matrixD, 0, 0, TWELVE_BAR_DIAL_COLORS ),
