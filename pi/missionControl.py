@@ -11,6 +11,7 @@ class Mission( threading.Thread ):
         self.audio  = audio
         self.serial = serial
         super(Mission, self).__init__()
+        self.skippedFirstDockingProbe = False
 
     def run(self):
 
@@ -26,7 +27,12 @@ class Mission( threading.Thread ):
                 rules.applyTemporalRules()
 
                 data = self.serial.read()
+
                 (eventId, eventValue) = eventParser.getEventTuple( data )
+
+                if not self.skippedFirstDockingProbe and eventId == 'DockingProbe':
+                   self.skippedFirstDockingProbe = True
+                   continue
 
                 rule = rules.getRule( eventId )
                 rule( eventValue )
