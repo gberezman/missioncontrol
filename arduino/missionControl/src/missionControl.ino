@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include "comm/SerialCommand.h"
 #include "controls/Adafruit_LEDBackpack.h"
+#include <math.h>
 
 #include "controls/Expanders.h"
 #include "controls/Potentiometers.h"
@@ -41,6 +42,11 @@ void setup() {
   numbers.testAll();
   meters.testAll();
 
+  for( int i = 0; i < 24; i++ ) {
+    setInco( i );
+    delay( 20 );
+  }
+
   delay( 1000 );
 
   leds.disableAll();
@@ -50,6 +56,7 @@ void setup() {
   serialCommand.addCommand("M", setMeter);
   serialCommand.addCommand("L", setLED);
   serialCommand.addCommand("N", setNumber);
+  serialCommand.addCommand("I", setInco);
 }
 
 void initializeMatrices() {
@@ -88,6 +95,26 @@ void setMeter( char* meterLabel, int graphSetting ) {
   LEDMeter* meter = meters.getMeter( meterLabel );
   if( meter != NULL )
     meter->setBars( graphSetting );
+}
+
+void setInco() {
+  char* value = serialCommand.next();
+
+  if( value != NULL )
+    setInco( atoi( value ) );
+}
+
+void setInco( int value ) {
+  LEDMeter* segment1 = meters.getMeter( "Signal1" );
+  LEDMeter* segment2 = meters.getMeter( "Signal2" );
+
+  if( segment1 != NULL && segment2 != NULL ) {
+    segment1->setBars( min( value, 12 ) );
+    if( value > 12 )
+        segment2->setBars( min( value - 12, 12 ) );
+    else
+        segment2->setBars( 0 );
+  }
 }
 
 void setLED() {

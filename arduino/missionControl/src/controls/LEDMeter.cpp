@@ -24,6 +24,7 @@ LEDMeter::LEDMeter(char* _label, Adafruit_LEDBackpack* _matrix, uint8_t _baseCat
     colors      = _colors;
     anodeMask   = ~ ( B11111111 << baseAnode );
     label = _label;
+    bars = 0;
 }
 
 char* LEDMeter::getLabel(void) {
@@ -37,7 +38,8 @@ void LEDMeter::clear(void) {
   matrix->writeDisplay();
 }
 
-void LEDMeter::setBars(uint8_t bars) {  
+void LEDMeter::setBars(uint8_t _bars) {  
+  bars = _bars;
   for( int cathodeOffset = 0; cathodeOffset < 3; cathodeOffset++ ) {
     uint8_t anodeSegment = anodeSegmentForBars[bars][cathodeOffset];
     setDisplayBuffer( cathodeOffset + baseCathode, anodeSegment, getColor( bars ) );
@@ -56,5 +58,10 @@ uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
 
 uint8_t LEDMeter::getColor( uint8_t bars ) {
   return bars >= 1 ? colors[bars - 1 ] : 0;
+}
+
+void LEDMeter::setColors( uint16_t* _colors ) {
+  colors = _colors;
+  setBars( bars );
 }
 
