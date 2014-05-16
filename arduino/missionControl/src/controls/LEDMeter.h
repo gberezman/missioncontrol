@@ -88,7 +88,7 @@ class LEDMeter {
     void clear(void);
     void setBars(uint8_t bars);
     char* getLabel( void );
-    void setColors(uint16_t* colors);
+    void enableBar(uint8_t bar);
 
   private:
     void setDisplayBuffer( uint8_t pin, uint8_t value, uint8_t color );

@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include "LEDMeter.h"
+#include <math.h>
 
 const static uint8_t anodeSegmentForBars[][3] = {
   { B00000000, B00000000, B00000000 },
@@ -48,8 +49,8 @@ void LEDMeter::setBars(uint8_t _bars) {
   matrix->writeDisplay();
 }
 
-void LEDMeter::setDisplayBuffer( uint8_t pin, uint8_t value, uint8_t color ) {
-  matrix->displaybuffer[pin] = applyNewAnodes(matrix->displaybuffer[pin], value & color);
+void LEDMeter::setDisplayBuffer( uint8_t cathodePin, uint8_t value, uint8_t color ) {
+  matrix->displaybuffer[cathodePin] = applyNewAnodes(matrix->displaybuffer[cathodePin], value & color);
 }
 
 uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
@@ -57,11 +58,16 @@ uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
 }
 
 uint8_t LEDMeter::getColor( uint8_t bars ) {
-  return bars >= 1 ? colors[bars - 1 ] : 0;
+  return bars >= 1 ? colors[bars - 1] : 0;
 }
 
-void LEDMeter::setColors( uint16_t* _colors ) {
-  colors = _colors;
-  setBars( bars );
-}
+void LEDMeter::enableBar( uint8_t bar ) {
+  uint8_t cathodePin = baseCathode + ceil( bar/4 ) - 1;
+  uint16_t current = matrix->displaybuffer[cathodePin];
 
+  if( bar > 0 ) {
+      uint16_t bit = 1 << ( bar % 4 ) << baseAnode;
+      matrix->displaybuffer[cathodePin] = current | bit;
+      matrix->writeDisplay();
+  }
+}

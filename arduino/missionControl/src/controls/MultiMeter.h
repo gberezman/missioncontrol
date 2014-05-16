@@ -6,7 +6,7 @@
 
 class MultiMeter {
   public:
-    MultiMeter( LEDMeter* loMeter, LEDMeter* hiMeter );
+    void setMeters( LEDMeter* loMeter, LEDMeter* hiMeter );
     void test( void );
     void clear( void );
     void enableRange( int8_t lo, int8_t hi );

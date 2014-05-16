@@ -29,7 +29,7 @@ LEDCollection leds;
 
 MeterCollection meters;
 NumberCollection numbers;
-MultiMeter inco = MultiMeter( meters.getMeter( "Signal1" ), meters.getMeter( "Signal2" ) );
+MultiMeter inco;
 
 SerialCommand serialCommand;
 
@@ -40,6 +40,8 @@ void setup() {
 
   initializeMatrices();
   expanders.initialize();
+
+  inco.setMeters( meters.getMeter( "Signal1" ), meters.getMeter( "Signal2" ) );
 
   leds.enableAll();
   numbers.testAll();
