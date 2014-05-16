@@ -59,6 +59,7 @@ void setup() {
   serialCommand.addCommand("L", setLED);
   serialCommand.addCommand("N", setNumber);
   serialCommand.addCommand("I", setInco);
+  serialCommand.addCommand("C", setIncoColor);
 }
 
 void initializeMatrices() {
@@ -105,6 +106,20 @@ void setInco() {
 
   if( low != NULL && high != NULL )
     inco.enableRange( atoi( low ), atoi( high ) );
+}
+
+void setIncoColor() {
+  char* bar = serialCommand.next();
+  char* colorEnum = serialCommand.next();
+
+  while( bar != NULL && colorEnum != NULL ) {
+    uint16_t color = BAR_LED_GREEN;
+    if( colorEnum[0] = 'R' )
+        color = BAR_LED_RED;
+    else if( colorEnum[0] = 'Y' )
+        color = BAR_LED_YELLOW;
+    inco.setColor( atoi( bar ), color );
+  }
 }
 
 void setLED() {

@@ -18,14 +18,14 @@ const static uint8_t anodeSegmentForBars[][3] = {
   { B11111111, B11111111, B11111111 }
 };
 
-LEDMeter::LEDMeter(char* _label, Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t _baseAnode, uint16_t _colors[16]) {
+LEDMeter::LEDMeter(char* _label, Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t _baseAnode, uint16_t _colors[12]) {
     baseCathode = _baseCathode;
     baseAnode   = _baseAnode;
     matrix      = _matrix;
     anodeMask   = ~ ( B11111111 << baseAnode );
     label = _label;
 
-    for( int i = 0; i < 16; i++ )
+    for( int i = 0; i < 12; i++ )
         colors[i] = _colors[i];
 }
 
@@ -62,11 +62,11 @@ uint8_t LEDMeter::getColor( uint8_t bars ) {
 }
 
 void LEDMeter::enableBar( uint8_t bar ) {
-  uint8_t cathodePin = baseCathode + ceil( bar/4 ) - 1;
-  uint16_t current = matrix->displaybuffer[cathodePin];
-
   if( bar > 0 ) {
-      uint16_t bit = 1 << ( bar % 4 );
+      uint8_t cathodePin = baseCathode + ceil( bar/4.0f ) - 1;
+      uint16_t current = matrix->displaybuffer[cathodePin];
+
+      uint16_t bit = B1 << ( ( bar - 1 ) % 4 );
       uint16_t bits = ( bit << 4 ) | bit;
       uint16_t colored = bits & getColor( bar );
       uint16_t shifted = colored << baseAnode;

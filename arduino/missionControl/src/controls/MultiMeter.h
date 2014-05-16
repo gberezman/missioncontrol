@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "LEDMeter.h"
+#include "LEDNumber.h"
 
 class MultiMeter {
   public:

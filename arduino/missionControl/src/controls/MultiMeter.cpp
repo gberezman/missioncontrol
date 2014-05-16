@@ -7,15 +7,15 @@ void MultiMeter::setMeters( LEDMeter* _loMeter, LEDMeter* _hiMeter ) {
 
 void MultiMeter::test( void ) {
     for( int i = 1; i < 25; i++ ) {
-        if( i < 5 || i > 10 )
+        if( i < 6 || i > 14 )
             setColor( i, BAR_LED_GREEN );
         else
             setColor( i, BAR_LED_RED );
     }
 
-    for( int i = 1; i < 25; i++ ) {
+    for( int i = -2; i < 26; i++ ) {
         enableRange( i, i + 3 );
-        delay( 50 );
+        delay( 20 );
     }
 }
 
@@ -27,7 +27,7 @@ void MultiMeter::clear( void ) {
 void MultiMeter::enableRange( int8_t lo, int8_t hi ) {
     clear();
     
-    for( int i = max( 1, lo ); i < min( hi, 25 ); i++ ) {
+    for( int i = max( 1, lo ); i <= min( hi, 24 ); i++ ) {
         if( i < 13 )
             loMeter->enableBar( i );
         else

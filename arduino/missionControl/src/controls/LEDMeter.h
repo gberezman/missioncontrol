@@ -84,7 +84,7 @@ static uint16_t TWELVE_BAR_QTY_COLORS[] = {
 
 class LEDMeter {
   public:
-    LEDMeter(char* label, Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode, uint16_t colors[16]);
+    LEDMeter(char* label, Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode, uint16_t colors[12]);
     void clear(void);
     void setBars(uint8_t bars);
     char* getLabel( void );
