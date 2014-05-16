@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include "comm/SerialCommand.h"
 #include "controls/Adafruit_LEDBackpack.h"
-#include <math.h>
+#include <string.h>
 
 #include "controls/Expanders.h"
 #include "controls/Potentiometers.h"
@@ -109,16 +109,17 @@ void setInco() {
 }
 
 void setIncoColor() {
-  char* bar = serialCommand.next();
-  char* colorEnum = serialCommand.next();
+  char* colors = serialCommand.next();
 
-  while( bar != NULL && colorEnum != NULL ) {
-    uint16_t color = BAR_LED_GREEN;
-    if( colorEnum[0] = 'R' )
-        color = BAR_LED_RED;
-    else if( colorEnum[0] = 'Y' )
-        color = BAR_LED_YELLOW;
-    inco.setColor( atoi( bar ), color );
+  if( colors != NULL ) {
+    for( int bar = 0; bar < strlen( colors ); bar ++ ) {
+        uint16_t color = BAR_LED_GREEN;
+        if( colors[bar] == 'R' )
+            color = BAR_LED_RED;
+        else if( colors[bar] == 'Y' )
+            color = BAR_LED_YELLOW;
+        inco.setColor( bar + 1, color );
+    }
   }
 }
 
