@@ -4,8 +4,8 @@
 #include <string.h>
 
 #include "controls/Expanders.h"
-#include "controls/Potentiometers.h"
 #include "controls/MultiMeter.h"
+#include "geometry/PotentiometerCollection.h"
 #include "geometry/LEDCollection.h"
 #include "geometry/MeterCollection.h"
 #include "geometry/NumberCollection.h"
@@ -24,7 +24,7 @@ Adafruit_LEDBackpack* matrices[] = {
 };
 
 Expanders expanders;
-Potentiometers pots;
+PotentiometerCollection pots;
 LEDCollection leds;
 
 MeterCollection meters;
