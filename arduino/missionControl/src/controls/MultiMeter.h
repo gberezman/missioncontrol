@@ -10,6 +10,7 @@ class MultiMeter {
     void test( void );
     void clear( void );
     void enableRange( int8_t lo, int8_t hi );
+    void setColor( int8_t bar, int8_t color );
 
   private:
     LEDMeter* loMeter;
