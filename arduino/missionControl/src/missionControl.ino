@@ -5,6 +5,7 @@
 
 #include "controls/Expanders.h"
 #include "controls/Potentiometers.h"
+#include "controls/MultiMeter.h"
 #include "geometry/LEDCollection.h"
 #include "geometry/MeterCollection.h"
 #include "geometry/NumberCollection.h"
@@ -25,8 +26,10 @@ Adafruit_LEDBackpack* matrices[] = {
 Expanders expanders;
 Potentiometers pots;
 LEDCollection leds;
+
 MeterCollection meters;
 NumberCollection numbers;
+MultiMeter inco = MultiMeter( meters.getMeter( "Signal1" ), meters.getMeter( "Signal2" ) );
 
 SerialCommand serialCommand;
 
@@ -41,17 +44,14 @@ void setup() {
   leds.enableAll();
   numbers.testAll();
   meters.testAll();
-
-  for( int i = 0; i < 24; i++ ) {
-    setInco( i );
-    delay( 20 );
-  }
+  inco.test();
 
   delay( 1000 );
 
   leds.disableAll();
   numbers.clearAll();
   meters.clearAll();
+  inco.clear();
 
   serialCommand.addCommand("M", setMeter);
   serialCommand.addCommand("L", setLED);
@@ -98,23 +98,11 @@ void setMeter( char* meterLabel, int graphSetting ) {
 }
 
 void setInco() {
-  char* value = serialCommand.next();
+  char* low = serialCommand.next();
+  char* high = serialCommand.next();
 
-  if( value != NULL )
-    setInco( atoi( value ) );
-}
-
-void setInco( int value ) {
-  LEDMeter* segment1 = meters.getMeter( "Signal1" );
-  LEDMeter* segment2 = meters.getMeter( "Signal2" );
-
-  if( segment1 != NULL && segment2 != NULL ) {
-    segment1->setBars( min( value, 12 ) );
-    if( value > 12 )
-        segment2->setBars( min( value - 12, 12 ) );
-    else
-        segment2->setBars( 0 );
-  }
+  if( low != NULL && high != NULL )
+    inco.enableRange( atoi( low ), atoi( high ) );
 }
 
 void setLED() {
