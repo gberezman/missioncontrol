@@ -17,8 +17,13 @@ class Potentiometer {
     char* potId;
     uint8_t currentState;
     uint8_t previousState;
-    unsigned long lastPoll = 0;
-    int pollFrequency_ms = 100;
+
+    static const int numReadings = 10;
+    int readings[numReadings];
+    int currentReadingIndex = 0;
+    int averageReading = 0;
+    int totalReading = 0;
+    int actualReadings = 0;
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include "Potentiometer.h"
 #include "Arduino.h"
+#include <math.h>
 
 Potentiometer::Potentiometer( char* _potId, uint8_t _analogPin ) {
   potId = _potId;
@@ -12,12 +13,17 @@ char* Potentiometer::id( void ) {
 }
 
 void Potentiometer::scan( void ) {
-  unsigned long now = millis();
-  if( now - lastPoll > pollFrequency_ms ) {
-    previousState = currentState;
-    currentState = map( analogRead(pin), 2, 1020, 0, 12 );
-    lastPoll = now;
-  }
+  actualReadings++;
+  totalReading = totalReading - readings[currentReadingIndex];
+  readings[currentReadingIndex] = map( analogRead(pin), 2, 1020, 0, 12 );
+  totalReading = totalReading + readings[currentReadingIndex];
+  currentReadingIndex += 1;
+  if( currentReadingIndex >= numReadings )
+  currentReadingIndex = 0;
+  averageReading = totalReading / min( numReadings, actualReadings );
+
+  previousState = currentState;
+  currentState = averageReading;
 }
 
 uint8_t Potentiometer::reading( void ) {
