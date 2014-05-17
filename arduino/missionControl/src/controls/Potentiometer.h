@@ -19,7 +19,7 @@ class Smoother {
 
 class Potentiometer {
   public:
-    Potentiometer( char* _potId, uint8_t _analogPin );
+    Potentiometer( char* _potId, uint8_t _analogPin, int limit );
     void scan( void );
     char* id( void );
     uint8_t reading( void );
@@ -31,6 +31,7 @@ class Potentiometer {
     char* potId;
     uint8_t currentState;
     uint8_t previousState;
+    int limit;
     Smoother smoother;
 };
 

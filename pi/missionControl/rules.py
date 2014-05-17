@@ -121,19 +121,19 @@ class Inco:
         self.beam = 12
 
     def setAntPitch(self, value, matrixDriver):
-        self.pitch = int( int( value ) / 3 )
+        self.pitch = int( value )
         self.write(matrixDriver)
 
     def setAntYaw(self, value, matrixDriver):
-        self.yaw = 2 * int( value ) 
+        self.yaw = int( value ) 
         self.write(matrixDriver)
 
     def setTune(self, value, matrixDriver):
-        self.tune = 2 * int( value )
+        self.tune = int( value )
         self.write(matrixDriver)
 
     def setBeam(self, value, matrixDriver):
-        self.beam = int( int( value ) / 2 )
+        self.beam = int( int( value ) )
         self.write(matrixDriver)
 
     def write(self, matrixDriver):

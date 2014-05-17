@@ -15,10 +15,10 @@ Potentiometer PotentiometerCollection::pots[] = {
   // Potentiometer( "O2Flow",     A6 ),
 
   // INCO
-  Potentiometer( "AntPitch",   A12 ),
-  Potentiometer( "AntYaw",     A13 ),
-  Potentiometer( "Beam",       A14 ),
-  Potentiometer( "Tune",       A15 )
+  Potentiometer( "AntPitch",   A12, 12 ),
+  Potentiometer( "AntYaw",     A13, 24 ),
+  Potentiometer( "Beam",       A14, 12 ),
+  Potentiometer( "Tune",       A15, 24 )
 };
 
 void PotentiometerCollection::scan( void ) {

@@ -3,9 +3,10 @@
 #include "Arduino.h"
 #include <math.h>
 
-Potentiometer::Potentiometer( char* _potId, uint8_t _analogPin ) {
+Potentiometer::Potentiometer( char* _potId, uint8_t _analogPin, int _limit ) {
   potId = _potId;
   pin = _analogPin;
+  limit = _limit;
 }
 
 char* Potentiometer::id( void ) {
@@ -13,7 +14,7 @@ char* Potentiometer::id( void ) {
 }
 
 void Potentiometer::scan( void ) {
-  smoother.record( map( analogRead(pin), 2, 1020, 0, 12 ) );
+  smoother.record( map( analogRead(pin), 2, 1020, 0, limit ) );
 
   previousState = currentState;
   currentState = smoother.getValue();
