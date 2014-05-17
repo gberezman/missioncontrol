@@ -121,19 +121,19 @@ class Inco:
         self.beam = 12
 
     def setAntPitch(self, value, matrixDriver):
-        self.pitch = int( int( 12 - value ) / 3 )
+        self.pitch = int( int( value ) / 3 )
         self.write(matrixDriver)
 
     def setAntYaw(self, value, matrixDriver):
-        self.yaw = 2 * int( 12 - value ) 
+        self.yaw = 2 * int( value ) 
         self.write(matrixDriver)
 
     def setTune(self, value, matrixDriver):
-        self.tune = 2 * int( 12 - value )
+        self.tune = 2 * int( value )
         self.write(matrixDriver)
 
     def setBeam(self, value, matrixDriver):
-        self.beam = int( int( 12 - value ) / 2 )
+        self.beam = int( int( value ) / 2 )
         self.write(matrixDriver)
 
     def write(self, matrixDriver):
@@ -327,10 +327,10 @@ class Rules:
             # In Arduino, tie the 4 pots directly to their LED graphs
 
             # INCO Potentiometers
-            'AntPitch' : lambda value: self.inco.setAntPitch( value, matrixDriver ),
-            'AntYaw'   : lambda value: self.inco.setAntYaw( value, matrixDriver ),
-            'Tune'     : lambda value: self.inco.setTune( value, matrixDriver ),
-            'Beam'     : lambda value: self.inco.setBeam( value, matrixDriver ),
+            'AntPitch' : lambda value: self.inco.setAntPitch( 12 - value, matrixDriver ),
+            'AntYaw'   : lambda value: self.inco.setAntYaw( 12 - value, matrixDriver ),
+            'Tune'     : lambda value: self.inco.setTune( 12 - value, matrixDriver ),
+            'Beam'     : lambda value: self.inco.setBeam( 12 - value, matrixDriver ),
 
             # In Arduino, tie the 4 pots directly to the LED graph:
                 # Tune moves the focal section up and down the graph (i.e. moves the beam)
