@@ -86,10 +86,13 @@ class LEDMeter {
   public:
     LEDMeter(char* label, Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode, uint16_t colors[12]);
     void clear(void);
+    void stageClear(void);
     void setBars(uint8_t bars);
     char* getLabel( void );
     void enableBar(uint8_t bar);
+    void stageEnableBar(uint8_t bar);
     void setColor(uint8_t bar, uint16_t color);
+    void writeDisplay();
 
   private:
     void setDisplayBuffer( uint8_t pin, uint8_t value, uint8_t color );

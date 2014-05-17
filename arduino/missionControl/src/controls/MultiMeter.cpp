@@ -20,8 +20,8 @@ void MultiMeter::test( void ) {
 }
 
 void MultiMeter::clear( void ) {
-    loMeter->clear();
-    hiMeter->clear();
+    loMeter->stageClear();
+    hiMeter->stageClear();
 }
 
 void MultiMeter::enableRange( int8_t lo, int8_t hi ) {
@@ -29,10 +29,13 @@ void MultiMeter::enableRange( int8_t lo, int8_t hi ) {
     
     for( int i = max( 1, lo ); i <= min( hi, 24 ); i++ ) {
         if( i < 13 )
-            loMeter->enableBar( i );
+            loMeter->stageEnableBar( i );
         else
-            hiMeter->enableBar( i - 12 );
+            hiMeter->stageEnableBar( i - 12 );
     }
+
+    loMeter->writeDisplay();
+    hiMeter->writeDisplay();
 }
 
 void MultiMeter::setColor( int8_t bar, int8_t color ) {

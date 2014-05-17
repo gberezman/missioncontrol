@@ -34,10 +34,13 @@ char* LEDMeter::getLabel(void) {
 }
 
 void LEDMeter::clear(void) {
+  stageClear();
+  matrix->writeDisplay();
+}
+
+void LEDMeter::stageClear(void) {
   for( int cathode = baseCathode; cathode < baseCathode + 3; cathode++ ) 
     matrix->displaybuffer[cathode] &= anodeMask;
-    
-  matrix->writeDisplay();
 }
 
 void LEDMeter::setBars(uint8_t bars) {  
@@ -63,6 +66,13 @@ uint8_t LEDMeter::getColor( uint8_t bars ) {
 
 void LEDMeter::enableBar( uint8_t bar ) {
   if( bar > 0 ) {
+      stageEnableBar( bar );
+      matrix->writeDisplay();
+  }
+}
+
+void LEDMeter::stageEnableBar( uint8_t bar ) {
+  if( bar > 0 ) {
       uint8_t cathodePin = baseCathode + ceil( bar/4.0f ) - 1;
       uint16_t current = matrix->displaybuffer[cathodePin];
 
@@ -71,8 +81,12 @@ void LEDMeter::enableBar( uint8_t bar ) {
       uint16_t colored = bits & getColor( bar );
       uint16_t shifted = colored << baseAnode;
       matrix->displaybuffer[cathodePin] = current | shifted;
-      matrix->writeDisplay();
   }
+}
+
+
+void LEDMeter::writeDisplay( void ) {
+    matrix->writeDisplay();
 }
 
 void LEDMeter::setColor( uint8_t bar, uint16_t color ) {
