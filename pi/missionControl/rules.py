@@ -328,8 +328,8 @@ class Rules:
 
             # INCO Potentiometers
             'AntPitch' : lambda value: self.inco.setAntPitch( 12 - value, matrixDriver ),
-            'AntYaw'   : lambda value: self.inco.setAntYaw( 12 - value, matrixDriver ),
-            'Tune'     : lambda value: self.inco.setTune( 12 - value, matrixDriver ),
+            'AntYaw'   : lambda value: self.inco.setAntYaw( 24 - value, matrixDriver ),
+            'Tune'     : lambda value: self.inco.setTune( 24 - value, matrixDriver ),
             'Beam'     : lambda value: self.inco.setBeam( 12 - value, matrixDriver ),
 
             # In Arduino, tie the 4 pots directly to the LED graph:
