@@ -13,17 +13,10 @@ char* Potentiometer::id( void ) {
 }
 
 void Potentiometer::scan( void ) {
-  actualReadings++;
-  totalReading = totalReading - readings[currentReadingIndex];
-  readings[currentReadingIndex] = map( analogRead(pin), 2, 1020, 0, 12 );
-  totalReading = totalReading + readings[currentReadingIndex];
-  currentReadingIndex += 1;
-  if( currentReadingIndex >= numReadings )
-  currentReadingIndex = 0;
-  averageReading = totalReading / min( numReadings, actualReadings );
+  smoother.record( map( analogRead(pin), 2, 1020, 0, 12 ) );
 
   previousState = currentState;
-  currentState = averageReading;
+  currentState = smoother.getValue();
 }
 
 uint8_t Potentiometer::reading( void ) {
@@ -40,4 +33,19 @@ void Potentiometer::sendToSerial( void ) {
   Serial.print( " " );
   Serial.print( reading() );
   Serial.print( "\n" );
+}
+
+void Smoother::record( int value ) {
+  total = total - readings[index];
+  readings[index] = value;
+  total = total + readings[index];
+
+  if( ++index >= numReadings )
+    index = 0;
+
+  average = total / min( numReadings, ++count );
+}
+
+int Smoother::getValue( void ) {
+  return average;
 }
