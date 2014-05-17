@@ -21,11 +21,23 @@ void LED::set( bool turnOn ) {
 }
 
 void LED::on(void) {
-    matrix->displaybuffer[cathode] |= onMask;
+    stageOn();
     matrix->writeDisplay();
 }
 
+void LED::stageOn(void) {
+    matrix->displaybuffer[cathode] |= onMask;
+}
+
 void LED::off(void) {
+    stageOff();
+    matrix->writeDisplay();
+}
+
+void LED::stageOff() {
     matrix->displaybuffer[cathode] &= offMask;
+}
+
+void LED::writeDisplay() {
     matrix->writeDisplay();
 }

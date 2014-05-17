@@ -13,10 +13,13 @@ char* LEDDigit::getLabel(void) {
 void LEDDigit::setDigit(uint8_t value) {
     for( int segment = 0; segment < 8; segment++ ) {
         if( numbers[value][segment] ) 
-            ledArray[segment].on();
+            ledArray[segment].stageOn();
         else 
-            ledArray[segment].off();
+            ledArray[segment].stageOff();
     }
+
+    // Assumes all segments are on the same matrix driver!
+    ledArray[0].writeDisplay();
 }
 
 void LEDDigit::clear(void) {

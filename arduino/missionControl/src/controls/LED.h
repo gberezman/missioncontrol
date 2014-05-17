@@ -8,8 +8,11 @@ class LED {
     LED(char* label, Adafruit_LEDBackpack* matrix, uint8_t cathode, uint8_t anode);
     void set( bool turnOn );
     void on( void );
+    void stageOn( void );
     void off( void );
+    void stageOff( void );
     char* getLabel( void );
+    void writeDisplay( void );
 
   private:
     Adafruit_LEDBackpack* matrix;

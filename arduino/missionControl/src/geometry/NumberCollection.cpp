@@ -264,7 +264,7 @@ void NumberCollection::testAll( void ) {
         for( int i = 0; i < sizeof( numbers ) / sizeof( LEDNumber ); i++ ) {
             numbers[i].set( buffer );
         }
-        delay( 10 );
+        delay( 100 );
     }
 }
 
