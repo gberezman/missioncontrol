@@ -17,6 +17,8 @@ class Potentiometer {
     char* potId;
     uint8_t currentState;
     uint8_t previousState;
+    unsigned long lastPoll = 0;
+    int pollFrequency_ms = 100;
 };
 
 #endif

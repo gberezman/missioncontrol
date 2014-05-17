@@ -12,8 +12,12 @@ char* Potentiometer::id( void ) {
 }
 
 void Potentiometer::scan( void ) {
-  previousState = currentState;
-  currentState = map( analogRead(pin), 2, 1020, 0, 12 );
+  unsigned long now = millis();
+  if( now - lastPoll > pollFrequency_ms ) {
+    previousState = currentState;
+    currentState = map( analogRead(pin), 2, 1020, 0, 12 );
+    lastPoll = now;
+  }
 }
 
 uint8_t Potentiometer::reading( void ) {
