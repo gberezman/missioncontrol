@@ -169,7 +169,7 @@ class FluctuatingMeter:
     def update(self, matrixDriver, isFanOn):
         now = time()
         if now - self.lastUpdate > self.frequency_s:
-            if ( not isFanOn ) or ( random.randint( 1, 10 ) > 4 ):
+            if ( not isFanOn ) or ( random.randint( 1, 10 ) > 3 ):
                 self.value += random.randint(-1, 1)
                 self.value = max( self.value, 1 )
                 self.value = min( self.value, 12 )
@@ -182,9 +182,9 @@ class FluctuatingMeter:
 
     def normalize(self, isOn, matrixDriver):
         if isOn and self.value < 4:
-            self.value = random.randint( 4, 6 )
+            self.value = random.randint( 5, 7 )
         elif isOn and self.value > 9:
-            self.value = random.randint( 6, 9 )
+            self.value = random.randint( 6, 8 )
         self.write( matrixDriver )
 
 class DecayingMeter:
