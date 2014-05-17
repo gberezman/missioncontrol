@@ -40,11 +40,11 @@ LED LEDCollection::leds[] = {
     LED( "ES10",            &matrixA, 4, 5 ),
 
     // ABORT
-    // LED( "ArmAbort",        &matrixA, 0, 10 ),
-    // LED( "Abort",           &matrixA, 1, 8 ),
+    // LED( "ArmAbort",        &matrixA, 0, 9 ),
+    LED( "Abort",           &matrixB, 0, 9 ),
 
     // C&WS
-    // LED( "MasterAlarm",     &matrixA, 0, 10 ),
+    LED( "MasterAlarm",     &matrixB, 1, 10 ),
     // LED( "Ack",             &matrixA, 1, 10 )
 
     // PANEL2
