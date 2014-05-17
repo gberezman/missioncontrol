@@ -112,6 +112,52 @@ class Pyrotechnics:
         if isOn:
             audio.play( self.clip )
 
+class Inco:
+
+    def __init__(self):
+        self.pitch = 5
+        self.yaw = 12
+        self.tune = 5
+        self.beam = 12
+
+    def setAntPitch(self, value, matrixDriver):
+        self.pitch = int( int( 12 - value ) / 3 )
+        self.write(matrixDriver)
+
+    def setAntYaw(self, value, matrixDriver):
+        self.yaw = 2 * int( 12 - value ) 
+        self.write(matrixDriver)
+
+    def setTune(self, value, matrixDriver):
+        self.tune = 2 * int( 12 - value )
+        self.write(matrixDriver)
+
+    def setBeam(self, value, matrixDriver):
+        self.beam = int( int( 12 - value ) / 2 )
+        self.write(matrixDriver)
+
+    def write(self, matrixDriver):
+        pitchOffset = int( self.pitch / 2 )
+        yawLo = self.yaw - pitchOffset
+        yawHi = self.yaw + pitchOffset
+        colors = ""
+        for idx in range( 1, 24 ):
+            if idx < yawLo - 2:
+                colors += "R"
+            elif idx < yawLo:
+                colors += "Y"
+            elif idx > yawHi + 2:
+                colors += "R"
+            elif idx > yawHi:
+                colors += "Y"
+            else:
+                colors += "G"
+            
+        matrixDriver.setIncoColors( colors )
+
+        beamOffset = int( self.beam ) / 2
+        matrixDriver.setInco( self.tune - beamOffset, self.tune + beamOffset )
+
 class FluctuatingMeter:
 
     def __init__(self, meter, initialValue = 12, frequency_s = 3):
@@ -262,6 +308,8 @@ class Rules:
         self.H2Qty      = DecayingMeter( "H2Qty", decayRate_s = 180 )
         self.H2Qty.write( matrixDriver )
 
+        self.inco = Inco()
+
         self.__rules = {
             # CAPCOM Potentiometers
             # 'Speaker'    # Adjust speaker volume
@@ -279,10 +327,11 @@ class Rules:
             # In Arduino, tie the 4 pots directly to their LED graphs
 
             # INCO Potentiometers
-            # 'AntPitch'
-            # 'AntYaw'
-            # 'Tune'
-            # 'Beam'
+            'AntPitch' : lambda value: self.inco.setAntPitch( value, matrixDriver ),
+            'AntYaw'   : lambda value: self.inco.setAntYaw( value, matrixDriver ),
+            'Tune'     : lambda value: self.inco.setTune( value, matrixDriver ),
+            'Beam'     : lambda value: self.inco.setBeam( value, matrixDriver ),
+
             # In Arduino, tie the 4 pots directly to the LED graph:
                 # Tune moves the focal section up and down the graph (i.e. moves the beam)
                 # Beam adjusts the width of the focal section

@@ -58,7 +58,7 @@ class ArduinoMatrixDriver:
     def setInco(self, lo, hi):
         self.serial.write( "I {} {}\n".format( lo, hi ) )
 
-    def setIncoColor(self, values):
+    def setIncoColors(self, values):
         self.serial.write( "C {}\n".format( values ) )
 
     def ledOn(self, ledId):
