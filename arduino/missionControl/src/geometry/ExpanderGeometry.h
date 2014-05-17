@@ -49,18 +49,20 @@ char* exp1Switches[16] = {
 
 char* exp2Switches[16] = {
     // ABORT
+    "ArmAbortInput",
     "ArmAbort",
-    "Abort",
+
+    // C&WS
+    "Mode",
+    "Power",
+    "Lamp",
+    "MasterAlarm",
 
     // CAPCOM
     "PTT",
 
-    // C&WS
-    "MasterAlarm",
-    "Lamp",
-    "Ack",
-    "Power",
-    "Mode",
+    // ABORT
+    "Abort",
 
     "unused",
     "unused",
@@ -73,6 +75,13 @@ char* exp2Switches[16] = {
 };
 
 char* exp3Switches[16] = {
+    "unused",
+    "unused",
+    "unused",
+    "unused",
+    "unused",
+    "unused",
+
     // EVENT SEQUENCE
     "ES1",
     "ES2",
@@ -83,19 +92,12 @@ char* exp3Switches[16] = {
     "ES7",
     "ES8",
     "ES9",
-    "ES10",
-
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused"
+    "ES10"
 };
 
 SwitchExpander SWITCH_EXPANDERS[] = {
   SwitchExpander( 0, exp0Switches ),
-  SwitchExpander( 1, exp1Switches )
-  // SwitchExpander( 2, exp2Switches ),
-  // SwitchExpander( 3, exp3Switches ),
+  SwitchExpander( 1, exp1Switches ),
+  SwitchExpander( 2, exp2Switches ),
+  SwitchExpander( 3, exp3Switches )
 };
