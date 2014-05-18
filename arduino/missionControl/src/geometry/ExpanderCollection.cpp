@@ -1,6 +1,6 @@
-#include "../controls/SwitchExpander.h"
+#include "ExpanderCollection.h"
 
-char* exp0Switches[16] = {
+char* ExpanderCollection::exp0Switches[16] = {
     // BOOSTER 
     "SPS",
     "-UNUSED",
@@ -24,7 +24,7 @@ char* exp0Switches[16] = {
     "M-III"
 };
 
-char* exp1Switches[16] = {
+char* ExpanderCollection::exp1Switches[16] = {
     // PYROTECHNICS
     "MainDeploy",
     "DrogueDeploy",
@@ -47,7 +47,7 @@ char* exp1Switches[16] = {
     "SuitComp"
 };
 
-char* exp2Switches[16] = {
+char* ExpanderCollection::exp2Switches[16] = {
     // ABORT
     "-UNUSED",
     "ArmAbort",
@@ -74,7 +74,7 @@ char* exp2Switches[16] = {
     "-UNUSED"
 };
 
-char* exp3Switches[16] = {
+char* ExpanderCollection::exp3Switches[16] = {
     "-UNUSED",
     "-UNUSED",
     "-UNUSED",
@@ -95,9 +95,25 @@ char* exp3Switches[16] = {
     "ES10"
 };
 
-SwitchExpander SWITCH_EXPANDERS[] = {
+SwitchExpander ExpanderCollection::SWITCH_EXPANDERS[] = {
   SwitchExpander( 0, exp0Switches ),
   SwitchExpander( 1, exp1Switches ),
   SwitchExpander( 2, exp2Switches ),
   SwitchExpander( 3, exp3Switches )
 };
+
+void ExpanderCollection::initialize( void ) {
+    for( int i = 0; i < sizeof(SWITCH_EXPANDERS)/sizeof(SwitchExpander); i++ )
+        SWITCH_EXPANDERS[i].initialize();
+}
+
+void ExpanderCollection::scan( void ){
+    for( int i = 0; i < sizeof(SWITCH_EXPANDERS)/sizeof(SwitchExpander); i++ )
+        SWITCH_EXPANDERS[i].scanSwitches();
+}
+
+void ExpanderCollection::sendSwitchStates( void ){
+    for( int i = 0; i < sizeof(SWITCH_EXPANDERS)/sizeof(SwitchExpander); i++ )
+        SWITCH_EXPANDERS[i].sendChangedStatesToSerial();
+}
+
