@@ -358,7 +358,7 @@ class Rules:
             'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
 
             # ABORT
-            #'ArmAbort'        : lambda armed: self.abort.setArm( armed ),
+            'ArmAbort'        : lambda disabled: self.abort.setArm( not disabled ),
             #'Abort'           : lambda pressed: self.abort.abort() if pressed else self.noAction(),
 
             # BOOSTER Switches
