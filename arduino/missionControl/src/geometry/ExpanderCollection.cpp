@@ -49,8 +49,8 @@ char* ExpanderCollection::exp1Switches[16] = {
 
 char* ExpanderCollection::exp2Switches[16] = {
     // ABORT
-    "-UNUSED",
     "ArmAbort",
+    "-UNUSED",
 
     // C&WS
     "Mode",
@@ -117,3 +117,6 @@ void ExpanderCollection::sendSwitchStates( void ){
         SWITCH_EXPANDERS[i].sendChangedStatesToSerial();
 }
 
+SwitchExpander* ExpanderCollection::getExpander( int address ) {
+    return &SWITCH_EXPANDERS[address];
+}

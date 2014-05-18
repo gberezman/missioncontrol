@@ -55,6 +55,10 @@ void setup() {
   meters.clearAll();
   inco.clear();
 
+  Adafruit_MCP23017* mcp2 = expanders.getExpander( 2 )->getMCP();
+  mcp2->pinMode( 1, OUTPUT );
+  mcp2->digitalWrite( 0, LOW );
+
   serialCommand.addCommand("M", setMeter);
   serialCommand.addCommand("L", setLED);
   serialCommand.addCommand("N", setNumber);

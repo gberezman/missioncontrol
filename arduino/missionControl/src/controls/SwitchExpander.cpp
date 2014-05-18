@@ -27,6 +27,10 @@ void SwitchExpander::initialize() {
   }
 }
 
+Adafruit_MCP23017* SwitchExpander::getMCP() {
+    return &mcp;
+}
+
 bool SwitchExpander::isUnused(int pin) {
     return pinLabels[pin][0] == '-';
 }

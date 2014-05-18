@@ -8,6 +8,7 @@ class ExpanderCollection {
         void initialize( void );
         void scan( void );
         void sendSwitchStates( void );
+        SwitchExpander* getExpander( int address );
 
     private:
         static char* exp0Switches[16];

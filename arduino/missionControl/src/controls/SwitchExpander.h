@@ -16,6 +16,7 @@ class SwitchExpander {
     bool didPinChangeState( uint8_t pin );
     void sendChangedStatesToSerial();
     char* getPinId( uint8_t _pin );
+    Adafruit_MCP23017* getMCP( void );
 
   private:
     void sendStateToSerial( uint8_t pin );
