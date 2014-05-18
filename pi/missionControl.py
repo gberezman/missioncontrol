@@ -12,6 +12,7 @@ class Mission( threading.Thread ):
         self.serial = serial
         super(Mission, self).__init__()
         self.skippedFirstDockingProbe = False
+        self.skippedFirstPTT = False
 
     def run(self):
 
@@ -33,6 +34,9 @@ class Mission( threading.Thread ):
                 if not self.skippedFirstDockingProbe and eventId == 'DockingProbe':
                    self.skippedFirstDockingProbe = True
                    continue
+                elif not self.skippedFirstPTT and eventId == "PTT":
+                    self.skippedFirstPTT = True
+                    continue
 
                 rule = rules.getRule( eventId )
                 rule( eventValue )

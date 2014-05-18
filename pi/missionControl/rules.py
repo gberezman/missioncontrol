@@ -412,8 +412,8 @@ class Rules:
             # 'Ack' # no lights, audio and master alarm only, probably should be illuminated
 
             # CAPCOM Switches
-            #'PTT'             : lambda isOn: audio.togglePlay( 'quindarin', isOn ) \
-                                             #or audio.togglePlay( 'quindarout', not isOn ),
+            'PTT'             : lambda isOn: audio.togglePlay( 'Quindarin', isOn ) \
+                                             or audio.togglePlay( 'Quindarout', not isOn ),
 
             # EVENT SEQUENCE Switches
             #'ES1'             : lambda isOn: audio.play( audio.ES1, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
