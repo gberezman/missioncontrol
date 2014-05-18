@@ -28,7 +28,7 @@ void SwitchExpander::initialize() {
 }
 
 bool SwitchExpander::isUnused(int pin) {
-    return pinLabels[pin][0] == 'U';
+    return pinLabels[pin][0] == '-';
 }
 
 void SwitchExpander::scanSwitches() {
