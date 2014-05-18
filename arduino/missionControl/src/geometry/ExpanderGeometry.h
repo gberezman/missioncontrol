@@ -3,9 +3,9 @@
 char* exp0Switches[16] = {
     // BOOSTER 
     "SPS",
-    "unused",
-    "unused",
-    "unused",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
 
     // CRYOGENICS
     "O2Fan",
@@ -34,7 +34,7 @@ char* exp1Switches[16] = {
     "ApexCoverJettsn",
     "LesMotorFire",
 
-    "unused",
+    "UNUSED",
 
     // CONTROL
     "DockingProbe",
@@ -49,7 +49,7 @@ char* exp1Switches[16] = {
 
 char* exp2Switches[16] = {
     // ABORT
-    "ArmAbortInput",
+    "UNUSED",
     "ArmAbort",
 
     // C&WS
@@ -64,23 +64,23 @@ char* exp2Switches[16] = {
     // ABORT
     "Abort",
 
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused"
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED"
 };
 
 char* exp3Switches[16] = {
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused",
-    "unused",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
+    "UNUSED",
 
     // EVENT SEQUENCE
     "ES1",

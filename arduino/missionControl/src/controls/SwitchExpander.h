@@ -20,6 +20,7 @@ class SwitchExpander {
   private:
     void sendStateToSerial( uint8_t pin );
     void invertSwitches( void );
+    bool isUnused( int pin );
     char** pinLabels;
     uint8_t address;
     Adafruit_MCP23017 mcp;

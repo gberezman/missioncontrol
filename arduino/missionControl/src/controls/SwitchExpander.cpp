@@ -14,8 +14,10 @@ void SwitchExpander::initialize() {
     mcp.begin(address);
   
     for( int pin = 0; pin < NUM_EXPANDER_PINS; pin++ ) { 
-        mcp.pinMode(pin, INPUT);
-        mcp.pullUp(pin, HIGH);  // 100K pullup 
+        if( ! isUnused(pin) ) {
+            mcp.pinMode(pin, INPUT);
+            mcp.pullUp(pin, HIGH);  // 100K pullup 
+        }
     }
 
     scanSwitches();
@@ -25,18 +27,24 @@ void SwitchExpander::initialize() {
   }
 }
 
+bool SwitchExpander::isUnused(int pin) {
+    return pinLabels[pin][0] == 'U';
+}
+
 void SwitchExpander::scanSwitches() {
   storePreviousSwitchStates();
 
   uint16_t gpioState = mcp.readGPIOAB();
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ )
-    currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
+    if( ! isUnused( pin ) )
+        currSwitchStates[pin] = ( gpioState & (1 << pin) ) >> pin;
 }
 
 void SwitchExpander::invertSwitches() {
   storePreviousSwitchStates();
   for( uint8_t pin = 0; pin < NUM_EXPANDER_PINS; pin++ )
-    currSwitchStates[pin] = ! currSwitchStates[pin];
+    if( ! isUnused( pin ) )
+        currSwitchStates[pin] = ! currSwitchStates[pin];
 }
 
 bool SwitchExpander::wasPinTurnedOn( uint8_t pin ) {
