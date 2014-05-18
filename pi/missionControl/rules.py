@@ -416,8 +416,8 @@ class Rules:
                                              or audio.togglePlay( 'Quindarout', not isOn ),
 
             # EVENT SEQUENCE Switches
-            #'ES1'             : lambda isOn: audio.play( audio.ES1, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES1' ) if isOn else self.noAction(),
-            #'ES2'             : lambda isOn: audio.play( audio.ES2, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES2' ) if isOn else self.noAction(),
+            'ES1'             : lambda isOn: audio.play( 'ES1', dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.ledOn( 'ES1' ) if isOn else self.noAction(),
+            'ES2'             : lambda isOn: audio.play( 'ES2', dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.ledOn( 'ES2' ) if isOn else self.noAction(),
             #'ES3'             : lambda isOn: audio.play( audio.ES3, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES3' ) if isOn else self.noAction(),
             #'ES4'             : lambda isOn: audio.play( audio.ES4, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES4' ) if isOn else self.noAction(),
             #'ES5'             : lambda isOn: audio.play( audio.ES5, dedicatedChannel = audio.eventSequenceChannel ) or matrixDriver.LedOn( 'ES5' ) if isOn else self.noAction(),
