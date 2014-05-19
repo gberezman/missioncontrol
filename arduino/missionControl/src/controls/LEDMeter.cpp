@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include "LEDMeter.h"
+#include <math.h>
 
 const static uint8_t anodeSegmentForBars[][3] = {
   { B00000000, B00000000, B00000000 },
@@ -17,13 +18,15 @@ const static uint8_t anodeSegmentForBars[][3] = {
   { B11111111, B11111111, B11111111 }
 };
 
-LEDMeter::LEDMeter(char* _label, Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t _baseAnode, uint16_t* _colors) {
+LEDMeter::LEDMeter(char* _label, Adafruit_LEDBackpack* _matrix, uint8_t _baseCathode, uint8_t _baseAnode, uint16_t _colors[12]) {
     baseCathode = _baseCathode;
     baseAnode   = _baseAnode;
     matrix      = _matrix;
-    colors      = _colors;
     anodeMask   = ~ ( B11111111 << baseAnode );
     label = _label;
+
+    for( int i = 0; i < 12; i++ )
+        colors[i] = _colors[i];
 }
 
 char* LEDMeter::getLabel(void) {
@@ -46,8 +49,8 @@ void LEDMeter::setBars(uint8_t bars) {
   matrix->writeDisplay();
 }
 
-void LEDMeter::setDisplayBuffer( uint8_t pin, uint8_t value, uint8_t color ) {
-  matrix->displaybuffer[pin] = applyNewAnodes(matrix->displaybuffer[pin], value & color);
+void LEDMeter::setDisplayBuffer( uint8_t cathodePin, uint8_t value, uint8_t color ) {
+  matrix->displaybuffer[cathodePin] = applyNewAnodes(matrix->displaybuffer[cathodePin], value & color);
 }
 
 uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
@@ -55,6 +58,23 @@ uint16_t LEDMeter::applyNewAnodes( uint16_t current, uint8_t value ) {
 }
 
 uint8_t LEDMeter::getColor( uint8_t bars ) {
-  return bars >= 1 ? colors[bars - 1 ] : 0;
+  return bars >= 1 ? colors[bars - 1] : 0;
 }
 
+void LEDMeter::enableBar( uint8_t bar ) {
+  if( bar > 0 ) {
+      uint8_t cathodePin = baseCathode + ceil( bar/4.0f ) - 1;
+      uint16_t current = matrix->displaybuffer[cathodePin];
+
+      uint16_t bit = B1 << ( ( bar - 1 ) % 4 );
+      uint16_t bits = ( bit << 4 ) | bit;
+      uint16_t colored = bits & getColor( bar );
+      uint16_t shifted = colored << baseAnode;
+      matrix->displaybuffer[cathodePin] = current | shifted;
+      matrix->writeDisplay();
+  }
+}
+
+void LEDMeter::setColor( uint8_t bar, uint16_t color ) {
+    colors[bar - 1] = color;
+}

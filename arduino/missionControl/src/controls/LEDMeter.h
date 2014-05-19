@@ -7,7 +7,52 @@
 #define BAR_LED_RED    B00001111
 #define BAR_LED_YELLOW B11111111
 
-static uint16_t TWELVE_BAR_DIAL_COLORS[] = {
+static uint16_t ALL_YELLOW[] = {
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW,
+  BAR_LED_YELLOW
+};
+
+static uint16_t ALL_RED[] = {
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED,
+  BAR_LED_RED
+};
+
+static uint16_t ALL_GREEN[] = {
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN,
+  BAR_LED_GREEN
+};
+
+static uint16_t TWELVE_BAR_MIDRANGE_COLORS[] = {
   BAR_LED_RED,
   BAR_LED_YELLOW,
   BAR_LED_YELLOW,
@@ -22,12 +67,12 @@ static uint16_t TWELVE_BAR_DIAL_COLORS[] = {
   BAR_LED_RED
 };
 
-static uint16_t TWELVE_BAR_METER_COLORS[] = {
+static uint16_t TWELVE_BAR_QTY_COLORS[] = {
   BAR_LED_RED,
   BAR_LED_RED,
   BAR_LED_YELLOW,
   BAR_LED_YELLOW,
-  BAR_LED_YELLOW,
+  BAR_LED_GREEN,
   BAR_LED_GREEN,
   BAR_LED_GREEN,
   BAR_LED_GREEN,
@@ -39,10 +84,12 @@ static uint16_t TWELVE_BAR_METER_COLORS[] = {
 
 class LEDMeter {
   public:
-    LEDMeter(char* label, Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode, uint16_t* _colors);
+    LEDMeter(char* label, Adafruit_LEDBackpack* matrix, uint8_t baseCathode, uint8_t baseAnode, uint16_t colors[12]);
     void clear(void);
     void setBars(uint8_t bars);
     char* getLabel( void );
+    void enableBar(uint8_t bar);
+    void setColor(uint8_t bar, uint16_t color);
 
   private:
     void setDisplayBuffer( uint8_t pin, uint8_t value, uint8_t color );
@@ -52,8 +99,9 @@ class LEDMeter {
     char* label;
     uint8_t  baseCathode;
     uint8_t  baseAnode;
-    uint16_t* colors;
+    uint16_t colors[16];
     uint16_t anodeMask;
+    uint8_t bars;
 };
 
 #endif

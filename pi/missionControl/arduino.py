@@ -55,6 +55,12 @@ class ArduinoMatrixDriver:
     def setNumber(self, numberId, value):
         self.serial.write( "N {} {}\n".format( numberId, value ) )
 
+    def setInco(self, lo, hi):
+        self.serial.write( "I {} {}\n".format( lo, hi ) )
+
+    def setIncoColors(self, values):
+        self.serial.write( "C {}\n".format( values ) )
+
     def ledOn(self, ledId):
         self.serial.write( "L {} 1\n".format( ledId ) )
 

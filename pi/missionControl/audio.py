@@ -109,7 +109,13 @@ class Audio:
             'heat'                : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/heat.wav' ),
 
             # PYROTECHNICS
-            'CsmDeploy'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/csmDeploy.wav' )
+            'MainDeploy'          : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/MainDeploy.wav' ),
+            'DrogueDeploy'        : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/drogueChute.wav' ),
+            'CsmDeploy'           : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/csmDeploy.wav' ),
+            'CanardDeploy'        : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/canardDeploy.wav' ),
+            'SmDeploy'            : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/smDeploy.wav' ),
+            'ApexCoverJettsn'     : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ApexCoverJettsn.wav' ),
+            'LesMotorFire'        : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/lesMotorFire.wav' )
         }
 
         # self.__sounds['o2fan'].set_volume( 0.2 )

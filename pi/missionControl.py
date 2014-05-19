@@ -11,6 +11,7 @@ class Mission( threading.Thread ):
         self.audio  = audio
         self.serial = serial
         super(Mission, self).__init__()
+        self.skippedFirstDockingProbe = False
 
     def run(self):
 
@@ -26,7 +27,12 @@ class Mission( threading.Thread ):
                 rules.applyTemporalRules()
 
                 data = self.serial.read()
+
                 (eventId, eventValue) = eventParser.getEventTuple( data )
+
+                if not self.skippedFirstDockingProbe and eventId == 'DockingProbe':
+                   self.skippedFirstDockingProbe = True
+                   continue
 
                 rule = rules.getRule( eventId )
                 rule( eventValue )
@@ -34,8 +40,11 @@ class Mission( threading.Thread ):
             except KeyboardInterrupt:
                 exit()
 
+def waitForStart( delay ):
+    sleep( delay )
+
 if __name__ == '__main__':
 
     mainThread = Mission( Audio(), ArduinoSerial( timeout = .5 ) )
-    # mainThread = Mission( Audio(), StubbedArduinoSerial() )
+    waitForStart( 5 )
     mainThread.start()

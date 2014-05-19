@@ -1,6 +1,15 @@
 from time import sleep,time
 import random
 
+class SwitchState:
+
+    def __init__(self, switch, isOn = False):
+        self.switch = switch
+        self.isOn = isOn
+
+    def setState(self, isOn):
+        self.isOn = isOn
+
 class CautionWarning:
 
     def __init__(self, audio, matrixDriver):
@@ -90,6 +99,112 @@ class LatchedLED:
         if self.buttonCount <= 0:
             self.matrixDriver.ledOff(self.led)
 
+class Pyrotechnics:
+
+    def __init__(self, led, clip):
+        self.led = led;
+        self.clip = clip
+        self.fired = False
+
+    def fire(self, isOn, matrixDriver, audio):
+        #if isOn and not self.fired:
+        matrixDriver.setLed( self.led, isOn )
+        if isOn:
+            audio.play( self.clip )
+
+class Inco:
+
+    def __init__(self):
+        self.pitch = 5
+        self.yaw = 12
+        self.tune = 5
+        self.beam = 12
+
+    def setAntPitch(self, value, matrixDriver):
+        self.pitch = int( value )
+        self.write(matrixDriver)
+
+    def setAntYaw(self, value, matrixDriver):
+        self.yaw = int( value ) 
+        self.write(matrixDriver)
+
+    def setTune(self, value, matrixDriver):
+        self.tune = int( value )
+        self.write(matrixDriver)
+
+    def setBeam(self, value, matrixDriver):
+        self.beam = int( int( value ) )
+        self.write(matrixDriver)
+
+    def write(self, matrixDriver):
+        pitchOffset = int( self.pitch / 2 )
+        yawLo = self.yaw - pitchOffset
+        yawHi = self.yaw + pitchOffset
+        colors = ""
+        for idx in range( 1, 24 ):
+            if idx < yawLo - 2:
+                colors += "R"
+            elif idx < yawLo:
+                colors += "Y"
+            elif idx > yawHi + 2:
+                colors += "R"
+            elif idx > yawHi:
+                colors += "Y"
+            else:
+                colors += "G"
+            
+        matrixDriver.setIncoColors( colors )
+
+        beamOffset = int( self.beam ) / 2
+        matrixDriver.setInco( self.tune - beamOffset, self.tune + beamOffset )
+
+class FluctuatingMeter:
+
+    def __init__(self, meter, initialValue = 12, frequency_s = 3):
+        self.meter = meter
+        self.value = initialValue
+        self.frequency_s = frequency_s
+        self.lastUpdate = time()
+
+    def update(self, matrixDriver, isFanOn):
+        now = time()
+        if now - self.lastUpdate > self.frequency_s:
+            if ( not isFanOn ) or ( random.randint( 1, 10 ) > 3 ):
+                self.value += random.randint(-1, 1)
+                self.value = max( self.value, 1 )
+                self.value = min( self.value, 12 )
+
+            self.write( matrixDriver )
+            self.lastUpdate = now
+
+    def write(self, matrixDriver):
+        matrixDriver.setMeter( self.meter, self.value )
+
+    def normalize(self, isOn, matrixDriver):
+        if isOn and self.value < 4:
+            self.value = random.randint( 5, 7 )
+        elif isOn and self.value > 9:
+            self.value = random.randint( 6, 8 )
+        self.write( matrixDriver )
+
+class DecayingMeter:
+
+    def __init__(self, meter, initialValue = 12, decayRate_s = 120):
+        self.meter = meter
+        self.value = initialValue
+        self.decayRate_s = decayRate_s
+        self.lastUpdate = time()
+
+    def decay(self, matrixDriver):
+        now = time()
+        if now - self.lastUpdate > self.decayRate_s:
+            self.value = max( self.value - 1, 1 )
+            self.write( matrixDriver )
+            self.lastUpdate = now
+
+    def write(self, matrixDriver):
+        matrixDriver.setMeter( self.meter, self.value )
+
 class ThreeDigitControl:
     
     def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350, range = 20 ):
@@ -143,6 +258,12 @@ class Rules:
         self.Yaw.update( self.matrixDriver )
         self.Roll.update( self.matrixDriver )
 
+        self.O2Pressure.update( self.matrixDriver, self.O2FanState.isOn )
+        self.H2Pressure.update( self.matrixDriver, self.H2FanState.isOn )
+
+        self.O2Qty.decay( self.matrixDriver )
+        self.H2Qty.decay( self.matrixDriver )
+
     def getRule(self, name):
         if name:
             return self.__rules.get(name, lambda value: self.noAction())
@@ -160,22 +281,34 @@ class Rules:
         self.cw = CautionWarning(audio, matrixDriver)
 
         self.IHR = ThreeDigitControl( "IHR" )
-        self.IHR.update( matrixDriver )
-
         self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
-        self.AHR.update( matrixDriver )
-
         self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
-        self.ABR.update( matrixDriver )
-
         self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
-        self.Pitch.update( matrixDriver )
-
         self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
-        self.Yaw.update( matrixDriver )
-
         self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
-        self.Roll.update( matrixDriver )
+
+        self.mainDeploy      = Pyrotechnics( 'MainChute', 'MainDeploy' )
+        self.drogueDeploy    = Pyrotechnics( 'DrogueChute', 'DrogueDeploy' )
+        self.csmDeploy       = Pyrotechnics( 'SMRCSA', 'CsmDeploy' )
+        self.canardDeploy    = Pyrotechnics( '', 'CanardDeploy' )
+        self.smDeploy        = Pyrotechnics( 'SMRCSB', 'SmDeploy' )
+        self.apexCoverJettsn = Pyrotechnics( 'Hatch', 'ApexCoverJettsn' )
+        self.lesMotorFire    = Pyrotechnics( 'CMRCS1', 'LesMotorFire' )
+
+        self.O2FanState = SwitchState( False )
+        self.H2FanState = SwitchState( False )
+
+        self.O2Pressure = FluctuatingMeter( "O2Pressure", initialValue = random.randint( 7, 9 ), frequency_s = 4 )
+        self.O2Pressure.write( matrixDriver )
+        self.H2Pressure = FluctuatingMeter( "H2Pressure", initialValue = random.randint( 7, 9 ) )
+        self.H2Pressure.write( matrixDriver )
+
+        self.O2Qty      = DecayingMeter( "O2Qty" )
+        self.O2Qty.write( matrixDriver )
+        self.H2Qty      = DecayingMeter( "H2Qty", decayRate_s = 180 )
+        self.H2Qty.write( matrixDriver )
+
+        self.inco = Inco()
 
         self.__rules = {
             # CAPCOM Potentiometers
@@ -194,10 +327,11 @@ class Rules:
             # In Arduino, tie the 4 pots directly to their LED graphs
 
             # INCO Potentiometers
-            # 'AntPitch'
-            # 'AntYaw'
-            # 'Tune'
-            # 'Beam'
+            'AntPitch' : lambda value: self.inco.setAntPitch( 12 - value, matrixDriver ),
+            'AntYaw'   : lambda value: self.inco.setAntYaw( 24 - value, matrixDriver ),
+            'Tune'     : lambda value: self.inco.setTune( 24 - value, matrixDriver ),
+            'Beam'     : lambda value: self.inco.setBeam( 12 - value, matrixDriver ),
+
             # In Arduino, tie the 4 pots directly to the LED graph:
                 # Tune moves the focal section up and down the graph (i.e. moves the beam)
                 # Beam adjusts the width of the focal section
@@ -215,12 +349,12 @@ class Rules:
                                              or audio.togglePlay( 'GlycolPump', isOn, continuous = True ),
             'SCEPower'        : lambda isOn: matrixDriver.setLed( 'SCEPower', isOn ),
             'WasteDump'       : lambda isOn: matrixDriver.setLed( 'WasteDump', isOn ) \
-                                             or ( audio.play('WasteDump') if isOn else self.noAction() ),
+                                             or ( audio.play( 'WasteDump' ) if isOn else self.noAction() ),
             'CabinFan'        : lambda isOn: matrixDriver.setLed( 'CabinFan', isOn ) \
                                              or audio.togglePlay( 'CabinFan', isOn, continuous = True ),
             'H2OFlow'         : lambda isOn: matrixDriver.setLed( 'H2OFlow', isOn ) \
                                              or audio.togglePlay( 'H2OFlow', isOn, continuous = True ),
-            'IntLights'       : lambda isOn: matrixDriver.setLed( 'IntLights', isOn ),
+            'IntLights'       : lambda isOn: matrixDriver.setLed( 'Lights', isOn ),
             'SuitComp'        : lambda isOn: matrixDriver.setLed( 'SuitComp', isOn ),
 
             # ABORT
@@ -295,35 +429,40 @@ class Rules:
 
             # CRYOGENICS Switches
 
-            'O2Fan'           : lambda isOn: matrixDriver.setLed('O2Fan', isOn) \
+            'O2Fan'           : lambda isOn: self.O2FanState.setState( isOn ) \
+                                             or matrixDriver.setLed( 'O2Fan', isOn ) \
+                                             or self.O2Pressure.normalize( isOn, matrixDriver ) \
                                              or audio.togglePlay( 'o2fan', isOn, continuous = True ),
-            'H2Fan'           : lambda isOn: matrixDriver.setLed('H2Fan', isOn) \
+            'H2Fan'           : lambda isOn: self.H2FanState.setState( isOn ) \
+                                             or matrixDriver.setLed('H2Fan', isOn ) \
+                                             or self.H2Pressure.normalize( isOn, matrixDriver ) \
                                              or audio.togglePlay( 'h2fan', isOn, continuous = True ),
-            'Pumps'           : lambda isOn: matrixDriver.setLed('Pumps', isOn) \
+            'Pumps'           : lambda isOn: matrixDriver.setLed('Pumps', isOn ) \
                                              or audio.togglePlay( 'pumps', isOn, continuous = True ),
-            'Heat'            : lambda isOn: matrixDriver.setLed('Heat', isOn) \
+            'Heat'            : lambda isOn: matrixDriver.setLed('Heat', isOn ) \
                                              or audio.togglePlay( 'heat', isOn, continuous = True ),
 
             # PYROTECHNICS Switches
-            #'DrogueDeploy'    : lambda isOn: audio.play('DrogueDeploy') or matrixDriver.LedOn('DrogueChute') if isOn else self.noAction(),
-
             # manually deploy the CM main parachutes.
-            #'MainDeploy'      : lambda isOn: audio.play('mainDeploy') or matrixDriver.LedOn('MainChute') if isOn else self.noAction(),
+            'MainDeploy'       : lambda isOn: self.mainDeploy.fire( isOn, matrixDriver, audio ),
+
+            # Parachute to slow ship down
+            'DrogueDeploy'     : lambda isOn: self.drogueDeploy.fire( isOn, matrixDriver, audio ),
 
             # Manually separate the CSM from the launch vehicle during an abort or in normal operation.
-            #'CSM/LVDeploy'    : lambda isOn: audio.play('CSM/LVDeploy') if isOn else self.noAction(),
-
-            # Separate for reentry
-            #'SM/CMDeploy'     : lambda isOn: audio.play('SM/CMDeploy') if isOn else self.noAction(),
+            'CSM/LVDeploy'    : lambda isOn: self.csmDeploy.fire( isOn, matrixDriver, audio ),
 
             # Deploy the Launch Escape System Canard Parachutes
-            #'CanardDeploy'    : lambda isOn: audio.play('CanardDeploy') if isOn else self.noAction(),
+            'CanardDeploy'    : lambda isOn: self.canardDeploy.fire( isOn, matrixDriver, audio ),
+
+            # Separate for reentry
+            'SM/CMDeploy'     : lambda isOn: self.smDeploy.fire( isOn, matrixDriver, audio ),
 
             # Push-switch to jettison CM apex cover if automatic system fails during an abort or earth landing after a normal mission. 
-            #'ApexCoverJettsn' : lambda isOn: audio.play('ApexCoverJettsn') or matrixDriver.LedOn('Hatch') if isOn else self.noAction(),
+            'ApexCoverJettsn' : lambda isOn: self.apexCoverJettsn.fire( isOn, matrixDriver, audio ),
 
             # Manually operates the Launch Escape System, either to jettison the LES tower or to fire the motor in the event of an LES abort.  In the former case, the explosive bolts connecting the LES tower to the CSM must fire first.
-            #'LesMotorFire'    : lambda isOn: audio.play('LesMotorFire') if isOn else self.noAction()
+            'LesMotorFire'    : lambda isOn: self.lesMotorFire.fire( isOn, matrixDriver, audio )
         }
 
 # Overuse of SPS engine:

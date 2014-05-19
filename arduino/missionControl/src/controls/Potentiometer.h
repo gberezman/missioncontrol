@@ -3,9 +3,23 @@
 
 #include "Arduino.h"
 
+class Smoother {
+  public:
+    void record( int value );
+    int getValue();
+    
+  private:
+    static const int numReadings = 10;
+    int readings[numReadings];
+    int index = 0;
+    int average = 0;
+    int total = 0;
+    long count = 0;
+};
+
 class Potentiometer {
   public:
-    Potentiometer( char* _potId, uint8_t _analogPin );
+    Potentiometer( char* _potId, uint8_t _analogPin, int limit );
     void scan( void );
     char* id( void );
     uint8_t reading( void );
@@ -17,6 +31,8 @@ class Potentiometer {
     char* potId;
     uint8_t currentState;
     uint8_t previousState;
+    int limit;
+    Smoother smoother;
 };
 
 #endif

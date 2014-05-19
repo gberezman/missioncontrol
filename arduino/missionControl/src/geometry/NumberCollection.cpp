@@ -1,8 +1,4 @@
-#ifndef LEDDIGIT_GEOMETRY_H
-#define LEDDIGIT_GEOMETRY_H
-
-#include "../controls/LEDDigit.h"
-#include "../controls/Adafruit_LEDBackpack.h"
+#include "NumberCollection.h"
 
 extern Adafruit_LEDBackpack matrixA;
 extern Adafruit_LEDBackpack matrixB;
@@ -10,7 +6,7 @@ extern Adafruit_LEDBackpack matrixC;
 extern Adafruit_LEDBackpack matrixD;
 extern Adafruit_LEDBackpack matrixE;
 
-LED IHR0[] = {
+LED NumberCollection::IHR0[] = {
     LED( "top right",    &matrixB, 6, 6 ),
     LED( "bottom right", &matrixB, 2, 6 ),
     LED( "bottom",       &matrixB, 4, 6 ),
@@ -21,7 +17,7 @@ LED IHR0[] = {
     LED( "point",        &matrixB, 3, 6 )
 };
 
-LED IHR1[] = {
+LED NumberCollection::IHR1[] = {
     LED( "top right",    &matrixB, 6, 7 ),
     LED( "bottom right", &matrixB, 2, 7 ),
     LED( "bottom",       &matrixB, 4, 7 ),
@@ -32,7 +28,7 @@ LED IHR1[] = {
     LED( "point",        &matrixB, 3, 7 )
 };
 
-LED IHR2[] = {
+LED NumberCollection::IHR2[] = {
     LED( "top right",    &matrixB, 5, 8 ),
     LED( "bottom right", &matrixB, 2, 8 ),
     LED( "bottom",       &matrixB, 4, 8 ),
@@ -43,7 +39,7 @@ LED IHR2[] = {
     LED( "point",        &matrixB, 3, 8 )
 };
 
-LED AHR0[] = {
+LED NumberCollection::AHR0[] = {
     LED( "top right",    &matrixB, 5, 3 ),
     LED( "bottom right", &matrixB, 2, 3 ),
     LED( "bottom",       &matrixB, 4, 3 ),
@@ -54,7 +50,7 @@ LED AHR0[] = {
     LED( "point",        &matrixB, 3, 3 )
 };
 
-LED AHR1[] = {
+LED NumberCollection::AHR1[] = {
     LED( "top right",    &matrixB, 5, 4 ),
     LED( "bottom right", &matrixB, 2, 4 ),
     LED( "bottom",       &matrixB, 4, 4 ),
@@ -65,7 +61,7 @@ LED AHR1[] = {
     LED( "point",        &matrixB, 3, 4 )
 };
 
-LED AHR2[] = {
+LED NumberCollection::AHR2[] = {
     LED( "top right",    &matrixB, 5, 5 ),
     LED( "bottom right", &matrixB, 2, 5 ),
     LED( "bottom",       &matrixB, 4, 5 ),
@@ -76,7 +72,7 @@ LED AHR2[] = {
     LED( "point",        &matrixB, 3, 5 )
 };
 
-LED ABR0[] = {
+LED NumberCollection::ABR0[] = {
     LED( "top right",    &matrixB, 5, 0 ),
     LED( "bottom right", &matrixB, 2, 0 ),
     LED( "bottom",       &matrixB, 4, 0 ),
@@ -87,7 +83,7 @@ LED ABR0[] = {
     LED( "point",        &matrixB, 3, 0 )
 };
 
-LED ABR1[] = {
+LED NumberCollection::ABR1[] = {
     LED( "top right",    &matrixB, 5, 1 ),
     LED( "bottom right", &matrixB, 2, 1 ),
     LED( "bottom",       &matrixB, 4, 1 ),
@@ -98,7 +94,7 @@ LED ABR1[] = {
     LED( "point",        &matrixB, 3, 1 )
 };
 
-LED ABR2[] = {
+LED NumberCollection::ABR2[] = {
     LED( "top right",    &matrixB, 0, 2 ),
     LED( "bottom right", &matrixB, 2, 2 ),
     LED( "bottom",       &matrixB, 4, 2 ),
@@ -109,7 +105,7 @@ LED ABR2[] = {
     LED( "point",        &matrixB, 3, 2 )
 };
 
-LED Pitch0[] = {
+LED NumberCollection::Pitch0[] = {
     LED( "top right",    &matrixA, 7, 6 ),
     LED( "bottom right", &matrixA, 3, 6 ),
     LED( "bottom",       &matrixA, 1, 6 ),
@@ -120,7 +116,7 @@ LED Pitch0[] = {
     LED( "point",        &matrixA, 4, 6 )
 };
 
-LED Pitch1[] = {
+LED NumberCollection::Pitch1[] = {
     LED( "top right",    &matrixA, 7, 7 ),
     LED( "bottom right", &matrixA, 3, 7 ),
     LED( "bottom",       &matrixA, 1, 7 ),
@@ -131,7 +127,7 @@ LED Pitch1[] = {
     LED( "point",        &matrixA, 4, 7 )
 };
 
-LED Pitch2[] = {
+LED NumberCollection::Pitch2[] = {
     LED( "top right",    &matrixA, 7, 8 ),
     LED( "bottom right", &matrixA, 3, 8 ),
     LED( "bottom",       &matrixA, 1, 8 ),
@@ -142,7 +138,7 @@ LED Pitch2[] = {
     LED( "point",        &matrixA, 4, 8 )
 };
 
-LED Yaw0[] = {
+LED NumberCollection::Yaw0[] = {
     LED( "top right",    &matrixA, 7, 10 ),
     LED( "bottom right", &matrixA, 3, 10 ),
     LED( "bottom",       &matrixA, 1, 10 ),
@@ -153,7 +149,7 @@ LED Yaw0[] = {
     LED( "point",        &matrixA, 4, 10 )
 };
 
-LED Yaw1[] = {
+LED NumberCollection::Yaw1[] = {
     LED( "top right",    &matrixA, 7, 11 ),
     LED( "bottom right", &matrixA, 3, 11 ),
     LED( "bottom",       &matrixA, 1, 11 ),
@@ -164,7 +160,7 @@ LED Yaw1[] = {
     LED( "point",        &matrixA, 4, 11 )
 };
 
-LED Yaw2[] = {
+LED NumberCollection::Yaw2[] = {
     LED( "top right",    &matrixA, 7, 12 ),
     LED( "bottom right", &matrixA, 3, 12 ),
     LED( "bottom",       &matrixA, 1, 12 ),
@@ -175,7 +171,7 @@ LED Yaw2[] = {
     LED( "point",        &matrixA, 4, 12 )
 };
 
-LED Roll0[] = {
+LED NumberCollection::Roll0[] = {
     LED( "top right",    &matrixA, 7, 13 ),
     LED( "bottom right", &matrixA, 3, 13 ),
     LED( "bottom",       &matrixA, 1, 13 ),
@@ -186,7 +182,7 @@ LED Roll0[] = {
     LED( "point",        &matrixA, 4, 13 )
 };
 
-LED Roll1[] = {
+LED NumberCollection::Roll1[] = {
     LED( "top right",    &matrixA, 7, 14 ),
     LED( "bottom right", &matrixA, 3, 14 ),
     LED( "bottom",       &matrixA, 1, 14 ),
@@ -197,7 +193,7 @@ LED Roll1[] = {
     LED( "point",        &matrixA, 4, 14 )
 };
 
-LED Roll2[] = {
+LED NumberCollection::Roll2[] = {
     LED( "top right",    &matrixA, 7, 15 ),
     LED( "bottom right", &matrixA, 3, 15 ),
     LED( "bottom",       &matrixA, 1, 15 ),
@@ -208,43 +204,43 @@ LED Roll2[] = {
     LED( "point",        &matrixA, 4, 15 )
 };
 
-LEDDigit IHR[] = {
+LEDDigit NumberCollection::IHR[] = {
   LEDDigit( "IHR0", IHR0 ),
   LEDDigit( "IHR1", IHR1 ),
   LEDDigit( "IHR2", IHR2 )
 };
 
-LEDDigit AHR[] = {
+LEDDigit NumberCollection::AHR[] = {
   LEDDigit( "AHR0", AHR0 ),
   LEDDigit( "AHR1", AHR1 ),
   LEDDigit( "AHR2", AHR2 )
 };
 
-LEDDigit ABR[] = {
+LEDDigit NumberCollection::ABR[] = {
   LEDDigit( "ABR0", ABR0 ),
   LEDDigit( "ABR1", ABR1 ),
   LEDDigit( "ABR2", ABR2 )
 };
 
-LEDDigit Pitch[] = {
+LEDDigit NumberCollection::Pitch[] = {
   LEDDigit( "Pitch0", Pitch0 ),
   LEDDigit( "Pitch1", Pitch1 ),
   LEDDigit( "Pitch2", Pitch2 )
 };
 
-LEDDigit Yaw[] = {
+LEDDigit NumberCollection::Yaw[] = {
   LEDDigit( "Yaw0", Yaw0 ),
   LEDDigit( "Yaw1", Yaw1 ),
   LEDDigit( "Yaw2", Yaw2 )
 };
 
-LEDDigit Roll[] = {
+LEDDigit NumberCollection::Roll[] = {
   LEDDigit( "Roll0", Roll0 ),
   LEDDigit( "Roll1", Roll1 ),
   LEDDigit( "Roll2", Roll2 )
 };
 
-LEDNumber NUMBERS[] = {
+LEDNumber NumberCollection::numbers[] = {
   LEDNumber( "ABR", ABR ),
   LEDNumber( "AHR", AHR ),
   LEDNumber( "IHR", IHR ),
@@ -253,6 +249,26 @@ LEDNumber NUMBERS[] = {
   LEDNumber( "Roll", Roll )
 };
 
-// MissionClock (?)
+LEDNumber* NumberCollection::getNumber( char* label ) {
+  for( int i = 0; i < sizeof( numbers ) / sizeof( LEDNumber ); i++ )
+    if( strcmp( label, numbers[i].getLabel() ) == 0 )
+        return &numbers[i];
 
-#endif
+  return NULL;
+}
+
+void NumberCollection::testAll( void ) {
+    char buffer[4];
+    for( int value = 0; value < 1000; value += 111 ) {
+        itoa( value, buffer, 10 );
+        for( int i = 0; i < sizeof( numbers ) / sizeof( LEDNumber ); i++ ) {
+            numbers[i].set( buffer );
+        }
+        delay( 10 );
+    }
+}
+
+void NumberCollection::clearAll( void ) {
+  for( int i = 0; i < sizeof( numbers ) / sizeof( LEDNumber ); i++ )
+        numbers[i].clear();
+}
