@@ -93,14 +93,10 @@ class Audio:
             # EVENT SEQUENCE
             'ES1'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES1.wav' ),
             'ES2'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES2.wav' ),
-            #'ES3'                 : DummySound(),
-            #'ES4'                 : DummySound(),
-            #'ES5'                 : DummySound(),
-            #'ES6'                 : DummySound(),
-            #'ES7'                 : DummySound(),
-            #'ES8'                 : DummySound(),
-            #'ES9'                 : DummySound(),
-            #'ES10'                : DummySound(),
+            'ES3'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES3.wav' ),
+            'ES4'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES4.wav' ),
+            'ES5'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES5.wav' ),
+            'ES6'                 : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/ES6.wav' ),
 
             # CRYOGENICS
             'o2fan'               : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/o2fan.wav' ),
