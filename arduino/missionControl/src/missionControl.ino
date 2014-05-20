@@ -5,6 +5,7 @@
 
 #include "controls/MultiMeter.h"
 #include "geometry/ExpanderCollection.h"
+#include "geometry/ExpanderLEDCollection.h"
 #include "geometry/PotentiometerCollection.h"
 #include "geometry/LEDCollection.h"
 #include "geometry/MeterCollection.h"
@@ -24,6 +25,7 @@ Adafruit_LEDBackpack* matrices[] = {
 };
 
 ExpanderCollection expanders;
+ExpanderLEDCollection expanderLEDs;
 PotentiometerCollection pots;
 LEDCollection leds;
 
@@ -40,10 +42,12 @@ void setup() {
 
   initializeMatrices();
   expanders.initialize();
+  expanderLEDs.initialize();
 
   inco.setMeters( meters.getMeter( "Signal1" ), meters.getMeter( "Signal2" ) );
 
   leds.enableAll();
+  expanderLEDs.enableAll();
   numbers.testAll();
   meters.testAll();
   inco.test();
@@ -51,16 +55,14 @@ void setup() {
   delay( 1000 );
 
   leds.disableAll();
+  expanderLEDs.disableAll();
   numbers.clearAll();
   meters.clearAll();
   inco.clear();
 
-  Adafruit_MCP23017* mcp2 = expanders.getExpander( 2 )->getMCP();
-  mcp2->pinMode( 1, OUTPUT );
-  mcp2->digitalWrite( 0, LOW );
-
   serialCommand.addCommand("M", setMeter);
   serialCommand.addCommand("L", setLED);
+  serialCommand.addCommand("E", setExpanderLED);
   serialCommand.addCommand("N", setNumber);
   serialCommand.addCommand("I", setInco);
   serialCommand.addCommand("C", setIncoColor);
@@ -133,6 +135,19 @@ void setLED() {
 
   if( ledLabel != NULL && value != NULL ) {
     LED* led = leds.getLed( ledLabel );
+    if( led != NULL ) {
+      bool isOn = strcmp( value, "1" ) == 0;
+      led->set( isOn );
+    }
+  }
+}
+
+void setExpanderLED() {
+  char* label = serialCommand.next();
+  char* value = serialCommand.next();
+
+  if( label != NULL && value != NULL ) {
+    ExpanderLED* led = expanderLEDs.getLed( label );
     if( led != NULL ) {
       bool isOn = strcmp( value, "1" ) == 0;
       led->set( isOn );

@@ -9,13 +9,6 @@ class ExpanderCollection {
         void scan( void );
         void sendSwitchStates( void );
         SwitchExpander* getExpander( int address );
-
-    private:
-        static char* exp0Switches[16];
-        static char* exp1Switches[16];
-        static char* exp2Switches[16];
-        static char* exp3Switches[16];
-        static SwitchExpander SWITCH_EXPANDERS[4];
 };
 
 #endif
