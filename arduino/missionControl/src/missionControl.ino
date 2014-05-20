@@ -21,7 +21,8 @@ Adafruit_LEDBackpack* matrices[] = {
     &matrixA, 
     &matrixB,
     &matrixC,
-    &matrixD
+    &matrixD,
+    &matrixE
 };
 
 ExpanderCollection expanders;
@@ -66,6 +67,7 @@ void setup() {
   serialCommand.addCommand("N", setNumber);
   serialCommand.addCommand("I", setInco);
   serialCommand.addCommand("C", setIncoColor);
+  serialCommand.addCommand("T", lampTest);
 }
 
 void initializeMatrices() {
@@ -168,3 +170,28 @@ void setNumber( char* label, char* value ) {
   if( number != NULL )
       number->set( value );
 }
+
+void lampTest() {
+  int matrixCount = sizeof(matrices)/sizeof(Adafruit_LEDBackpack*);
+
+  uint16_t displaybufferBackup[matrixCount][8];
+
+  for( int m = 0; m < matrixCount; m++) {
+    for( int c = 0; c < 8; c++ ) {
+      displaybufferBackup[m][c] = matrices[m]->displaybuffer[c];
+      matrices[m]->displaybuffer[c] = 0xffff;
+      matrices[m]->writeDisplay();
+    }
+  }
+
+  delay( 3000 );
+
+  for( int m = 0; m < matrixCount; m++) {
+    for( int c = 0; c < 8; c++ ) {
+      matrices[m]->displaybuffer[c] = displaybufferBackup[m][c];
+      matrices[m]->writeDisplay();
+    }
+  }
+
+}
+

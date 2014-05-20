@@ -410,7 +410,7 @@ class Rules:
                 # pressing clears tone, but leaves lights on
             # 'Power'  # Resets the C&WS system
             # 'Mode' # what systems to be monitored (CM deactivates the SM monitors)
-            # 'Lamp' # Wire Lamp to light all LED's directly
+             'Lamp'           : lambda isOn: matrixDriver.test() if isOn else self.noAction(),
             # 'Ack' # no lights, audio and master alarm only, probably should be illuminated
 
             # CAPCOM Switches
