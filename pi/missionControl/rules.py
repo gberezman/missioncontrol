@@ -39,9 +39,11 @@ class Abort:
     def setArm(self, armed = True):
         self.armed = armed
         if self.armed:
-            self.matrixDriver.ledOn( 'Abort' ),
+            self.matrixDriver.ledOn( 'Abort' )
+            self.matrixDriver.expanderLedOn( 'ArmAbort' )
         else:
-            self.matrixDriver.ledOff( 'Abort' ),
+            self.matrixDriver.ledOff( 'Abort' )
+            self.matrixDriver.expanderLedOff( 'ArmAbort' )
 
     def setMode(self, mode):
         self.mode = mode

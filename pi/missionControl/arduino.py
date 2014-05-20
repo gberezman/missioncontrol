@@ -67,6 +67,19 @@ class ArduinoMatrixDriver:
     def ledOff(self, ledId):
         self.serial.write( "L {} 0\n".format( ledId ) )
 
+    def expanderLedOn(self, ledId):
+        self.serial.write( "E {} 1\n".format( ledId ) )
+
+    def expanderLedOff(self, ledId):
+        self.serial.write( "E {} 0\n".format( ledId ) )
+
+
+    def setExpanderLed(self, ledId, state):
+        if state:
+            self.expanderLedOn( ledId )
+        else:
+            self.expanderLedOff( ledId )
+
     def setLed(self, ledId, state):
         if state:
             self.ledOn(ledId)
