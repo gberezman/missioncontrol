@@ -10,6 +10,22 @@ class SwitchState:
     def setState(self, isOn):
         self.isOn = isOn
 
+class Power:
+
+    def stop(self):
+        # stop C&W audio
+        # stop C&W LED
+        # play power up audio
+        # disable Caution LEDs (all red)
+        # ignore warnings
+        pass
+
+    def start(self):
+        # play power up
+        # stop blocking signals
+        # start sending signals
+        pass
+
 class CautionWarning:
 
     def __init__(self, audio, matrixDriver):
@@ -19,12 +35,12 @@ class CautionWarning:
 
     def alert(self):
         self.state = 'active'
-        self.audio.play( 'caution', dedicatedChannel = self.audio.cautionChannel, continuous = True )
+        self.audio.play( 'Caution', dedicatedChannel = self.audio.cautionChannel, continuous = True )
         self.matrixDriver.ledOn( 'MasterAlarm' )
 
     def clear(self):
         self.state = 'inactive'
-        self.audio.stop( 'caution' )
+        self.audio.stop( 'Caution' )
         self.matrixDriver.ledOff( 'MasterAlarm' )
 
 class Abort:
@@ -88,7 +104,7 @@ class LatchedLED:
         self.led = led
         self.buttonCount = 0
 
-    def on(self, isOn = True):
+    def event(self, isOn = True):
         if isOn:
             self.buttonCount += 1
             if self.buttonCount > 0:
@@ -162,11 +178,16 @@ class Inco:
 
 class FluctuatingMeter:
 
-    def __init__(self, meter, initialValue = 12, frequency_s = 3):
+    def __init__(self, meter, warningLed, initialValue = 12, frequency_s = 3, caution = None, loWarning = -1, hiWarning = 13 ):
         self.meter = meter
+        self.warningLed = warningLed
         self.value = initialValue
         self.frequency_s = frequency_s
         self.lastUpdate = time()
+        self.loWarning = loWarning
+        self.hiWarning = hiWarning
+        self.caution = caution
+        self.isWarning = False
 
     def update(self, matrixDriver, isFanOn):
         now = time()
@@ -182,20 +203,35 @@ class FluctuatingMeter:
     def write(self, matrixDriver):
         matrixDriver.setMeter( self.meter, self.value )
 
+        if self.value <= self.loWarning or self.value >= self.hiWarning:
+            if not self.isWarning:
+                self.warningLed.event( True )
+            if self.caution:
+                self.caution.alert()
+            self.isWarning = True
+        else:
+            if self.isWarning:
+                self.warningLed.off()
+            self.isWarning = False
+
     def normalize(self, isOn, matrixDriver):
         if isOn and self.value < 4:
-            self.value = random.randint( 5, 7 )
+            self.value = random.randint( 6, 8 )
         elif isOn and self.value > 9:
             self.value = random.randint( 6, 8 )
         self.write( matrixDriver )
 
 class DecayingMeter:
 
-    def __init__(self, meter, initialValue = 12, decayRate_s = 120):
+    def __init__(self, meter, warningLed, initialValue = 12, decayRate_s = 120, caution = None, cautionThreshold = -1):
         self.meter = meter
         self.value = initialValue
         self.decayRate_s = decayRate_s
         self.lastUpdate = time()
+        self.warningLed = warningLed
+        self.caution = caution
+        self.cautionThreshold = cautionThreshold
+        self.isWarning = False
 
     def decay(self, matrixDriver):
         now = time()
@@ -206,6 +242,17 @@ class DecayingMeter:
 
     def write(self, matrixDriver):
         matrixDriver.setMeter( self.meter, self.value )
+
+        if self.value <= self.cautionThreshold:
+            if not self.isWarning:
+                self.warningLed.event( True )
+            if self.caution:
+                self.caution.alert()
+            self.isWarning = True
+        else:
+            if self.isWarning:
+                self.warningLed.off()
+            self.isWarning = False
 
 class ThreeDigitControl:
     
@@ -300,17 +347,22 @@ class Rules:
         self.O2FanState = SwitchState( False )
         self.H2FanState = SwitchState( False )
 
-        self.O2Pressure = FluctuatingMeter( "O2Pressure", initialValue = random.randint( 7, 9 ), frequency_s = 4 )
+        cryopress = LatchedLED(matrixDriver, 'CryoPress')
+        self.O2Pressure = FluctuatingMeter( "O2Pressure", cryopress, initialValue = 9, frequency_s = 4, caution = self.cw, loWarning = 3, hiWarning = 10 )
         self.O2Pressure.write( matrixDriver )
-        self.H2Pressure = FluctuatingMeter( "H2Pressure", initialValue = random.randint( 7, 9 ) )
+        #self.H2Pressure = FluctuatingMeter( "H2Pressure", cryopress, initialValue = random.randint( 7, 9 ), caution = self.cw, loWarning = 3, hiWarning = 10 )
+        self.H2Pressure = FluctuatingMeter( "H2Pressure", cryopress, initialValue = 9, caution = self.cw, loWarning = 3, hiWarning = 10 )
         self.H2Pressure.write( matrixDriver )
 
-        self.O2Qty      = DecayingMeter( "O2Qty" )
+        crewalert = LatchedLED(matrixDriver, 'CrewAlert')
+        self.O2Qty      = DecayingMeter( "O2Qty", crewalert, caution = self.cw, cautionThreshold = 1 )
         self.O2Qty.write( matrixDriver )
-        self.H2Qty      = DecayingMeter( "H2Qty", decayRate_s = 180 )
+        self.H2Qty      = DecayingMeter( "H2Qty", crewalert, decayRate_s = 180, caution = self.cw, cautionThreshold = 1 )
         self.H2Qty.write( matrixDriver )
 
         self.inco = Inco()
+
+        self.power = Power()
 
         self.__rules = {
             # CAPCOM Potentiometers
@@ -361,54 +413,52 @@ class Rules:
 
             # ABORT
             'ArmAbort'        : lambda disabled: self.abort.setArm( not disabled ),
-            #'Abort'           : lambda pressed: self.abort.abort() if pressed else self.noAction(),
+            'Abort'           : lambda pressed: self.abort.abort() if pressed else self.noAction(),
 
             # BOOSTER Switches
             # Service propulsion system
-            'SPS'             : lambda isOn: self.thrustStatus.on( isOn ) \
+            'SPS'             : lambda isOn: self.thrustStatus.event( isOn ) \
                                              or audio.togglePlay( 'spsThruster', isOn, continuous = True ),
                                              # or self.SPSPresses.record( isOn ),
 
             # Trans-Earth injection (from parking orbit around moon, sets on burn towards Earth)
-            'TEI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+            'TEI'             : lambda isOn: self.thrustStatus.event( isOn ) \
                                              or audio.togglePlay( 'teiThruster', isOn, continuous = True ),
 
             # Trans-Lunar injection (puts on path towards moon)
-            'TLI'             : lambda isOn: self.thrustStatus.on( isOn ) \
+            'TLI'             : lambda isOn: self.thrustStatus.event( isOn ) \
                                              or audio.togglePlay( 'tliThruster', isOn, continuous = True ),
             
             # Saturn, first stage
-            'S-IC'            : lambda isOn: self.thrustStatus.on( isOn ) \
+            'S-IC'            : lambda isOn: self.thrustStatus.event( isOn ) \
                                              or audio.togglePlay( 'sicThruster', isOn, continuous = True ),
 
             # Saturn, second stage
-            'S-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
+            'S-II'            : lambda isOn: self.thrustStatus.event( isOn ) \
                                              or audio.togglePlay( 'siiThruster', isOn, continuous = True ),
 
             # Saturn V, third stage
-            'S-iVB'           : lambda isOn: self.thrustStatus.on( isOn ) \
+            'S-iVB'           : lambda isOn: self.thrustStatus.event( isOn ) \
                                              or audio.togglePlay( 'sivbThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            'M-I'             : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or self.ullageStatus.on( isOn ) \
+            'M-I'             : lambda isOn: self.thrustStatus.event( isOn ) \
+                                             or self.ullageStatus.event( isOn ) \
                                              or audio.togglePlay( 'miThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            'M-II'            : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or self.ullageStatus.on( isOn ) \
+            'M-II'            : lambda isOn: self.thrustStatus.event( isOn ) \
+                                             or self.ullageStatus.event( isOn ) \
                                              or audio.togglePlay( 'miiThruster', isOn, continuous = True ),
 
             # Maneuvering thruster (ullage)
-            'M-III'           : lambda isOn: self.thrustStatus.on( isOn ) \
-                                             or self.ullageStatus.on( isOn ) \
+            'M-III'           : lambda isOn: self.thrustStatus.event( isOn ) \
+                                             or self.ullageStatus.event( isOn ) \
                                              or audio.togglePlay( 'miiiThruster', isOn, continuous = True ),
 
             # C&WS Switches
-            # square wave alternating between 750 and 2000cps changing 2.5 times per second
-            # 'Caution' # lights up when C&WS fires
-                # pressing clears tone, but leaves lights on
-            # 'Power'  # Resets the C&WS system
+            'MasterAlarm'     : lambda isOn: self.cw.clear() if isOn else self.noAction(),
+            'Power'           : lambda isOn: self.power.stop() if isOn else self.power.start(),
             # 'Mode' # what systems to be monitored (CM deactivates the SM monitors)
              'Lamp'           : lambda isOn: matrixDriver.test() if isOn else self.noAction(),
             # 'Ack' # no lights, audio and master alarm only, probably should be illuminated
