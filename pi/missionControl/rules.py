@@ -1,5 +1,6 @@
 from time import sleep,time
 from random import random, randint
+import os
 
 class SwitchState:
 
@@ -66,6 +67,9 @@ class Abort:
 
     def abort(self):
         if self.armed:
+            self.audio.play( 'abortPad' )
+            self.matrixDriver.test()
+
             if self.mode == 1:
                 self.audio.play( 'abortPad' )
             elif self.mode == 2:
@@ -79,7 +83,8 @@ class Abort:
             elif self.mode == 6:
                 self.audio.play( 'abortIV' )
 
-            # shutdown sequence "sudo halt"
+            sleep(3)
+            os.system( "shutdown -h now" )
 
 class EventRecord:
 

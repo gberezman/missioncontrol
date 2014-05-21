@@ -65,7 +65,7 @@ class Audio:
             'H2OFlow'             : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/H2OFlow.wav' ),
 
             # ABORT
-            # 'abortPad'
+            'abortPad'             : pygame.mixer.Sound( '/home/pi/MissionControl/pi/missionControl/audio/shutdown.wav' ),
             # 'abortI'
             # 'abortII'
             # 'abortIII'
