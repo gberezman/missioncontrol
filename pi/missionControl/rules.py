@@ -84,7 +84,7 @@ class Abort:
                 self.audio.play( 'abortIV' )
 
             sleep(3)
-            os.system( "shutdown -h now" )
+            os.system( "sudo shutdown -h now" )
 
 class EventRecord:
 
