@@ -44,7 +44,6 @@ LED LEDCollection::leds[] = {
     LED( "Abort",           &matrixB, 0, 9 ),
 
     // C&WS
-    LED( "MasterAlarm",     &matrixB, 1, 10 ),
     // LED( "Ack",             &matrixA, 1, 10 )
 
     // PANEL2

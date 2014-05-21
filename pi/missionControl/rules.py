@@ -36,12 +36,12 @@ class CautionWarning:
     def alert(self):
         self.state = 'active'
         self.audio.play( 'Caution', dedicatedChannel = self.audio.cautionChannel, continuous = True )
-        self.matrixDriver.ledOn( 'MasterAlarm' )
+        self.matrixDriver.expanderLedOn( 'MasterAlarm' )
 
     def clear(self):
         self.state = 'inactive'
         self.audio.stop( 'Caution' )
-        self.matrixDriver.ledOff( 'MasterAlarm' )
+        self.matrixDriver.expanderLedOff( 'MasterAlarm' )
 
 class Abort:
 

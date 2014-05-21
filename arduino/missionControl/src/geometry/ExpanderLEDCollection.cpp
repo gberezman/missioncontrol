@@ -5,7 +5,8 @@
 extern SwitchExpander SWITCH_EXPANDERS[]; 
 
 ExpanderLED ExpanderLEDCollection::expanderLeds[] = {
-    ExpanderLED( "ArmAbort", SWITCH_EXPANDERS[2].getMCP(), 1, true )
+    ExpanderLED( "ArmAbort", SWITCH_EXPANDERS[2].getMCP(), 1, true ),
+    ExpanderLED( "MasterAlarm", SWITCH_EXPANDERS[2].getMCP(), 8, false )
 };
 
 void ExpanderLEDCollection::initialize( void ) {
