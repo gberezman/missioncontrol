@@ -1,5 +1,5 @@
 from time import sleep,time
-import random
+from random import random, randint
 
 class SwitchState:
 
@@ -178,7 +178,7 @@ class Inco:
 
 class FluctuatingMeter:
 
-    def __init__(self, meter, warningLed, initialValue = 12, frequency_s = 3, caution = None, loWarning = -1, hiWarning = 13 ):
+    def __init__(self, meter, warningLed, initialValue = 12, frequency_s = 6, caution = None, loWarning = -1, hiWarning = 13 ):
         self.meter = meter
         self.warningLed = warningLed
         self.value = initialValue
@@ -192,8 +192,11 @@ class FluctuatingMeter:
     def update(self, matrixDriver, isFanOn):
         now = time()
         if now - self.lastUpdate > self.frequency_s:
-            if ( not isFanOn ) or ( random.randint( 1, 10 ) > 3 ):
-                self.value += random.randint(-1, 1)
+            if ( not isFanOn and random() < .7 ) or ( isFanOn and random() < .4 ):
+                hiDelta = 0 if self.value > 6 and random() < .7 else 1
+                loDelta = 0 if self.value < 5 and random() < .7 else -1
+
+                self.value += randint(loDelta, hiDelta)
                 self.value = max( self.value, 1 )
                 self.value = min( self.value, 12 )
 
@@ -216,9 +219,9 @@ class FluctuatingMeter:
 
     def normalize(self, isOn, matrixDriver):
         if isOn and self.value < 4:
-            self.value = random.randint( 6, 8 )
+            self.value = randint( 6, 8 )
         elif isOn and self.value > 9:
-            self.value = random.randint( 6, 8 )
+            self.value = randint( 6, 8 )
         self.write( matrixDriver )
 
 class DecayingMeter:
@@ -258,7 +261,7 @@ class ThreeDigitControl:
     
     def __init__(self, numberLabel, frequency_s = 2, lower = 150, upper = 350, range = 20 ):
         self.updateTime = 0
-        self.value = random.randint( lower, upper )
+        self.value = randint( lower, upper )
         self.frequency_s = frequency_s
         self.lower = lower
         self.upper = upper
@@ -273,7 +276,7 @@ class ThreeDigitControl:
             self.updateTime = time()
 
     def adjustTime(self):
-        self.value += random.randint( - self.range, self.range )
+        self.value += randint( - self.range, self.range )
         self.value = min( self.value, self.upper )
         self.value = max( self.value, self.lower )
 
@@ -348,10 +351,10 @@ class Rules:
         self.H2FanState = SwitchState( False )
 
         cryopress = LatchedLED(matrixDriver, 'CryoPress')
-        self.O2Pressure = FluctuatingMeter( "O2Pressure", cryopress, initialValue = 9, frequency_s = 4, caution = self.cw, loWarning = 3, hiWarning = 10 )
+        self.O2Pressure = FluctuatingMeter( "O2Pressure", cryopress, initialValue = randint( 6, 8 ), caution = self.cw, loWarning = 3, hiWarning = 10 )
         self.O2Pressure.write( matrixDriver )
-        #self.H2Pressure = FluctuatingMeter( "H2Pressure", cryopress, initialValue = random.randint( 7, 9 ), caution = self.cw, loWarning = 3, hiWarning = 10 )
-        self.H2Pressure = FluctuatingMeter( "H2Pressure", cryopress, initialValue = 9, caution = self.cw, loWarning = 3, hiWarning = 10 )
+
+        self.H2Pressure = FluctuatingMeter( "H2Pressure", cryopress, initialValue = randint( 6, 8 ), caution = self.cw, loWarning = 3, hiWarning = 10 )
         self.H2Pressure.write( matrixDriver )
 
         crewalert = LatchedLED(matrixDriver, 'CrewAlert')
