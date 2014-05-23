@@ -338,11 +338,19 @@ class Rules:
         self.cw = CautionWarning(audio, matrixDriver)
 
         self.IHR = ThreeDigitControl( "IHR" )
+        self.IHR.write( matrixDriver )
         self.AHR = ThreeDigitControl( "AHR", frequency_s = 2.5 )
+        self.AHR.write( matrixDriver )
         self.ABR = ThreeDigitControl( "ABR", frequency_s = 3 )
+        self.ABR.write( matrixDriver )
         self.Pitch = ThreeDigitControl( "Pitch", lower = 0, upper = 359, range = 3, frequency_s = 2.5 )
+        self.Pitch.write( matrixDriver )
         self.Yaw = ThreeDigitControl( "Yaw", lower = 0, upper = 359, range = 3, frequency_s = 4 )
+        self.Yaw.write( matrixDriver )
         self.Roll = ThreeDigitControl( "Roll", lower = 0, upper = 359, range = 3 )
+        self.Roll.write( matrixDriver )
+
+        sleep( .2 )
 
         self.mainDeploy      = Pyrotechnics( 'MainChute', 'MainDeploy' )
         self.drogueDeploy    = Pyrotechnics( 'DrogueChute', 'DrogueDeploy' )
@@ -389,10 +397,10 @@ class Rules:
             # In Arduino, tie the 4 pots directly to their LED graphs
 
             # INCO Potentiometers
-            'AntPitch' : lambda value: self.inco.setAntPitch( 12 - value, matrixDriver ),
-            'AntYaw'   : lambda value: self.inco.setAntYaw( 24 - value, matrixDriver ),
-            'Tune'     : lambda value: self.inco.setTune( 24 - value, matrixDriver ),
-            'Beam'     : lambda value: self.inco.setBeam( 12 - value, matrixDriver ),
+            'AntPitch' : lambda value: self.inco.setAntPitch( value, matrixDriver ),
+            'AntYaw'   : lambda value: self.inco.setAntYaw( value, matrixDriver ),
+            'Tune'     : lambda value: self.inco.setTune( value, matrixDriver ),
+            'Beam'     : lambda value: self.inco.setBeam( value, matrixDriver ),
 
             # In Arduino, tie the 4 pots directly to the LED graph:
                 # Tune moves the focal section up and down the graph (i.e. moves the beam)
