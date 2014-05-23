@@ -15,13 +15,13 @@ LEDMeter MeterCollection::METERS[] = {
 
   // INCO
   LEDMeter( "Signal1",    &matrixD, 0, 0, ALL_YELLOW ),
-  LEDMeter( "Signal2",    &matrixD, 3, 0, ALL_YELLOW )
+  LEDMeter( "Signal2",    &matrixD, 3, 0, ALL_YELLOW ),
 
   // EECOM
-  // LEDMeter( "Voltage",    &matrixE, 0, 0, TWELVE_BAR_QTY_COLORS ),
-  // LEDMeter( "Current",    &matrixE, 0, 8, TWELVE_BAR_MIDRANGE_COLORS ),
-  // LEDMeter( "Resistance", &matrixE, 3, 0, TWELVE_BAR_MIDRANGE_COLORS ),
-  // LEDMeter( "O2Flow",     &matrixE, 3, 8, TWELVE_BAR_MIDRANGE_COLORS ),
+  LEDMeter( "Voltage",    &matrixE, 0, 0, TWELVE_BAR_QTY_COLORS ),
+  LEDMeter( "Current",    &matrixE, 3, 0, TWELVE_BAR_MIDRANGE_COLORS ),
+  LEDMeter( "Resistance", &matrixE, 0, 8, TWELVE_BAR_MIDRANGE_COLORS ),
+  LEDMeter( "O2Flow",     &matrixE, 3, 8, TWELVE_BAR_MIDRANGE_COLORS )
 };
 
 LEDMeter* MeterCollection::getMeter( char* label ) {
