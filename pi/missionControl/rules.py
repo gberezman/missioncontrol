@@ -197,9 +197,9 @@ class FluctuatingMeter:
     def update(self, matrixDriver, isFanOn):
         now = time()
         if now - self.lastUpdate > self.frequency_s:
-            if ( not isFanOn and random() < .7 ) or ( isFanOn and random() < .4 ):
-                hiDelta = 0 if self.value > 6 and random() < .7 else 1
-                loDelta = 0 if self.value < 5 and random() < .7 else -1
+            if ( not isFanOn and random() < .4 ) or ( isFanOn and random() < .2 ):
+                hiDelta = 0 if self.value > 6 and random() < .8 else 1
+                loDelta = 0 if self.value < 5 and random() < .8 else -1
 
                 self.value += randint(loDelta, hiDelta)
                 self.value = max( self.value, 1 )
