@@ -14,7 +14,10 @@ char* Potentiometer::id( void ) {
 }
 
 void Potentiometer::scan( void ) {
-  smoother.record( map( analogRead(pin), 2, 1020, 0, limit ) );
+  // invert the reading
+  int reading = limit - map( analogRead(pin), 2, 1020, 0, limit );
+
+  smoother.record( reading );
 
   previousState = currentState;
   currentState = smoother.getValue();

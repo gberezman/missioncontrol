@@ -33,3 +33,11 @@ void PotentiometerCollection::sendPotStates( void ) {
         if( pots[i].hasChanged() )
             pots[i].sendToSerial();
 };
+
+Potentiometer* PotentiometerCollection::getPot( char* label ) {
+    for( int i = 0; i < sizeof( pots ) / sizeof( Potentiometer ); i++ )
+        if( strcmp( label, pots[i].id() ) == 0 ) 
+            return &pots[i];
+
+    return NULL;
+}

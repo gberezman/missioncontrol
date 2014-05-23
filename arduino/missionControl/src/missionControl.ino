@@ -36,6 +36,15 @@ MultiMeter inco;
 
 SerialCommand serialCommand;
 
+LEDMeter* voltageMeter;
+LEDMeter* currentMeter;
+LEDMeter* resistanceMeter;
+LEDMeter* o2flowMeter;
+Potentiometer* voltagePot;
+Potentiometer* currentPot;
+Potentiometer* resistancePot;
+Potentiometer* o2flowPot;
+
 void setup() {
   Serial.begin(115200);
 
@@ -68,6 +77,15 @@ void setup() {
   serialCommand.addCommand("I", setInco);
   serialCommand.addCommand("C", setIncoColor);
   serialCommand.addCommand("T", lampTest);
+    
+  voltageMeter    = meters.getMeter( "Voltage" );
+  currentMeter    = meters.getMeter( "Current" );
+  resistanceMeter = meters.getMeter( "Resistance" );
+  o2flowMeter     = meters.getMeter( "O2Flow" );
+  voltagePot      = pots.getPot( "Voltage" );
+  currentPot      = pots.getPot( "Current" );
+  resistancePot   = pots.getPot( "Resistance" );
+  o2flowPot       = pots.getPot( "O2Flow" );
 }
 
 void initializeMatrices() {
@@ -88,6 +106,11 @@ void loop() {
   expanders.sendSwitchStates();
 
   pots.scan();
+
+  voltageMeter->setBars(voltagePot->reading());
+  currentMeter->setBars(currentPot->reading());
+  resistanceMeter->setBars(resistancePot->reading());
+  o2flowMeter->setBars(o2flowPot->reading());
   
   pots.sendPotStates();
 

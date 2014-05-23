@@ -7,6 +7,7 @@ class PotentiometerCollection {
     public:
         void scan( void );
         void sendPotStates( void );
+        Potentiometer* getPot( char* label );
 
     private:
         static Potentiometer pots[];
