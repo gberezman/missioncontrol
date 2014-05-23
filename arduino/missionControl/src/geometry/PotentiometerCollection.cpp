@@ -2,17 +2,17 @@
 
 Potentiometer PotentiometerCollection::pots[] = { 
   // CAPCOM
-  // Potentiometer( "Speaker",    A0 ),
-  // Potentiometer( "Headset",    A1 ),
+  Potentiometer( "Speaker",     A5, 100 ),
+  Potentiometer( "Headset",     A6, 100 ),
 
   // ABORT
-  // Potentiometer( "AbortMode",  A2 ),
+  Potentiometer( "AbortMode",   A7, 6 ),
 
   // EECOM
-  // Potentiometer( "Voltage",    A3 ),
-  // Potentiometer( "Current",    A4 ),
-  // Potentiometer( "Resistance", A5 ),
-  // Potentiometer( "O2Flow",     A6 ),
+  Potentiometer( "Resistance",  A8, 12 ),
+  Potentiometer( "O2Flow",      A9, 12 ),
+  Potentiometer( "Voltage",    A10, 12 ),
+  Potentiometer( "Current",    A11, 12 ),
 
   // INCO
   Potentiometer( "AntPitch",   A12, 12 ),
